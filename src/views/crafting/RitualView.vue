@@ -3,6 +3,12 @@
 
 <template>
   <main>
-    This is the main body
+    Do a ritual here
   </main>
 </template>
+
+<style scoped>
+main {
+  padding: 16px;
+}
+</style>
