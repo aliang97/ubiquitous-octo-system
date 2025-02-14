@@ -15,21 +15,23 @@ function exitCombat() {
 </script>
 
 <template>
-  <div class="window">
+  <div class="combatVisualization">
     <template v-if="profile1 && profile2">
       <div class="timer">Timer: {{ timer }}</div>
       <CombatStatus
         :character="profile1"
+        :tick="timer"
         class="statusWindow-position1"
       />
       <div class="platform platform-position1"></div>
-      <div class="sprite sprite-position1"></div>
+      <profile1.sprite class="sprite-position1" />
       <CombatStatus
         :character="profile2"
+        :tick="timer"
         class="statusWindow-position2"
       />
       <div class="platform platform-position2"></div>
-      <div class="sprite sprite-position2"></div>
+      <profile2.sprite class="sprite-position2" />
       <button class="exit" v-on:click="exitCombat">Leave Combat</button>
     </template>
     <template v-else>
@@ -39,7 +41,7 @@ function exitCombat() {
 </template>
 
 <style scoped>
-.window {
+.combatVisualization {
   background-color: palegreen;
   width: 100%;
   height: 100%;
@@ -93,20 +95,13 @@ function exitCombat() {
   right: 80px;
 }
 
-.sprite {
-  width: 40px;
-  height: 80px;
-}
-
 .sprite-position1 {
-  background-color: blue;
   position: absolute;
   bottom: 70px;
   left: 150px;
 }
 
 .sprite-position2 {
-  background-color: red;
   position: absolute;
   top: 90px;
   right: 150px;

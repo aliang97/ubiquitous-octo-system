@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import type { CharacterEntity } from '@/types/CharacterEntity';
 import { removeFromObjectListById } from '@/utils/utils';
 
-import JohnExile from '@/exampleData/characters/johnExile';
+import JohnExile from '@/data/characters/johnExile';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
   const people = ref(<CharacterEntity[]>[JohnExile]);

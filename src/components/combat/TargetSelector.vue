@@ -6,7 +6,7 @@ import Slime from '@/data/enemies/Slime';
 import Crook from '@/data/enemies/Crook';
 import MafiaBoss from '@/data/enemies/MafiaBoss';
 import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
-import JohnExile from '@/exampleData/characters/johnExile.ts';
+import JohnExile from '@/data/characters/johnExile';
 import { computed } from 'vue';
 import { useOngoingCombatStore } from '@/stores/ongoingCombat.ts';
 

@@ -1,30 +1,35 @@
 <script setup lang="ts">
 import type { CharacterEntity } from '@/types/CharacterEntity';
+import type { ComputedRef } from 'vue';
 import { computed } from 'vue';
+import { getAttackIntervalMS } from '@/utils/resolveCombatTick';
 
 const props = defineProps<{
-  character: CharacterEntity
+  character: CharacterEntity,
+  tick: number,
 }>()
 
-const healthPercentage = computed(() => Math.max(
-  Math.round(100 * props.character.currentHitpoints / props.character.maximumHitpoints),
-  0
-  ));
+const attackIntervalMS = getAttackIntervalMS(props.character);
+const attackPercentage: ComputedRef<number | undefined> = computed(() => {
+  if (attackIntervalMS) {
+    return Math.round(100* (props.tick % attackIntervalMS) / attackIntervalMS);
+  }
+  return undefined;
+})
+
 </script>
 
 <template>
-  <div class="hitpointGauge">
-    <div class="label">{{ character.currentHitpoints }} / {{ character.maximumHitpoints }}</div>
+  <div v-if="attackPercentage" class="attackGauge">
     <div class="gauge">
       <div class="gauge-background"></div>
-      <div class="gauge-internal" :style="{width: healthPercentage + '%'}"></div>
+      <div class="gauge-internal" :style="{width: attackPercentage + '%'}"></div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.hitpointGauge {
-  position: relative;
+.attackGauge {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -34,7 +39,7 @@ const healthPercentage = computed(() => Math.max(
 .gauge {
   border-radius: 999px;
   width: 100%;
-  height: 6px;
+  height: 2px;
   overflow: hidden;
   position: relative;
 }
@@ -45,7 +50,6 @@ const healthPercentage = computed(() => Math.max(
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #f00000;
 }
 
 .gauge-internal {
@@ -55,16 +59,6 @@ const healthPercentage = computed(() => Math.max(
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #00c410;
-}
-
-.label {
-  position: absolute;
-  top: -12px;
-  right: 0;
-  font-size: 8px;
-  line-height: 1;
-  align-self: flex-end;
-  color: white;
+  background-color: white;
 }
 </style>

@@ -2,8 +2,8 @@
 import type { CharacterEntity } from '@/types/CharacterEntity'
 
 import ProfileCard from '@/components/characterEntity/ProfileCard.vue'
-import JohnExile from "@/exampleData/characters/johnExile.ts"
-import Person2 from '@/exampleData/characters/person2.ts'
+import JohnExile from "@/data/characters/johnExile"
+import Person2 from '@/data/characters/person2'
 import { ref } from 'vue'
 import { useGuildRosterStore } from '@/stores/guildRoster.ts'
 import { removeFromObjectListById } from '@/utils/utils.ts'

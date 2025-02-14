@@ -1,6 +1,7 @@
 import type { Entity } from '@/types/Entity.ts';
-import type { CombatInstance } from './CombatInstance';
+import type { CombatInstance } from '@/types/CombatInstance';
 import type { LootTable }from '@/types/LootTable';
+import type { Component } from 'vue';
 
 export type CharacterEntity = Entity & {
   class?: string,
@@ -11,4 +12,6 @@ export type CharacterEntity = Entity & {
   attacksPerSecond?: number,
   lootTable?: LootTable,
   onDeath?: (combat: CombatInstance) => void,
+  sprite?: Component,
+  hitAnimation?: Component,
 }

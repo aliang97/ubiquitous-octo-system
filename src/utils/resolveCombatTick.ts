@@ -42,12 +42,17 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   }
 }
 
+export function getAttackIntervalMS(c: CharacterEntity): number | undefined {
+  if (c.attacksPerSecond === undefined) { return undefined; }
+  const ticksPerSecond = 1000 / SERVER_TICK_RATE_MS;
+  return Math.round(ticksPerSecond / c.attacksPerSecond);
+}
+
 // Check character's attack speed to determine if they can attack this server tick
 function canAttack(c: CharacterEntity, t: number): boolean {
   if (t <= 0) { return false; }
-  if (c.attacksPerSecond === undefined) { return false; }
-  const ticksPerSecond = 1000 / SERVER_TICK_RATE_MS;
-  const attackIntervalMS = Math.round(ticksPerSecond / c.attacksPerSecond);
+  const attackIntervalMS = getAttackIntervalMS(c);
+  if (attackIntervalMS === undefined) { return false; }
 
   return t % attackIntervalMS === 0;
 }

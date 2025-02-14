@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { CharacterEntity } from '@/types/CharacterEntity';
 import HitpointGauge from '@/components/characterEntity/HitpointGauge.vue';
+import AttackGauge from '@/components/characterEntity/AttackGauge.vue';
 
 defineProps<{
-  character: CharacterEntity
+  character: CharacterEntity,
+  tick?: number,
 }>()
 </script>
 
@@ -14,6 +16,7 @@ defineProps<{
       <div class="class">{{ character.class }}</div>
     </div>
     <HitpointGauge :character="character" />
+    <AttackGauge v-if="tick" :character="character" :tick="tick" />
   </div>
 </template>
 
