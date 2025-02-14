@@ -6,6 +6,7 @@ import { useOngoingCombatStore } from "@/stores/ongoingCombat";
 import { useInventoryStore } from "@/stores/inventory";
 import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS } from "./utils";
+import type { RenderInstruction, RenderQueue } from "@/types/RenderQueue";
 
 // This will run every tick of combat
 export function resolveCombatTick(combatLocation: CombatLocationId) {
@@ -18,14 +19,21 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   if (combat.value.tick !== undefined) { combat.value.tick++; }
   else { combat.value.tick = 0; }
 
+  combat.value.c1RenderQueue = resolveRenderQueueTick(combat.value.c1RenderQueue);
+  combat.value.c2RenderQueue = resolveRenderQueueTick(combat.value.c2RenderQueue);
+
   // Execute the combat actions for all characters
   const c1 = combat.value.character1;
   const c2 = combat.value.character2;
 
   if (canAttack(c1, combat.value.tick)) {
+    appendToRenderQueue(combat.value.c1RenderQueue, 'sendHit');
+    appendToRenderQueue(combat.value.c2RenderQueue, 'takeHit');
     doAttack(c1, c2);
   }
   if (canAttack(c2, combat.value.tick)) {
+    appendToRenderQueue(combat.value.c1RenderQueue, 'takeHit');
+    appendToRenderQueue(combat.value.c2RenderQueue, 'sendHit');
     doAttack(c2, c1);
   }
 
@@ -88,4 +96,23 @@ function rollLoot(c: CharacterEntity) {
     if (entry.chance > rollResult) { lootList.push(entry) }
   });
   return lootList;
+}
+
+// Reduces the duration of each queued item by 1 tick, and
+//  deletes any items that are timed out (0 duration remaining)
+function resolveRenderQueueTick(rq: RenderQueue) {
+  rq.forEach(instruction => instruction.duration -= SERVER_TICK_RATE_MS);
+  const newRenderQueue = rq.filter(el => el.duration > 0);
+  return newRenderQueue;
+}
+
+// Appends a render instruction to the queue, and looks up the duration of the render
+function appendToRenderQueue(rq: RenderQueue, command: string) {
+  const d_string = new Date().toISOString();
+  const newRenderInstruction: RenderInstruction = {
+    command,
+    duration: 800,
+    id: 'ri_' + d_string,
+  };
+  rq.push(newRenderInstruction);
 }

@@ -1,7 +1,7 @@
 import type { CharacterEntity } from "@/types/CharacterEntity"
 import { shallowRef } from 'vue';
 import DeadeyeSprite from "@/components/sprites/characters/DeadeyeSprite.vue";
-import HitAnimation from "@/components/sprites/TheHitAnimation.vue";
+import DeadeyeRenderer from '@/components/sprites/characters/DeadeyeRenderer.vue';
 
 const data: CharacterEntity = {
   id: '0',
@@ -11,9 +11,9 @@ const data: CharacterEntity = {
   currentHitpoints: 10,
   hitDamageMaximum: 9,
   hitDamageMinimum: 4,
-  attacksPerSecond: 1,
+  attacksPerSecond: 2,
   sprite: shallowRef(DeadeyeSprite),
-  hitAnimation: shallowRef(HitAnimation),
+  rendererComponent: shallowRef(DeadeyeRenderer),
 }
 
 export default data;

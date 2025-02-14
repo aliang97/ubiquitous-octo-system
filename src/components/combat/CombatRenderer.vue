@@ -11,7 +11,7 @@ defineProps<{
   <div class="CombatRenderer">
     <div class="platform-position1">
       <div class="platform"></div>
-      <combat.character1.sprite class="sprite" />
+      <combat.character1.rendererComponent class="on-platform" :renderQueue="combat.c1RenderQueue"/>
     </div>
     <div class="platform-position2">
       <div class="platform"></div>
@@ -50,6 +50,7 @@ defineProps<{
   right: 80px;
 }
 
+.on-platform,
 .sprite {
   position: absolute;
   bottom: 50%;

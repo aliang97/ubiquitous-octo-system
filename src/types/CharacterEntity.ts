@@ -13,5 +13,5 @@ export type CharacterEntity = Entity & {
   lootTable?: LootTable,
   onDeath?: (combat: CombatInstance) => void,
   sprite?: Component,
-  hitAnimation?: Component,
+  rendererComponent?: Component,
 }
