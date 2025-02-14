@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, getCurrentInstance } from 'vue'
-import type { Person } from '@/types/Person.ts'
+import type { CharacterEntity } from '@/types/CharacterEntity.ts'
 defineProps<{
-  profile: Person
+  profile: CharacterEntity
   buttonText?: string
 }>()
 const hasOnClick = computed(
@@ -19,7 +19,7 @@ const hasOnClick = computed(
         <div class="name">{{ profile.name }}</div>
       </div>
 
-      <button :v-if="buttonText">{{ buttonText }}</button>
+      <button v-if="buttonText">{{ buttonText }}</button>
     </div>
   </div>
 </template>

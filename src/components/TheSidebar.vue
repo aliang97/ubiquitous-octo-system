@@ -16,7 +16,7 @@ const currentRouteName = computed(() => {
 <template>
   <nav>
     <ul>
-      <li v-for="option in options" :key="option">
+      <li v-for="option in options" :key="option.name">
         <RouterLink :class="{ 'is-selected': currentRouteName === option.name }" :to="{name: option.name}">
           {{ option.label }}
         </RouterLink>

@@ -5,6 +5,8 @@ import RecruitmentView from '@/views/home/RecruitmentView.vue'
 import RosterView from '@/views/loadout/RosterView.vue'
 import TransmutationView from '@/views/crafting/TransmutationView.vue'
 import RitualView from '@/views/crafting/RitualView.vue'
+import ForestView from '@/views/combat/ForestView.vue'
+import CaveView from '@/views/combat/CaveView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -71,11 +73,25 @@ const router = createRouter({
     },
     {
       path: '/combat',
-      name: 'combat',
       component: GenericView,
       props: {
-
+        sidebarOptions: [
+          {name: 'combat', label: 'Forest'},
+          {name: 'cave', label: 'Cave'},
+        ]
       },
+      children: [
+        {
+          path: '',
+          name: 'combat',
+          component: ForestView,
+        },
+        {
+          path: 'cave',
+          name: 'cave',
+          component: CaveView,
+        },
+      ]
     }
   ],
 })

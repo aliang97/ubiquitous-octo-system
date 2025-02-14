@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import ProfileCard from '@/components/person/ProfileCard.vue'
-import { usePersonListStore } from '@/stores/personList.ts'
+import type { CharacterEntity } from '@/types/CharacterEntity';
 
-const personList = usePersonListStore();
-function firePerson(person) {
-  personList.removePerson(person);
+import ProfileCard from '@/components/characterEntity/ProfileCard.vue'
+import { useGuildRosterStore } from '@/stores/guildRoster';
+
+const guildRoster = useGuildRosterStore();
+function firePerson(person: CharacterEntity) {
+  guildRoster.removePerson(person);
 }
 
 </script>
@@ -13,7 +15,7 @@ function firePerson(person) {
   <main>
     These are your adventurers:
     <ul>
-      <li v-for="person in personList.people" :key="person.id">
+      <li v-for="person in guildRoster.people" :key="person.id">
         <ProfileCard :profile="person" buttonText="fire" v-on:click="firePerson(person)" />
       </li>
     </ul>

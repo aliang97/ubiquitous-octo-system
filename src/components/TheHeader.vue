@@ -1,5 +1,30 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
+import { computed } from 'vue';
+
+const route = useRoute();
+// TODO: need to compute route parent because this doesn't work if we're at /home/inventory for example
+const currentRouteName = computed(() => {
+  return route.name;
+})
+const tabs = [
+  {
+    name: 'home',
+    label: 'Home',
+  },
+  {
+    name: 'loadout',
+    label: 'Loadout',
+  },
+  {
+    name: 'crafting',
+    label: 'Crafting',
+  },
+  {
+    name: 'combat',
+    label: 'Combat',
+  },
+]
 </script>
 
 <template>
@@ -9,10 +34,9 @@ import { RouterLink } from 'vue-router';
       Project Name
     </div>
     <nav>
-      <RouterLink :to="{name: 'home'}">Home</RouterLink>
-      <RouterLink :to="{name: 'loadout'}">Loadout</RouterLink>
-      <RouterLink :to="{name: 'crafting'}">Crafting</RouterLink>
-      <RouterLink :to="{name: 'combat'}">Combat</RouterLink>
+      <div v-for="tab in tabs" :key="tab.name">
+        <RouterLink :to="tab" :class="{'is-selected': tab.name === currentRouteName}">{{ tab.label }}</RouterLink>
+      </div>
     </nav>
   </header>
 </template>
@@ -46,5 +70,14 @@ nav {
   gap: 16px;
   align-items: center;
   justify-content: start;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(180, 180, 180, 1);
+}
+
+a.is-selected {
+  color: white
 }
 </style>

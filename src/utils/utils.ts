@@ -4,3 +4,6 @@ export const removeFromObjectListById = (id: string, list: {id: string}[]) => {
     list.splice(index, 1);
   }
 }
+
+export const SERVER_TICK_RATE_MS = 10;
+
