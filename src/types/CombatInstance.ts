@@ -1,6 +1,6 @@
 import type { CharacterEntity } from "@/types/CharacterEntity";
 
-export type CombatLocationId = 'forest' | 'cave';
+export type CombatLocationId = 'loc-forest' | 'loc-cave';
 
 export type CombatInstance = {
   character1: CharacterEntity,

@@ -29,6 +29,8 @@ defineProps<{
   flex-direction: column;
   justify-content: center;
   gap: 4px;
+  width: 200px;
+  height: 60px;
 }
 
 .info {

@@ -1,30 +1,29 @@
 <script setup lang="ts">
 import type { CharacterEntity } from '@/types/CharacterEntity';
 import type { CombatInstance, CombatLocationId } from '@/types/CombatInstance';
+import type { LocationEntity } from '@/types/LocationEntity';
 
-import Slime from '@/data/enemies/Slime';
-import Crook from '@/data/enemies/Crook';
-import MafiaBoss from '@/data/enemies/MafiaBoss';
 import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
 import JohnExile from '@/data/characters/johnExile';
 import { computed } from 'vue';
 import { useOngoingCombatStore } from '@/stores/ongoingCombat.ts';
 
 const props = defineProps<{
-  locationId: CombatLocationId,
+  locationProfile: LocationEntity,
 }>()
 
+const locationId = props.locationProfile.id as CombatLocationId;
 const ongoingCombat = useOngoingCombatStore();
-const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(props.locationId));
+const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(locationId));
+const enemyList = props.locationProfile.enemyList;
 
-const enemyList = [Slime, Crook, MafiaBoss];
 function selectTarget(target: CharacterEntity) {
   const newCombatInstance: CombatInstance = {
     character1: JohnExile,
     character2: target,
-    location: props.locationId,
+    location: locationId,
   };
-  ongoingCombat.removeCombatByLocationId(props.locationId);
+  ongoingCombat.removeCombatByLocationId(locationId);
   ongoingCombat.addCombat(newCombatInstance);
 }
 

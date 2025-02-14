@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import CombatVisualization from "@/components/combat/CombatVisualization.vue"
-import TargetSelector from '@/components/combat/TargetSelector.vue'
+import CombatWindow from '@/components/combat/CombatWindow.vue';
+import TargetSelector from '@/components/combat/TargetSelector.vue';
+import ForestData from '@/data/locations/Forest';
+import { ref } from 'vue';
 
-const locationName = "Forest Location Name";
+const locationProfile = ref(ForestData);
+const locationName = ForestData.name;
 </script>
 
 <template>
   <main>
-    <div class="visualization">
-      <CombatVisualization locationId="forest"/>
-    </div>
+    <CombatWindow :locationProfile="locationProfile"/>
     <h1>{{ locationName }}</h1>
-    <TargetSelector locationId="forest"/>
+    <TargetSelector :locationProfile="ForestData"/>
   </main>
 </template>
 
