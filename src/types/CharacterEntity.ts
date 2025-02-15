@@ -1,7 +1,14 @@
 import type { Entity } from '@/types/Entity.ts';
 import type { CombatInstance } from '@/types/CombatInstance';
 import type { LootTable }from '@/types/LootTable';
-import type { Component } from 'vue';
+import type { RenderList } from './RenderList';
+
+export type SpriteSheetData = {
+  spriteSrc: string,
+  size: {x: number, y: number},
+  frames: number,
+  durationMS: number,
+}
 
 export type CharacterEntity = Entity & {
   class?: string,
@@ -12,6 +19,6 @@ export type CharacterEntity = Entity & {
   attacksPerSecond?: number,
   lootTable?: LootTable,
   onDeath?: (combat: CombatInstance) => void,
-  sprite?: Component,
-  rendererComponent?: Component,
+  renderList?: RenderList,
+  spriteProps?: SpriteSheetData,
 }

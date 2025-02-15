@@ -6,7 +6,7 @@ import { useOngoingCombatStore } from "@/stores/ongoingCombat";
 import { useInventoryStore } from "@/stores/inventory";
 import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS } from "./utils";
-import type { RenderInstruction, RenderQueue } from "@/types/RenderQueue";
+import type { RenderInstruction, RenderList } from "@/types/RenderList";
 
 // This will run every tick of combat
 export function resolveCombatTick(combatLocation: CombatLocationId) {
@@ -19,21 +19,22 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   if (combat.value.tick !== undefined) { combat.value.tick++; }
   else { combat.value.tick = 0; }
 
-  combat.value.c1RenderQueue = resolveRenderQueueTick(combat.value.c1RenderQueue);
-  combat.value.c2RenderQueue = resolveRenderQueueTick(combat.value.c2RenderQueue);
-
   // Execute the combat actions for all characters
   const c1 = combat.value.character1;
   const c2 = combat.value.character2;
 
+  // Each entry in the Render List represents an HTML element that will
+  //  be visible for some duration (during which it will play an animation
+  //  or something).
+  if (c1.renderList === undefined) { c1.renderList = []; }
+  if (c2.renderList === undefined) { c2.renderList = []; }
+  c1.renderList = resolveRenderListTick(c1.renderList);
+  c2.renderList = resolveRenderListTick(c2.renderList);
+
   if (canAttack(c1, combat.value.tick)) {
-    appendToRenderQueue(combat.value.c1RenderQueue, 'sendHit');
-    appendToRenderQueue(combat.value.c2RenderQueue, 'takeHit');
     doAttack(c1, c2);
   }
   if (canAttack(c2, combat.value.tick)) {
-    appendToRenderQueue(combat.value.c1RenderQueue, 'takeHit');
-    appendToRenderQueue(combat.value.c2RenderQueue, 'sendHit');
     doAttack(c2, c1);
   }
 
@@ -81,6 +82,9 @@ function rollDamage(c: CharacterEntity) {
 function doAttack(source: CharacterEntity, target: CharacterEntity) {
   const damage = rollDamage(source);
   target.currentHitpoints = Math.max(0, target.currentHitpoints - damage);
+  if (target.renderList) {
+    appendToRenderList(target.renderList, 'takeHit', { damage });
+  }
 }
 
 function hasDied(c: CharacterEntity): boolean {
@@ -100,17 +104,20 @@ function rollLoot(c: CharacterEntity) {
 
 // Reduces the duration of each queued item by 1 tick, and
 //  deletes any items that are timed out (0 duration remaining)
-function resolveRenderQueueTick(rq: RenderQueue) {
+// Returns a new list because I don't want to deal with iteration while deleting
+function resolveRenderListTick(rq?: RenderList) {
+  if (rq === undefined) { return; }
   rq.forEach(instruction => instruction.duration -= SERVER_TICK_RATE_MS);
-  const newRenderQueue = rq.filter(el => el.duration > 0);
-  return newRenderQueue;
+  const newRenderList = rq.filter(el => el.duration > 0);
+  return newRenderList;
 }
 
 // Appends a render instruction to the queue, and looks up the duration of the render
-function appendToRenderQueue(rq: RenderQueue, command: string) {
+function appendToRenderList(rq: RenderList, command: string, params?: object) {
   const d_string = new Date().toISOString();
   const newRenderInstruction: RenderInstruction = {
     command,
+    params,
     duration: 800,
     id: 'ri_' + d_string,
   };

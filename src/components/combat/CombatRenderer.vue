@@ -1,8 +1,7 @@
 <script setup lang="ts">
-// import type { LocationEntity } from '@/types/LocationEntity';
 import type { CombatInstance } from '@/types/CombatInstance';
+import CharacterRenderer from '@/components/combat/CharacterRenderer.vue';
 defineProps<{
-  // locationProfile: LocationEntity,
   combat: CombatInstance,
 }>()
 </script>
@@ -11,11 +10,11 @@ defineProps<{
   <div class="CombatRenderer">
     <div class="platform-position1">
       <div class="platform"></div>
-      <combat.character1.rendererComponent class="on-platform" :renderQueue="combat.c1RenderQueue"/>
+      <CharacterRenderer class="on-platform" :character="combat.character1" />
     </div>
     <div class="platform-position2">
       <div class="platform"></div>
-      <combat.character2.sprite class="sprite" />
+      <CharacterRenderer class="on-platform" :character="combat.character2" />
     </div>
   </div>
 </template>

@@ -1,7 +1,5 @@
 import type { CharacterEntity } from "@/types/CharacterEntity"
-import { shallowRef } from 'vue';
-import DeadeyeSprite from "@/components/sprites/characters/DeadeyeSprite.vue";
-import DeadeyeRenderer from '@/components/sprites/characters/DeadeyeRenderer.vue';
+import TestImage from '@/assets/characters/classes/guy-idle.png';
 
 const data: CharacterEntity = {
   id: '0',
@@ -9,11 +7,15 @@ const data: CharacterEntity = {
   class: 'Deadeye',
   maximumHitpoints: 10,
   currentHitpoints: 10,
-  hitDamageMaximum: 9,
-  hitDamageMinimum: 4,
+  hitDamageMaximum: 4,
+  hitDamageMinimum: 2,
   attacksPerSecond: 2,
-  sprite: shallowRef(DeadeyeSprite),
-  rendererComponent: shallowRef(DeadeyeRenderer),
+  spriteProps: {
+    spriteSrc: TestImage,
+    size: {x: 64, y: 64},
+    frames: 2,
+    durationMS: 800,
+  },
 }
 
 export default data;

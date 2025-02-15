@@ -1,7 +1,6 @@
 import type { CharacterEntity } from "@/types/CharacterEntity";
-import { shallowRef } from "vue";
 import SlimeCorpse from '@/data/items/SlimeCorpse';
-import SlimeSprite from "@/components/sprites/enemies/SlimeSprite.vue";
+import SlimeSpritesheet from '@/assets/characters/enemies/slime/purple-slime-idle.png';
 
 const data: CharacterEntity = {
   id: 'en-slime',
@@ -18,7 +17,12 @@ const data: CharacterEntity = {
   onDeath: (combat) => {
     console.log(combat.character1.name + ' killed Slime');
   },
-  sprite: shallowRef(SlimeSprite),
+  spriteProps: {
+    spriteSrc: SlimeSpritesheet,
+    size: {x: 64, y: 64},
+    frames: 2,
+    durationMS: 800,
+  },
 }
 
 

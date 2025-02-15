@@ -20,9 +20,7 @@ const enemyList = props.locationProfile.enemyList;
 function selectTarget(target: CharacterEntity) {
   const newCombatInstance: CombatInstance = {
     character1: JohnExile,
-    c1RenderQueue: [],
     character2: target,
-    c2RenderQueue: [],
     location: locationId,
   };
   ongoingCombat.removeCombatByLocationId(locationId);

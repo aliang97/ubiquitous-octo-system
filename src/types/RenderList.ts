@@ -1,7 +1,8 @@
 export type RenderInstruction = {
   command: string,
+  params?: object,
   duration: number, // in MS
   id: string,
 }
 
-export type RenderQueue = RenderInstruction[];
+export type RenderList = RenderInstruction[];

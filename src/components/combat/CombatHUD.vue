@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 const ongoingCombat = useOngoingCombatStore();
-const timeMS = computed(() => props.combat.tick);
+const tickCount = computed(() => props.combat.tick);
 function exitCombat() {
   ongoingCombat.removeCombatByLocationId(props.locationProfile.id);
 }
@@ -20,15 +20,15 @@ function exitCombat() {
 
 <template>
   <div class="CombatHUD">
-    <div class="timer">Timer: {{ timeMS }}</div>
+    <div class="timer">Frame# {{ tickCount }}</div>
     <CombatStatus
       :character="combat.character1"
-      :tick="timeMS"
+      :tick="tickCount"
       class="statusWindow-position1"
     />
     <CombatStatus
       :character="combat.character2"
-      :tick="timeMS"
+      :tick="tickCount"
       class="statusWindow-position2"
     />
     <div class="exit" v-on:click="exitCombat">Leave Combat</div>
