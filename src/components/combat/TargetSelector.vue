@@ -9,30 +9,25 @@ import { computed } from 'vue';
 import { useOngoingCombatStore } from '@/stores/ongoingCombat.ts';
 
 const props = defineProps<{
-  locationProfile: LocationEntity,
-}>()
+  locationProfile: LocationEntity;
+}>();
 
 const locationId = props.locationProfile.id as CombatLocationId;
-const ongoingCombat = useOngoingCombatStore();
-const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(locationId));
 const enemyList = props.locationProfile.enemyList;
 
-function selectTarget(target: CharacterEntity, infinite?: boolean) {
+const ongoingCombat = useOngoingCombatStore();
+const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(locationId));
+const currentMonsterId = computed(() => currentCombat.value?.character2.id);
+
+function selectTarget(target: CharacterEntity, isInfinite?: boolean) {
   const newCombatInstance: CombatInstance = {
     character1: JohnExile,
     character2: target,
     location: locationId,
-    loop: infinite,
+    loop: isInfinite,
   };
   ongoingCombat.removeCombatByLocationId(locationId);
   ongoingCombat.addCombat(newCombatInstance);
-}
-
-function combatContainsCharacter(combat: CombatInstance | undefined, character: CharacterEntity) {
-  if (!combat) { return false; }
-  if (combat.character1.id === character.id) { return true; }
-  if (combat.character2.id === character.id) { return true; }
-  return false;
 }
 </script>
 
@@ -40,10 +35,7 @@ function combatContainsCharacter(combat: CombatInstance | undefined, character: 
   <div class="window">
     <ul>
       <li v-for="enemy in enemyList" :key="enemy.id">
-        <ProfileCard
-          :profile="enemy"
-          :isHighlighted="combatContainsCharacter(currentCombat, enemy)"
-        >
+        <ProfileCard :profile="enemy" :isHighlighted="currentMonsterId === enemy.id">
           <button v-on:click="selectTarget(enemy)">Fight 1</button>
           <button v-on:click="selectTarget(enemy, true)">Fight infinite</button>
         </ProfileCard>

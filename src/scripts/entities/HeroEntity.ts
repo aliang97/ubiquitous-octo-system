@@ -1,33 +1,16 @@
-import type { CharacterEntity } from './CharacterEntity';
-import { EquippableItemEntity } from './EquippableItemEntity';
-import { RenderableEntity, type RenderableEntityArgs } from './RenderableEntity';
+import {
+  type CharacterEntity,
+  type EquippedItemLoadout,
+  type HeroClass,
+  type RenderableEntityArgs,
+  RenderableEntity,
+} from '@/scripts/entities';
+import { arraySum } from '@/scripts/util';
 
 export type HeroEntityArgs = RenderableEntityArgs & {
   heroClass?: HeroClass;
   equipment?: EquippedItemLoadout;
 };
-
-export type EquippedItemLoadout = {
-  helmet?: EquippableItemEntity;
-  body?: EquippableItemEntity;
-  gloves?: EquippableItemEntity;
-  boots?: EquippableItemEntity;
-  weapon1?: EquippableItemEntity;
-  weapon2?: EquippableItemEntity;
-  ring1?: EquippableItemEntity;
-  ring2?: EquippableItemEntity;
-  amulet?: EquippableItemEntity;
-  belt?: EquippableItemEntity;
-};
-
-export type HeroClass = {
-  name: string;
-  baseHitpoints: number;
-};
-
-export function arraySum(a: (number | undefined)[]): number {
-  return a.reduce((sum, a) => (sum || 0) + (a || 0), 0) || -1;
-}
 
 export class HeroEntity extends RenderableEntity implements CharacterEntity {
   heroClass?: HeroClass;
@@ -36,7 +19,7 @@ export class HeroEntity extends RenderableEntity implements CharacterEntity {
 
   get maximumHitPoints() {
     const sources = [
-      this.heroClass?.baseHitpoints,
+      this.heroClass?.baseHitPoints,
       this.equipment['helmet']?.effects?.['baseHitPoints'],
     ];
     return arraySum(sources);

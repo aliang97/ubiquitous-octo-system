@@ -1,30 +1,30 @@
-import type { CharacterEntity } from '@/types/CharacterEntity';
+import { HeroEntity } from '@/scripts/entities';
+import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/scripts/util';
 
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { removeFromObjectListById } from '@/utils/utils';
-import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/utils/utils';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
-  let guildRoster: CharacterEntity[] = [];
+  let guildRoster: HeroEntity[] = [];
   const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
-    const oldState = JSON.parse(localStorageData);
-    guildRoster = oldState.people;
+    const recoveredState = JSON.parse(localStorageData);
+    guildRoster = recoveredState.heroList;
   }
 
-  const people = ref(guildRoster);
+  const heroList = ref(guildRoster);
 
-  function addPerson(newPerson: CharacterEntity) {
-    const index = people.value.findIndex((el) => el.id === newPerson.id);
+  function addHero(newHero: HeroEntity) {
+    const index = heroList.value.findIndex((el) => el.id === newHero.id);
     if (index === -1) {
-      people.value.push(newPerson);
+      heroList.value.push(newHero);
     }
   }
 
-  function removePerson(person: CharacterEntity) {
-    removeFromObjectListById(person.id, people.value);
+  function removeHero(hero: HeroEntity) {
+    removeFromObjectListById(hero.id, heroList.value);
   }
 
-  return { people, addPerson, removePerson };
+  return { heroList, addHero, removeHero };
 });

@@ -1,11 +1,4 @@
-import { Entity, type EntityArgs } from './Entity';
-
-export type SpriteSheetData = {
-  spriteSrc: string;
-  size: { x: number; y: number };
-  frames: number;
-  durationMS: number;
-};
+import { type SpriteSheetData, type EntityArgs, Entity } from '@/scripts/entities';
 
 export type RenderableEntityArgs = EntityArgs & {
   animations?: Record<string, SpriteSheetData>;
@@ -13,7 +6,12 @@ export type RenderableEntityArgs = EntityArgs & {
 };
 
 export class RenderableEntity extends Entity {
+  animations?: Record<string, SpriteSheetData>;
+  particles?: string;
+
   constructor(args: RenderableEntityArgs = {}) {
     super(args);
+    this.animations = args.animations;
+    this.particles = args.particles;
   }
 }

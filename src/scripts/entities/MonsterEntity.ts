@@ -1,16 +1,9 @@
-import type { CharacterEntity } from './CharacterEntity';
-import { RenderableEntity } from './RenderableEntity';
-
-import type { ItemEntity } from '@/types/ItemEntity';
-import type { RenderableEntityArgs } from './RenderableEntity';
-
-export type LootTableEntry = {
-  itemEntity: ItemEntity;
-  quantity: number;
-  chance: number;
-};
-
-export type LootTable = LootTableEntry[];
+import {
+  type CharacterEntity,
+  type LootTable,
+  type RenderableEntityArgs,
+  RenderableEntity,
+} from '@/scripts/entities';
 
 export type MonsterEntityArgs = RenderableEntityArgs & {
   name: string;

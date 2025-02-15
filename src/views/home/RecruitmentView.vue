@@ -1,34 +1,23 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types/CharacterEntity'
+import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
+import { useRecruitmentRosterStore } from '@/stores/recruitmentRoster';
+import { storeToRefs } from 'pinia';
 
-import ProfileCard from '@/components/characterEntity/ProfileCard.vue'
-import JohnExile from "@/data/characters/johnExile"
-import Person2 from '@/data/characters/person2'
-import { ref } from 'vue'
-import { useGuildRosterStore } from '@/stores/guildRoster.ts'
-import { removeFromObjectListById } from '@/utils/utils.ts'
-
-// TODO: add a gameplay system cost to generating candidates
-// TODO: add meaningful differentiation between candidates
-// TODO: randomly generate candidates
-const newCandidateList = ref([
-  JohnExile,
-  Person2,
-]);
-const guildRoster = useGuildRosterStore();
-function hirePerson(character: CharacterEntity) {
-  guildRoster.addPerson(character);
-  removeFromObjectListById(character.id, newCandidateList.value);
-}
+const recruitmentRosterStore = useRecruitmentRosterStore();
+const { heroList } = storeToRefs(recruitmentRosterStore);
 </script>
 
 <template>
   <main>
-    Recruitment some adventurers to your guild
+    <div class="top">
+      <h1>Recruit some new adventurers to your guild:</h1>
+      <button class="refresh" v-on:click="recruitmentRosterStore.randomize(4)">Refresh</button>
+    </div>
+
     <ul>
-      <li v-for="character in newCandidateList" :key="character.id">
-        <ProfileCard :profile="character" buttonText="Hire" v-on:click="hirePerson(character)">
-          <button v-on:click="hirePerson(character)">Hire</button>
+      <li v-for="character in heroList" :key="character.id">
+        <ProfileCard :profile="character">
+          <button v-on:click="recruitmentRosterStore.recruitHero(character)">Hire</button>
         </ProfileCard>
       </li>
     </ul>
@@ -41,6 +30,31 @@ main {
   display: flex;
   flex-direction: column;
   gap: 32px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+h1 {
+  color: white;
+  font-size: 32px;
+}
+
+.refresh {
+  padding: 8px 16px;
+  display: flex;
+  border: 2px solid white;
+  border-radius: 8px;
+  color: white;
+}
+
+.refresh:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
 }
 
 ul {

@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types/CharacterEntity.ts';
+import type { CharacterEntity } from '@/scripts/entities';
 
 import AnimatedSprite from '../combat/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
 
 defineProps<{
-  profile: CharacterEntity,
-  isHighlighted?: boolean,
-}>()
+  profile: CharacterEntity;
+  isHighlighted?: boolean;
+}>();
 </script>
 
 <template>
-  <div class="card" :class="{'is-highlighted': isHighlighted}">
+  <div class="card" :class="{ 'is-highlighted': isHighlighted }">
     <div class="top">
       <div class="icon">
-        <template v-if="profile.spriteProps">
-          <AnimatedSprite v-bind="profile.spriteProps" :size="{x: 24, y: 24}" />
+        <template v-if="profile.animations?.['idle']">
+          <AnimatedSprite v-bind="profile.animations['idle']" :size="{ x: 24, y: 24 }" />
         </template>
         <template v-else>
           <div
             class="placeholderIcon"
-            :style="{'background-image': `url(${QuestionMarkIcon})`}"
+            :style="{ 'background-image': `url(${QuestionMarkIcon})` }"
           ></div>
         </template>
       </div>
 
       <div class="topSummary">
-        <div class="class">{{ profile.class }}</div>
+        <div class="class">{{ profile.heroClass?.name }}</div>
         <div class="name">{{ profile.name }}</div>
       </div>
 
