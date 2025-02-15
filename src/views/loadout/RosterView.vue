@@ -16,7 +16,9 @@ function firePerson(person: CharacterEntity) {
     These are your adventurers:
     <ul>
       <li v-for="person in guildRoster.people" :key="person.id">
-        <ProfileCard :profile="person" buttonText="fire" v-on:click="firePerson(person)" />
+        <ProfileCard :profile="person" buttonText="fire" v-on:click="firePerson(person)">
+          <button v-on:click="firePerson(person)">Fire</button>
+        </ProfileCard>
       </li>
     </ul>
   </main>

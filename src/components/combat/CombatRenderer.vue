@@ -26,6 +26,7 @@ const showCombat = computed(() => {
 
 <style scoped>
 .CombatRenderer {
+  z-index: 5;
   overflow: hidden;
   position: absolute;
   top: 0;

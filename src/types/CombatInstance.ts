@@ -11,4 +11,5 @@ export type CombatInstance = {
   trueTick?: number,
   paused?: boolean,
   status?: 'starting' | 'ongoing' | 'ending',
+  loop?: boolean,
 }

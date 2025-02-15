@@ -65,8 +65,15 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
         // Love JS object scoping to access c2 here XDD
         const lootList = rollLoot(c2);
         lootList.forEach(entry => inventory.addItemEntity(entry.itemEntity, entry.quantity));
+
+        // Reset everything & loop if required
         resetCharacterRenderList(c2);
         resetCharacterHitpoints(c2);
+        combat.trueTick = 0;
+        combat.gameTick = 0;
+        if (combat.loop) {
+          ongoingCombat.addCombat(combat);
+        }
       })
     });
 

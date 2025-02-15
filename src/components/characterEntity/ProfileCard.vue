@@ -1,25 +1,38 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance } from 'vue'
-import type { CharacterEntity } from '@/types/CharacterEntity.ts'
+import type { CharacterEntity } from '@/types/CharacterEntity.ts';
+
+import AnimatedSprite from '../combat/AnimatedSprite.vue';
+import QuestionMarkIcon from '@/assets/icons/question-mark.png';
+
 defineProps<{
-  profile: CharacterEntity
-  buttonText?: string
+  profile: CharacterEntity,
+  isHighlighted?: boolean,
 }>()
-const hasOnClick = computed(
-  () => !!getCurrentInstance()?.vnode.props?.onClick
-);
 </script>
 
 <template>
-  <div class="card" :class="{'is-hoverable': hasOnClick}">
+  <div class="card" :class="{'is-highlighted': isHighlighted}">
     <div class="top">
-      <div class="icon"></div>
+      <div class="icon">
+        <template v-if="profile.spriteProps">
+          <AnimatedSprite v-bind="profile.spriteProps" :size="{x: 24, y: 24}" />
+        </template>
+        <template v-else>
+          <div
+            class="placeholderIcon"
+            :style="{'background-image': `url(${QuestionMarkIcon})`}"
+          ></div>
+        </template>
+      </div>
+
       <div class="topSummary">
         <div class="class">{{ profile.class }}</div>
         <div class="name">{{ profile.name }}</div>
       </div>
 
-      <button v-if="buttonText">{{ buttonText }}</button>
+      <div class="buttonBox">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -30,15 +43,11 @@ const hasOnClick = computed(
   padding: 16px;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-soft)
+  background-color: var(--color-background-soft);
+  border: 1px solid var(--color-background-soft);
 }
 
-.card.is-hoverable {
-  border: 2px solid var(--color-background-soft);
-}
-
-.card.is-hoverable:hover {
-  cursor: pointer;
+.card.is-highlighted {
   border-color: white;
 }
 
@@ -52,7 +61,16 @@ const hasOnClick = computed(
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: goldenrod;
+  background-color: rgba(220, 220, 220, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderIcon {
+  width: 18px;
+  height: 18px;
+  background-size: cover;
 }
 
 .topSummary {
@@ -73,14 +91,21 @@ const hasOnClick = computed(
   line-height: 1;
 }
 
-button {
+.buttonBox {
+  display: flex;
+  gap: 4px;
+}
+
+:slotted(button) {
   padding: 6px 16px;
   border-radius: 4px;
   border: 1px solid white;
   color: white;
 }
 
-button:hover {
-  background-color: var(--color-background-mute);
+:slotted(button:hover) {
+  background-color: white;
+  color: black;
+  cursor: pointer;
 }
 </style>

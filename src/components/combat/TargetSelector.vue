@@ -17,11 +17,12 @@ const ongoingCombat = useOngoingCombatStore();
 const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(locationId));
 const enemyList = props.locationProfile.enemyList;
 
-function selectTarget(target: CharacterEntity) {
+function selectTarget(target: CharacterEntity, infinite?: boolean) {
   const newCombatInstance: CombatInstance = {
     character1: JohnExile,
     character2: target,
     location: locationId,
+    loop: infinite,
   };
   ongoingCombat.removeCombatByLocationId(locationId);
   ongoingCombat.addCombat(newCombatInstance);
@@ -40,10 +41,12 @@ function combatContainsCharacter(combat: CombatInstance | undefined, character: 
     <ul>
       <li v-for="enemy in enemyList" :key="enemy.id">
         <ProfileCard
-          :class="{'is-targeted': combatContainsCharacter(currentCombat, enemy)}"
           :profile="enemy"
-          v-on:click="selectTarget(enemy)"
-        />
+          :isHighlighted="combatContainsCharacter(currentCombat, enemy)"
+        >
+          <button v-on:click="selectTarget(enemy)">Fight 1</button>
+          <button v-on:click="selectTarget(enemy, true)">Fight infinite</button>
+        </ProfileCard>
       </li>
     </ul>
   </div>
@@ -54,9 +57,5 @@ ul {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-}
-
-.is-targeted {
-  background-color: red;
 }
 </style>

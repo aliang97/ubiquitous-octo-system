@@ -27,7 +27,9 @@ function hirePerson(character: CharacterEntity) {
     Recruitment some adventurers to your guild
     <ul>
       <li v-for="character in newCandidateList" :key="character.id">
-        <ProfileCard :profile="character" buttonText="Hire" v-on:click="hirePerson(character)" />
+        <ProfileCard :profile="character" buttonText="Hire" v-on:click="hirePerson(character)">
+          <button v-on:click="hirePerson(character)">Hire</button>
+        </ProfileCard>
       </li>
     </ul>
   </main>

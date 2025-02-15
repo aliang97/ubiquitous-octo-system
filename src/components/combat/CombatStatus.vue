@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CharacterEntity } from '@/types/CharacterEntity';
-import HitpointGauge from '@/components/characterEntity/HitpointGauge.vue';
-import AttackGauge from '@/components/characterEntity/AttackGauge.vue';
+import HitpointGauge from '@/components/combat/HitpointGauge.vue';
+import AttackGauge from '@/components/combat/AttackGauge.vue';
 
 defineProps<{
   character: CharacterEntity,

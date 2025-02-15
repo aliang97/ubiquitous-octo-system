@@ -2,7 +2,7 @@
 import type { CombatInstance } from '@/types/CombatInstance';
 import type { LocationEntity } from '@/types/LocationEntity';
 import { computed } from 'vue';
-import CombatStatus from '@/components/characterEntity/CombatStatus.vue';
+import CombatStatus from '@/components/combat/CombatStatus.vue';
 import { useOngoingCombatStore } from '@/stores/ongoingCombat';
 
 const props = defineProps<{
