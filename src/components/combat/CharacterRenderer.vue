@@ -6,18 +6,27 @@ import { computed } from 'vue';
 const props = defineProps<{
   character: CharacterEntity,
 }>()
+const DEBUG = false;
 const renderList = computed(() => props.character.renderList);
 const spriteProps = computed(() => props.character.spriteProps);
+const debugPrintRenderList = computed(() => (renderList.value || []).map(el => el.command).join(', '));
+const animateDie = computed(() => (renderList.value || []).filter(el => el.command === 'die').length > 0);
 </script>
 
 <template>
 <div class="CharacterRenderer">
-  <template v-if="spriteProps">
-    <AnimatedSprite v-bind="spriteProps"/>
-  </template>
-  <template v-else>
-    <div class="PLACEHOLDER_SPRITE">{{ character.name }}</div>
-  </template>
+  <div v-if="DEBUG" class="debug">{{ debugPrintRenderList }}</div>
+
+  <div class="character">
+    <div :class="animateDie ? 'die' : 'alive'">
+      <template v-if="spriteProps">
+        <AnimatedSprite v-bind="spriteProps"/>
+      </template>
+      <template v-else>
+        <div class="PLACEHOLDER_SPRITE">{{ character.name }}</div>
+      </template>
+    </div>
+  </div>
   <template v-for="instruction in renderList" :key="instruction.id">
     <CSSAnimation v-if="instruction.command === 'takeHit'" class="target-self" animationId="float-up" :animationDurationMS="800">
       <div class="takeHit">-{{ (instruction.params as any).damage }}</div>
@@ -31,6 +40,18 @@ const spriteProps = computed(() => props.character.spriteProps);
   position: absolute;
 }
 
+.character {
+  overflow: hidden;
+}
+
+.debug {
+  color: black;
+  position: absolute;
+  top: -30px;
+  left: 0;
+  width: 200px;
+}
+
 .PLACEHOLDER_SPRITE {
   height: 80px;
   width: 80px;
@@ -39,6 +60,17 @@ const spriteProps = computed(() => props.character.spriteProps);
   align-items: center;
   justify-content: center;
   text-align: center;
+}
+
+.alive {
+  transition: transform 0.8s ease;
+  transform-origin: center center;
+  transform: none;
+}
+
+.die {
+  transition: transform 0.8s ease;
+  transform: translateY(100%);
 }
 
 .takeHit {

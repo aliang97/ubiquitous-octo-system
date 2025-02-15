@@ -1,18 +1,23 @@
 <script setup lang="ts">
 import type { CombatInstance } from '@/types/CombatInstance';
 import CharacterRenderer from '@/components/combat/CharacterRenderer.vue';
-defineProps<{
+import { computed } from 'vue';
+const props = defineProps<{
   combat: CombatInstance,
 }>()
+
+const showCombat = computed(() => {
+  return props.combat.status === 'ongoing';
+})
 </script>
 
 <template>
   <div class="CombatRenderer">
-    <div class="platform-position1">
+    <div class="platform-position1" :class="showCombat ? 'onscreen-position1' : ''">
       <div class="platform"></div>
       <CharacterRenderer class="on-platform" :character="combat.character1" />
     </div>
-    <div class="platform-position2">
+    <div class="platform-position2" :class="showCombat ? 'onscreen-position2' : ''">
       <div class="platform"></div>
       <CharacterRenderer class="on-platform" :character="combat.character2" />
     </div>
@@ -21,6 +26,7 @@ defineProps<{
 
 <style scoped>
 .CombatRenderer {
+  overflow: hidden;
   position: absolute;
   top: 0;
   left: 0;
@@ -38,14 +44,24 @@ defineProps<{
 }
 
 .platform-position1 {
+  transition: left 1s ease;
   position: absolute;
   bottom: -20px;
+  left: -100%;
+}
+
+.onscreen-position1 {
   left: 80px;
 }
 
 .platform-position2 {
+  transition: right 1s ease;
   position: absolute;
   top: 80px;
+  right: -100%
+}
+
+.onscreen-position2 {
   right: 80px;
 }
 

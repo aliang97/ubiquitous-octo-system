@@ -6,13 +6,13 @@ import { getAttackIntervalMS } from '@/utils/resolveCombatTick';
 
 const props = defineProps<{
   character: CharacterEntity,
-  tick: number,
+  gameTick: number,
 }>()
 
 const attackIntervalMS = getAttackIntervalMS(props.character);
 const attackPercentage: ComputedRef<number | undefined> = computed(() => {
   if (attackIntervalMS) {
-    return Math.round(100* (props.tick % attackIntervalMS) / attackIntervalMS);
+    return Math.round(100* (props.gameTick % attackIntervalMS) / attackIntervalMS);
   }
   return undefined;
 })

@@ -17,9 +17,12 @@ export const useOngoingCombatStore = defineStore('ongoingCombat', () => {
     );
     if (existingCombatIndex === -1) {
       // Add the new combat instance, and set up the clock to run the combat
+      //  The combat instance will start in /delay/ ms to give time for the intro animation
       ongoingCombat.value.push(newCombat);
+      pauseCombat(newCombat.location, 1500);
       const clockId = setInterval(() => resolveCombatTick(newCombat.location), SERVER_TICK_RATE_MS);
       newCombat.clockId = clockId;
+      newCombat.status = 'starting';
     } else {
       console.error('Error adding new combat at location with existing combat instance');
     }
@@ -49,5 +52,23 @@ export const useOngoingCombatStore = defineStore('ongoingCombat', () => {
     );
   }
 
-  return {ongoingCombat, addCombat, removeCombatByLocationId, getCombatByLocationId}
+  function pauseCombat(locationId: CombatLocationId, durationMS?: number, cb?: (combat: CombatInstance) => void) {
+    const combat = getCombatByLocationId(locationId);
+    if (!combat) { return; }
+    combat.paused = true;
+    if (durationMS) {
+      setTimeout(() => {
+        combat.paused = false;
+        if (cb) { cb(combat); }
+      }, durationMS)
+    }
+  }
+
+  function unpauseCombat(locationId: CombatLocationId) {
+    const combat = getCombatByLocationId(locationId);
+    if (!combat) { return; }
+    combat.paused = false;
+  }
+
+  return {ongoingCombat, addCombat, removeCombatByLocationId, getCombatByLocationId, pauseCombat, unpauseCombat}
 })

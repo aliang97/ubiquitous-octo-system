@@ -5,23 +5,23 @@ import AttackGauge from '@/components/characterEntity/AttackGauge.vue';
 
 defineProps<{
   character: CharacterEntity,
-  tick?: number,
+  gameTick?: number,
 }>()
 </script>
 
 <template>
-  <div class="statusWindow">
+  <div class="CombatStatus">
     <div class="info">
       <div class="name">{{ character.name }}</div>
       <div class="class">{{ character.class }}</div>
     </div>
     <HitpointGauge :character="character" />
-    <AttackGauge v-if="tick" :character="character" :tick="tick" />
+    <AttackGauge v-if="gameTick" :character="character" :gameTick="gameTick" />
   </div>
 </template>
 
 <style scoped>
-.statusWindow {
+.CombatStatus {
   padding: 8px;
   border: 1px solid white;
   background-color: var(--color-background-soft);

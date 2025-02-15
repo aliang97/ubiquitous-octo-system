@@ -1,7 +1,7 @@
 export type RenderInstruction = {
   command: string,
   params?: object,
-  duration: number, // in MS
+  duration: number | 'infinite', // in MS
   id: string,
 }
 

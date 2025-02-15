@@ -7,5 +7,8 @@ export type CombatInstance = {
   character2: CharacterEntity,
   location: CombatLocationId,
   clockId?: number,
-  tick?: number,
+  gameTick?: number,
+  trueTick?: number,
+  paused?: boolean,
+  status?: 'starting' | 'ongoing' | 'ending',
 }

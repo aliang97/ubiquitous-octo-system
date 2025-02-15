@@ -1,7 +1,7 @@
 import type { CombatLocationId } from "@/types/CombatInstance";
 import type { CharacterEntity } from "@/types/CharacterEntity";
 import type { LootTable } from '@/types/LootTable';
-import { resetCombatInstance } from "@/utils/combatUtils";
+import { resetCharacterHitpoints, resetCharacterRenderList } from "@/utils/combatUtils";
 import { useOngoingCombatStore } from "@/stores/ongoingCombat";
 import { useInventoryStore } from "@/stores/inventory";
 import { computed } from 'vue';
@@ -13,16 +13,18 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   const inventory = useInventoryStore();
   const ongoingCombat = useOngoingCombatStore();
   const combat = computed(() => ongoingCombat.getCombatByLocationId(combatLocation));
-
-  // Increment the tick
   if (!combat.value) { return; }
-  if (combat.value.tick !== undefined) { combat.value.tick++; }
-  else { combat.value.tick = 0; }
-
-  // Execute the combat actions for all characters
   const c1 = combat.value.character1;
   const c2 = combat.value.character2;
 
+  // Increment trueTick
+  if (combat.value.trueTick !== undefined) { combat.value.trueTick++; }
+  else { combat.value.trueTick = 0; }
+
+  if (combat.value.status === 'starting') { combat.value.status = 'ongoing'; }
+
+  // Execute Render instructions in the render list
+  // TODO: separate render list for pausable renders?
   // Each entry in the Render List represents an HTML element that will
   //  be visible for some duration (during which it will play an animation
   //  or something).
@@ -31,10 +33,18 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   c1.renderList = resolveRenderListTick(c1.renderList);
   c2.renderList = resolveRenderListTick(c2.renderList);
 
-  if (canAttack(c1, combat.value.tick)) {
+  // STOP if combat is paused
+  if (combat.value.paused) { return; }
+
+  // Increment gameTick
+  if (combat.value.gameTick !== undefined) { combat.value.gameTick++; }
+  else { combat.value.gameTick = 0; }
+
+  // Execute the combat actions for all characters
+  if (canAttack(c1, combat.value.gameTick)) {
     doAttack(c1, c2);
   }
-  if (canAttack(c2, combat.value.tick)) {
+  if (canAttack(c2, combat.value.gameTick)) {
     doAttack(c2, c1);
   }
 
@@ -45,9 +55,21 @@ export function resolveCombatTick(combatLocation: CombatLocationId) {
   if (hasDied(c2)) {
     // Monster death logic
     if (c2.onDeath) { c2.onDeath(combat.value); }
-    resetCombatInstance(combat.value);
-    const lootList = rollLoot(c2);
-    lootList.forEach(entry => inventory.addItemEntity(entry.itemEntity, entry.quantity))
+    appendToRenderList(c2.renderList, 'die');
+    // Pause for outro animation
+
+    ongoingCombat.pauseCombat(combatLocation, 500, (combat) => {
+      combat.status = 'ending';
+      ongoingCombat.pauseCombat(combatLocation, 500, (combat) => {
+        ongoingCombat.removeCombatByLocationId(combat.location);
+        // Love JS object scoping to access c2 here XDD
+        const lootList = rollLoot(c2);
+        lootList.forEach(entry => inventory.addItemEntity(entry.itemEntity, entry.quantity));
+        resetCharacterRenderList(c2);
+        resetCharacterHitpoints(c2);
+      })
+    });
+
   }
 }
 
@@ -82,9 +104,7 @@ function rollDamage(c: CharacterEntity) {
 function doAttack(source: CharacterEntity, target: CharacterEntity) {
   const damage = rollDamage(source);
   target.currentHitpoints = Math.max(0, target.currentHitpoints - damage);
-  if (target.renderList) {
-    appendToRenderList(target.renderList, 'takeHit', { damage });
-  }
+  appendToRenderList(target.renderList, 'takeHit', { damage });
 }
 
 function hasDied(c: CharacterEntity): boolean {
@@ -105,21 +125,29 @@ function rollLoot(c: CharacterEntity) {
 // Reduces the duration of each queued item by 1 tick, and
 //  deletes any items that are timed out (0 duration remaining)
 // Returns a new list because I don't want to deal with iteration while deleting
-function resolveRenderListTick(rq?: RenderList) {
-  if (rq === undefined) { return; }
-  rq.forEach(instruction => instruction.duration -= SERVER_TICK_RATE_MS);
-  const newRenderList = rq.filter(el => el.duration > 0);
+function resolveRenderListTick(rl?: RenderList) {
+  if (rl === undefined) { return; }
+  rl.forEach(instruction => {
+    if (instruction.duration === 'infinite') { return; }
+    instruction.duration -= SERVER_TICK_RATE_MS;
+  });
+  const newRenderList = rl.filter(el => el.duration === 'infinite' || el.duration > 0);
   return newRenderList;
 }
 
 // Appends a render instruction to the queue, and looks up the duration of the render
-function appendToRenderList(rq: RenderList, command: string, params?: object) {
+function appendToRenderList(rl: RenderList | undefined, command: string, params?: object) {
+  if (rl === undefined) { return; }
+  const animationToDuration: Record<string, number | 'infinite'> = {
+    'takeHit': 800,
+    'die': 'infinite',
+  }
   const d_string = new Date().toISOString();
   const newRenderInstruction: RenderInstruction = {
     command,
     params,
-    duration: 800,
+    duration: animationToDuration[command] || 0,
     id: 'ri_' + d_string,
   };
-  rq.push(newRenderInstruction);
+  rl.push(newRenderInstruction);
 }
