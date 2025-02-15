@@ -1,4 +1,4 @@
 export type Entity = {
-  id: string,
-  name: string,
-}
+  id: string;
+  name: string;
+};

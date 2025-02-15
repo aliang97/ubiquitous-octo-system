@@ -1,21 +1,30 @@
+import type { CharacterEntity } from '@/types/CharacterEntity';
+
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { CharacterEntity } from '@/types/CharacterEntity';
 import { removeFromObjectListById } from '@/utils/utils';
-
-import JohnExile from '@/data/characters/johnExile';
+import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/utils/utils';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
-  const people = ref(<CharacterEntity[]>[JohnExile]);
+  let guildRoster: CharacterEntity[] = [];
+  const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
+  if (localStorageData) {
+    const oldState = JSON.parse(localStorageData);
+    guildRoster = oldState.people;
+  }
+
+  const people = ref(guildRoster);
+
   function addPerson(newPerson: CharacterEntity) {
-    const index = people.value.findIndex(el => el.id === newPerson.id);
+    const index = people.value.findIndex((el) => el.id === newPerson.id);
     if (index === -1) {
-      people.value.push(newPerson)
+      people.value.push(newPerson);
     }
   }
+
   function removePerson(person: CharacterEntity) {
     removeFromObjectListById(person.id, people.value);
   }
 
-  return { people, addPerson, removePerson}
-})
+  return { people, addPerson, removePerson };
+});

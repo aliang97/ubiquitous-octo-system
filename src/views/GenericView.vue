@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import TheSidebar from '@/components/TheSidebar.vue';
+// import NotificationToast from '@/components/NotificationToast.vue'
 defineProps<{
   sidebarOptions?: {
-    name: string,
-    label: string,
-  }[],
-}>()
+    name: string;
+    label: string;
+  }[];
+}>();
 </script>
 
 <template>
   <main>
-    <TheSidebar :options="sidebarOptions"/>
+    <TheSidebar :options="sidebarOptions" />
     <RouterView />
+    <!-- <NotificationToast /> -->
   </main>
 </template>
 

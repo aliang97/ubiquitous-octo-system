@@ -1,8 +1,8 @@
-import type { CharacterEntity } from "@/types/CharacterEntity"
+import type { CharacterEntity } from '@/types/CharacterEntity';
 import TestImage from '@/assets/characters/classes/guy-idle.png';
 
 const data: CharacterEntity = {
-  id: '0',
+  id: 'ce-1',
   name: 'John Exile',
   class: 'Deadeye',
   maximumHitpoints: 10,
@@ -12,10 +12,10 @@ const data: CharacterEntity = {
   attacksPerSecond: 2,
   spriteProps: {
     spriteSrc: TestImage,
-    size: {x: 64, y: 64},
+    size: { x: 64, y: 64 },
     frames: 2,
     durationMS: 800,
   },
-}
+};
 
 export default data;
