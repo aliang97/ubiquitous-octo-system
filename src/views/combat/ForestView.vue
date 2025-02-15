@@ -2,17 +2,18 @@
 import CombatWindow from '@/components/combat/CombatWindow.vue';
 import TargetSelector from '@/components/combat/TargetSelector.vue';
 import ForestData from '@/data/locations/Forest';
+import { LocationEntity } from '@/scripts/entities';
 import { ref } from 'vue';
 
-const locationProfile = ref(ForestData);
+const locationProfile = ref(new LocationEntity(ForestData));
 const locationName = ForestData.name;
 </script>
 
 <template>
   <main>
-    <CombatWindow :locationProfile="locationProfile"/>
+    <CombatWindow :locationProfile="locationProfile" />
     <h1>{{ locationName }}</h1>
-    <TargetSelector :locationProfile="ForestData"/>
+    <TargetSelector :locationProfile="locationProfile" />
   </main>
 </template>
 

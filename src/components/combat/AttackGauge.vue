@@ -1,29 +1,37 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types/CharacterEntity';
+import type { CharacterEntity } from '@/scripts/entities';
 import type { ComputedRef } from 'vue';
 import { computed } from 'vue';
-import { getAttackIntervalMS } from '@/utils/resolveCombatTick';
+import { SERVER_TICK_RATE_MS } from '@/scripts/util';
 
 const props = defineProps<{
-  character: CharacterEntity,
-  gameTick: number,
-}>()
+  character: CharacterEntity;
+  gameTick: number;
+}>();
+
+// TODO: put somewhere better
+function getAttackIntervalMS(c: CharacterEntity): number | undefined {
+  if (c.attacksPerSecond === undefined) {
+    return undefined;
+  }
+  const ticksPerSecond = 1000 / SERVER_TICK_RATE_MS;
+  return Math.round(ticksPerSecond / c.attacksPerSecond);
+}
 
 const attackIntervalMS = getAttackIntervalMS(props.character);
 const attackPercentage: ComputedRef<number | undefined> = computed(() => {
   if (attackIntervalMS) {
-    return Math.round(100* (props.gameTick % attackIntervalMS) / attackIntervalMS);
+    return Math.round((100 * (props.gameTick % attackIntervalMS)) / attackIntervalMS);
   }
   return undefined;
-})
-
+});
 </script>
 
 <template>
   <div v-if="attackPercentage" class="attackGauge">
     <div class="gauge">
       <div class="gauge-background"></div>
-      <div class="gauge-internal" :style="{width: attackPercentage + '%'}"></div>
+      <div class="gauge-internal" :style="{ width: attackPercentage + '%' }"></div>
     </div>
   </div>
 </template>

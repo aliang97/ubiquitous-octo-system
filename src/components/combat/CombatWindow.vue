@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { useOngoingCombatStore } from '@/stores/ongoingCombat';
-import type { LocationEntity } from '@/types/LocationEntity';
+import { LocationEntity } from '@/scripts/entities';
 import CombatHUD from '@/components/combat/CombatHUD.vue';
 import CombatRenderer from '@/components/combat/CombatRenderer.vue';
 
 import { computed } from 'vue';
+import { useCombatManagerStore } from '@/stores/combatManager';
 
 const props = defineProps<{
-  locationProfile: LocationEntity,
-}>()
+  locationProfile: LocationEntity;
+}>();
 
-const ongoingCombat = useOngoingCombatStore();
-const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(props.locationProfile.id));
-
+const combatManager = useCombatManagerStore();
+const currentCombat = computed(() => combatManager.combatDictionary[props.locationProfile.id]);
 </script>
 
 <template>
@@ -23,9 +22,7 @@ const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(props.l
       <CombatRenderer :combat="currentCombat" />
     </template>
     <template v-else>
-      <div class="prompt">
-        Pick an enemy to fight!
-      </div>
+      <div class="prompt">Pick an enemy to fight!</div>
     </template>
   </div>
 </template>

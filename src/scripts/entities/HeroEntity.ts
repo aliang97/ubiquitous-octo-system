@@ -25,6 +25,10 @@ export class HeroEntity extends RenderableEntity implements CharacterEntity {
     return arraySum(sources);
   }
 
+  set maximumHitPoints(n) {
+    this.maximumHitPoints = n;
+  }
+
   get attacksPerSecond() {
     return this.equipment['weapon1']?.effects?.['attacksPerSecond'] || 0;
   }
@@ -42,5 +46,13 @@ export class HeroEntity extends RenderableEntity implements CharacterEntity {
     this.heroClass = args.heroClass;
     this.equipment = args.equipment || {};
     this.currentHitPoints = this.maximumHitPoints;
+  }
+
+  getMaximumHitPoints() {
+    const sources = [
+      this.heroClass?.baseHitPoints,
+      this.equipment['helmet']?.effects?.['baseHitPoints'],
+    ];
+    return arraySum(sources);
   }
 }

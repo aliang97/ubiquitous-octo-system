@@ -1,16 +1,6 @@
 import type { CharacterEntity } from '@/scripts/entities';
 import { SERVER_TICK_RATE_MS } from '@/scripts/util';
-
-export enum CombatLocation {
-  Forest = 'LOCATION_FOREST',
-  Cave = 'LOCATION_CAVE',
-}
-
-export enum CombatStatus {
-  Starting = 'COMBAT_STARTING',
-  Ongoing = 'COMBAT_ONGOING',
-  Ending = 'COMBAT_ENDING',
-}
+import { CombatLocation, CombatStatus } from '@/scripts/combat';
 
 export type CombatInstanceArgs = {
   c1: CharacterEntity;

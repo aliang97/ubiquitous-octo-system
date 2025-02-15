@@ -1,33 +1,38 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types/CharacterEntity';
-import type { CombatInstance, CombatLocationId } from '@/types/CombatInstance';
-import type { LocationEntity } from '@/types/LocationEntity';
+import { LocationEntity, MonsterEntity } from '@/scripts/entities';
+import { CombatInstance } from '@/scripts/combat';
 
 import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
-import JohnExile from '@/data/characters/johnExile';
 import { computed } from 'vue';
-import { useOngoingCombatStore } from '@/stores/ongoingCombat.ts';
+import { useCombatManagerStore } from '@/stores/combatManager';
+import { useGuildRosterStore } from '@/stores/guildRoster';
+import { storeToRefs } from 'pinia';
 
 const props = defineProps<{
   locationProfile: LocationEntity;
 }>();
 
-const locationId = props.locationProfile.id as CombatLocationId;
+const locationId = props.locationProfile.id;
 const enemyList = props.locationProfile.enemyList;
 
-const ongoingCombat = useOngoingCombatStore();
-const currentCombat = computed(() => ongoingCombat.getCombatByLocationId(locationId));
-const currentMonsterId = computed(() => currentCombat.value?.character2.id);
+const combatManager = useCombatManagerStore();
+const currentMonsterId = computed(() => combatManager.combatDictionary[locationId]?.c2.id);
 
-function selectTarget(target: CharacterEntity, isInfinite?: boolean) {
-  const newCombatInstance: CombatInstance = {
-    character1: JohnExile,
-    character2: target,
+const guildRoster = useGuildRosterStore();
+const { heroList } = storeToRefs(guildRoster);
+
+function selectTarget(target: MonsterEntity, isInfinite?: boolean) {
+  if (heroList.value[0] === undefined) {
+    return;
+  }
+  const newCombat = new CombatInstance({
+    c1: heroList.value[0],
+    c2: target,
     location: locationId,
     loop: isInfinite,
-  };
-  ongoingCombat.removeCombatByLocationId(locationId);
-  ongoingCombat.addCombat(newCombatInstance);
+  });
+  combatManager.removeCombatByLocation(locationId);
+  combatManager.addCombat(newCombat);
 }
 </script>
 

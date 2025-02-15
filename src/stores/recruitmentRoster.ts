@@ -1,4 +1,4 @@
-import { HeroEntity } from '@/scripts/entities';
+import { HeroEntity, type HeroEntityArgs } from '@/scripts/entities';
 import { RECRUITMENTROSTER_LOCALSTORAGE_KEY } from '@/scripts/util';
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
@@ -6,11 +6,14 @@ import { generateHero } from '@/data/heros';
 import { useGuildRosterStore } from './guildRoster';
 
 export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => {
-  let recruitmentRoster: HeroEntity[] = [];
+  const recruitmentRoster: HeroEntity[] = [];
   const localStorageData = localStorage.getItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    recruitmentRoster = recoveredState.heroList;
+    // Need to convert the JSON to actual objects so I can use the attached methods!
+    recoveredState.heroList.forEach((heroData: HeroEntityArgs) => {
+      recruitmentRoster.push(new HeroEntity(heroData));
+    });
   } else {
     // Generate the first set of heros
     [...Array(4)].forEach(() => {

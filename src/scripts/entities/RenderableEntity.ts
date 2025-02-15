@@ -1,4 +1,4 @@
-import { type SpriteSheetData, type EntityArgs, Entity } from '@/scripts/entities';
+import { type SpriteSheetData, type EntityArgs, Entity, type RenderList } from '@/scripts/entities';
 
 export type RenderableEntityArgs = EntityArgs & {
   animations?: Record<string, SpriteSheetData>;
@@ -8,6 +8,7 @@ export type RenderableEntityArgs = EntityArgs & {
 export class RenderableEntity extends Entity {
   animations?: Record<string, SpriteSheetData>;
   particles?: string;
+  renderList: RenderList = [];
 
   constructor(args: RenderableEntityArgs = {}) {
     super(args);

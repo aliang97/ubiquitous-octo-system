@@ -1,4 +1,4 @@
-import { HeroEntity } from '@/scripts/entities';
+import { HeroEntity, type HeroEntityArgs } from '@/scripts/entities';
 import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/scripts/util';
 
 import { ref } from 'vue';
@@ -6,11 +6,14 @@ import { defineStore } from 'pinia';
 import { removeFromObjectListById } from '@/utils/utils';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
-  let guildRoster: HeroEntity[] = [];
+  const guildRoster: HeroEntity[] = [];
   const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    guildRoster = recoveredState.heroList;
+    // Need to convert the JSON to actual objects so I can use the attached methods!
+    recoveredState.heroList.forEach((heroData: HeroEntityArgs) => {
+      guildRoster.push(new HeroEntity(heroData));
+    });
   }
 
   const heroList = ref(guildRoster);

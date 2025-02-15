@@ -1,25 +1,25 @@
 <script setup lang="ts">
-import type { CombatInstance } from '@/types/CombatInstance';
 import CharacterRenderer from '@/components/combat/CharacterRenderer.vue';
+import { CombatInstance, CombatStatus } from '@/scripts/combat';
 import { computed } from 'vue';
 const props = defineProps<{
-  combat: CombatInstance,
-}>()
+  combat: CombatInstance;
+}>();
 
 const showCombat = computed(() => {
-  return props.combat.status === 'ongoing';
-})
+  return props.combat.status === CombatStatus.Ongoing;
+});
 </script>
 
 <template>
   <div class="CombatRenderer">
     <div class="platform-position1" :class="showCombat ? 'onscreen-position1' : ''">
       <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.character1" />
+      <CharacterRenderer class="on-platform" :character="combat.c1" />
     </div>
     <div class="platform-position2" :class="showCombat ? 'onscreen-position2' : ''">
       <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.character2" />
+      <CharacterRenderer class="on-platform" :character="combat.c2" />
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@ const showCombat = computed(() => {
   width: 180px;
   background-color: rgba(180, 180, 180, 1);
   border-radius: 50%;
-  transform: rotateX(70deg)
+  transform: rotateX(70deg);
 }
 
 .platform-position1 {
@@ -59,7 +59,7 @@ const showCombat = computed(() => {
   transition: right 1s ease;
   position: absolute;
   top: 80px;
-  right: -100%
+  right: -100%;
 }
 
 .onscreen-position2 {

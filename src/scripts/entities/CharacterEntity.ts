@@ -7,4 +7,5 @@ export interface CharacterEntity extends RenderableEntity {
   attacksPerSecond: number;
   hitDamageMaximum: number;
   hitDamageMinimum: number;
+  getMaximumHitPoints?: () => number;
 }

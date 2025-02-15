@@ -1,38 +1,47 @@
 <script setup lang="ts">
 import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
 import CSSAnimation from '@/components/combat/CSSAnimation.vue';
-import type { CharacterEntity } from '@/types/CharacterEntity';
+import { RenderableEntity } from '@/scripts/entities';
 import { computed } from 'vue';
 const props = defineProps<{
-  character: CharacterEntity,
-}>()
+  character: RenderableEntity;
+}>();
 const DEBUG = false;
 const renderList = computed(() => props.character.renderList);
-const spriteProps = computed(() => props.character.spriteProps);
-const debugPrintRenderList = computed(() => (renderList.value || []).map(el => el.command).join(', '));
-const animateDie = computed(() => (renderList.value || []).filter(el => el.command === 'die').length > 0);
+const spriteProps = computed(() => props.character.animations?.['idle']);
+const debugPrintRenderList = computed(() =>
+  (renderList.value || []).map((el) => el.command).join(', '),
+);
+const animateDie = computed(
+  () => (renderList.value || []).filter((el) => el.command === 'die').length > 0,
+);
 </script>
 
 <template>
-<div class="CharacterRenderer">
-  <div v-if="DEBUG" class="debug">{{ debugPrintRenderList }}</div>
+  <div class="CharacterRenderer">
+    <div v-if="DEBUG" class="debug">{{ debugPrintRenderList }}</div>
 
-  <div class="character">
-    <div :class="animateDie ? 'die' : 'alive'">
-      <template v-if="spriteProps">
-        <AnimatedSprite v-bind="spriteProps"/>
-      </template>
-      <template v-else>
-        <div class="PLACEHOLDER_SPRITE">{{ character.name }}</div>
-      </template>
+    <div class="character">
+      <div :class="animateDie ? 'die' : 'alive'">
+        <template v-if="spriteProps">
+          <AnimatedSprite v-bind="spriteProps" />
+        </template>
+        <template v-else>
+          <div class="PLACEHOLDER_SPRITE">{{ character.name }}</div>
+        </template>
+      </div>
     </div>
+    <template v-for="instruction in renderList" :key="instruction.id">
+      <CSSAnimation
+        v-if="instruction.command === 'takeHit'"
+        class="target-self"
+        animationId="float-up"
+        :animationDurationMS="800"
+      >
+        <div class="takeHit">-{{ (instruction.params as any).damage }}</div>
+      </CSSAnimation>
+    </template>
   </div>
-  <template v-for="instruction in renderList" :key="instruction.id">
-    <CSSAnimation v-if="instruction.command === 'takeHit'" class="target-self" animationId="float-up" :animationDurationMS="800">
-      <div class="takeHit">-{{ (instruction.params as any).damage }}</div>
-    </CSSAnimation>
-  </template>
-</div>
 </template>
 
 <style scoped>

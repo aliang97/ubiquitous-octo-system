@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types/CharacterEntity';
 import { computed } from 'vue';
+import type { CharacterEntity } from '@/scripts/entities';
 
 const props = defineProps<{
-  character: CharacterEntity
-}>()
+  character: CharacterEntity;
+}>();
 
-const healthPercentage = computed(() => Math.max(
-  Math.round(100 * props.character.currentHitpoints / props.character.maximumHitpoints),
-  0
-  ));
+const healthPercentage = computed(() =>
+  Math.max(
+    Math.round((100 * props.character.currentHitPoints) / props.character.maximumHitPoints),
+    0,
+  ),
+);
 </script>
 
 <template>
   <div class="hitpointGauge">
-    <div class="label">{{ character.currentHitpoints }} / {{ character.maximumHitpoints }}</div>
+    <div class="label">{{ character.currentHitPoints }} / {{ character.maximumHitPoints }}</div>
     <div class="gauge">
       <div class="gauge-background"></div>
-      <div class="gauge-internal" :style="{width: healthPercentage + '%'}"></div>
+      <div class="gauge-internal" :style="{ width: healthPercentage + '%' }"></div>
     </div>
   </div>
 </template>

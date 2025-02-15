@@ -9,7 +9,8 @@ export class Entity {
   static id = 0;
 
   static generateId() {
-    return `e-${Entity.id++}-${new Date().toISOString}`;
+    const timestamp = new Date().toISOString();
+    return `e-${Entity.id++}-${timestamp}`;
   }
 
   constructor(args: EntityArgs = {}) {

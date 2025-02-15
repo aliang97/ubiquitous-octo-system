@@ -17,10 +17,14 @@ export { HeroEntity, type HeroEntityArgs } from './HeroEntity';
 
 export { MonsterEntity, type MonsterEntityArgs } from './MonsterEntity';
 
+export { LocationEntity, type LocationEntityArgs } from './LocationEntity';
+
 export type {
   EquippedItemLoadout,
   HeroClass,
   LootTableEntry,
   LootTable,
   SpriteSheetData,
+  RenderInstruction,
+  RenderList,
 } from './types';

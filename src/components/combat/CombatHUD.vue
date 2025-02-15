@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { CombatInstance } from '@/types/CombatInstance';
-import type { LocationEntity } from '@/types/LocationEntity';
 import { computed } from 'vue';
+import { LocationEntity } from '@/scripts/entities';
+import { CombatInstance, CombatStatus as CombatStatusType } from '@/scripts/combat';
 import CombatStatus from '@/components/combat/CombatStatus.vue';
-import { useOngoingCombatStore } from '@/stores/ongoingCombat';
+import { useCombatManagerStore } from '@/stores/combatManager';
 
 const props = defineProps<{
-  locationProfile: LocationEntity,
-  combat: CombatInstance,
-}>()
+  locationProfile: LocationEntity;
+  combat: CombatInstance;
+}>();
 
 const DEBUG = true;
-const ongoingCombat = useOngoingCombatStore();
+const combatManager = useCombatManagerStore();
+const currentCombat = computed(() => combatManager.combatDictionary[props.locationProfile.id]);
 const gameTick = computed(() => props.combat.gameTick);
 const trueTick = computed(() => props.combat.trueTick);
 const combatStatus = computed(() => props.combat.status);
 const showCombatStatus = computed(() => {
-  return props.combat.status === 'ongoing';
-})
+  return props.combat.status === CombatStatusType.Ongoing;
+});
 function exitCombat() {
-  ongoingCombat.removeCombatByLocationId(props.locationProfile.id);
+  combatManager.removeCombatByLocation(props.locationProfile.id);
 }
-
 </script>
 
 <template>
@@ -32,21 +32,21 @@ function exitCombat() {
       <div>Status {{ combatStatus }}</div>
     </div>
     <CombatStatus
-      :character="combat.character1"
+      :character="combat.c1"
       :gameTick="gameTick"
       class="statusWindow-position1"
       :class="showCombatStatus ? 'onscreen-left' : ''"
     />
     <CombatStatus
-      :character="combat.character2"
+      :character="combat.c2"
       :gameTick="gameTick"
       class="statusWindow-position2"
       :class="showCombatStatus ? 'onscreen-right' : ''"
     />
     <div class="buttonBox">
       <div class="button" v-on:click="exitCombat">Leave Combat</div>
-      <div class="button" v-on:click="ongoingCombat.pauseCombat(combat.location)">Pause</div>
-      <div class="button" v-on:click="ongoingCombat.unpauseCombat(combat.location)">Play</div>
+      <div class="button" v-on:click="currentCombat?.pause()">Pause</div>
+      <div class="button" v-on:click="currentCombat?.unpause()">Play</div>
     </div>
   </div>
 </template>
@@ -67,7 +67,7 @@ function exitCombat() {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  color: black
+  color: black;
 }
 
 .statusWindow-position1 {
