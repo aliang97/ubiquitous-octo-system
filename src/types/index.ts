@@ -6,3 +6,4 @@ export type { LootTable, LootTableEntry } from './LootTable';
 export type { EquippedItemLoadout } from './EquippedItemLoadout';
 
 export * from './entities';
+export * from './combat';

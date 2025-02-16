@@ -1,8 +1,8 @@
 import type { EquippedItemLoadout, HeroClass, HeroEntity } from '@/types';
 import { allClasses } from '@/data/classes';
-import { basicHelmet, basicSword } from '@/data/equippableItems';
 import TestImage from '@/assets/characters/classes/guy-idle.png';
-import { generateId } from '@/utils';
+import { EquippableItemType, generateId } from '@/utils';
+import { generateEquippableItem } from './generateEquippableItem';
 
 type GenerateHeroFixedParams = {
   name?: string;
@@ -25,8 +25,8 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
     params.equipment = fixedParams.equipment;
   } else {
     params.equipment = {
-      helmet: basicHelmet,
-      weapon1: basicSword,
+      helmet: generateEquippableItem({ type: EquippableItemType.Helmet }),
+      weapon1: generateEquippableItem({ type: EquippableItemType.Sword }),
     };
   }
 

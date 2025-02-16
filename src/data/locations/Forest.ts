@@ -1,11 +1,11 @@
 import { shallowRef } from 'vue';
 import ForestRenderer from '@/components/combat/locationEntity/ForestRenderer.vue';
-import { CombatLocation } from '@/scripts/combat';
-import { LocationEntity } from '@/scripts/entities';
-import { slime, level1Crook, level100Boss } from '../enemies';
+import { slime, level1Crook, level100Boss } from '@/utils/generators/generateEnemy';
+import type { Location } from '@/types';
+import { LocationId } from '@/utils';
 
-const data: LocationEntity = {
-  id: CombatLocation.Forest,
+const data: Location = {
+  id: LocationId.Forest,
   name: 'Generic RPG Forest Zone',
   backgroundComponent: shallowRef(ForestRenderer),
   enemyList: [slime, level1Crook, level100Boss],

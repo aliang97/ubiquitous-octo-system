@@ -14,3 +14,16 @@ export enum LocationId {
   Forest = 'LOCATION_FOREST',
   Cave = 'LOCATION_CAVE',
 }
+
+export enum EnemyType {
+  Slime = 'ENEMY_SLIME',
+  Crook = 'ENEMY_CROOK',
+  Boss = 'ENEMY_BOSS',
+}
+
+export enum CombatInstanceStatus {
+  Uninitialized = 'COMBATINSTANCESTATUS_UNINITIALIZED',
+  Starting = 'COMBATINSTANCESTATUS_STARTING',
+  Ongoing = 'COMBATINSTANCESTATUS_ONGOING',
+  Ending = 'COMBATINSTANCESTATUS_ENDING',
+}

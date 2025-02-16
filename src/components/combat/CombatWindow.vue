@@ -11,7 +11,7 @@ const props = defineProps<{
 }>();
 
 const combatManager = useCombatManagerStore();
-const currentCombat = computed(() => combatManager.combatDictionary[props.locationProfile.id]);
+const currentCombat = computed(() => combatManager.combatsByLocationId[props.locationProfile.id]);
 </script>
 
 <template>

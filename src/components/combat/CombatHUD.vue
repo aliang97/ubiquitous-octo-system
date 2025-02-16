@@ -18,7 +18,7 @@ const cc = computed(() => {
   console.log(combatManager.getCombatByLocation(props.locationProfile.id));
   return c;
 });
-const currentCombat = computed(() => combatManager.combatDictionary[props.locationProfile.id]);
+const currentCombat = computed(() => combatManager.combatsByLocationId[props.locationProfile.id]);
 // const gameTick = computed(() => currentCombat.value.gameTick);
 // const trueTick = computed(() => currentCombat.value.trueTick);
 // const combatStatus = computed(() => currentCombat.value.status);

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { LocationEntity, MonsterEntity } from '@/scripts/entities';
-import { CombatInstance } from '@/scripts/combat';
+import type { Location, MonsterEntity, CombatInstance } from '@/types';
 
 import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
 import { computed } from 'vue';
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { useGuildRosterStore } from '@/stores/guildRoster';
 import { storeToRefs } from 'pinia';
+import { generateCombat } from '@/utils';
 
 const props = defineProps<{
-  locationProfile: LocationEntity;
+  location: Location;
 }>();
 
-const locationId = props.locationProfile.id;
-const enemyList = props.locationProfile.enemyList;
+const locationId = props.location.id;
+const enemyList = props.location.enemyList;
 
 const combatManager = useCombatManagerStore();
-const currentMonsterId = computed(() => combatManager.combatDictionary[locationId]?.c2.id);
+const currentMonsterId = computed(() => combatManager.combatsByLocationId[locationId]?.m1.id);
 
 const guildRoster = useGuildRosterStore();
 const { heroList } = storeToRefs(guildRoster);
@@ -25,10 +25,10 @@ function selectTarget(target: MonsterEntity, isInfinite?: boolean) {
   if (heroList.value[0] === undefined) {
     return;
   }
-  const newCombat = new CombatInstance({
-    c1: heroList.value[0],
-    c2: target,
-    location: locationId,
+  const newCombat: CombatInstance = generateCombat({
+    h1: heroList.value[0],
+    m1: target,
+    locationId: locationId,
     loop: isInfinite,
   });
   combatManager.removeCombatByLocation(locationId);

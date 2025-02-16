@@ -1,51 +1,39 @@
-import { CombatInstance, CombatLocation } from '@/scripts/combat';
-import { HeroEntity, MonsterEntity } from '@/scripts/entities';
+import { COMBATMANAGER_LOCALSTORAGE_KEY, LocationId } from '@/utils';
+import type { CombatInstance } from '@/types';
 import { defineStore } from 'pinia';
-import { ref, type Ref } from 'vue';
-import { COMBATMANAGER_LOCALSTORAGE_KEY } from '@/scripts/util';
-import type { CombatInstanceArgs } from '@/scripts/combat/CombatInstance';
+import { ref } from 'vue';
+import { startCombat, endCombat } from '@/utils/combat';
 
 export const useCombatManagerStore = defineStore('combatManager', () => {
-  const c: Partial<Record<CombatLocation, Ref<CombatInstance>>> = {};
-  const cl: CombatInstance[] = [];
+  let c: Partial<Record<LocationId, CombatInstance>> = {};
   const localStorageData = localStorage.getItem(COMBATMANAGER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    // Need to convert the JSON to actual objects so I can use the attached methods!
-    Object.entries(recoveredState.combatDictionary).forEach(([k, v]) => {
-      const loc = k as CombatLocation;
-      const args = v as CombatInstanceArgs;
-      args.c1 = new HeroEntity(args.c1);
-      args.c2 = new MonsterEntity(args.c2);
-      c[loc] = ref(new CombatInstance(args));
-    });
+    c = recoveredState.combatsByLocationId;
   }
 
-  const combatDictionary = ref(c);
-  const combatList = ref(cl);
+  const combatsByLocationId = ref(c);
 
   function addCombat(newCombat: CombatInstance) {
-    if (combatDictionary.value[newCombat.location]) {
+    if (combatsByLocationId.value[newCombat.locationId]) {
       console.error(
-        `Error while adding new combat: Combat already exists at location ${newCombat.location}`,
+        `Error while adding new combat: Combat already exists at location ${newCombat.locationId}`,
       );
       return;
     }
-    combatDictionary.value[newCombat.location] = newCombat;
-    combatList.value.push(newCombat);
-    newCombat.startCombat();
+
+    combatsByLocationId.value[newCombat.locationId] = newCombat;
+    startCombat(newCombat);
   }
 
-  function removeCombatByLocation(location: CombatLocation) {
-    const targetCombat = combatDictionary.value[location];
-    targetCombat?.endCombat();
-    delete combatDictionary.value[location];
+  function removeCombatByLocation(locationId: LocationId) {
+    const targetCombat = combatsByLocationId.value[locationId];
+    if (!targetCombat) {
+      return;
+    }
+    endCombat(targetCombat);
+    delete combatsByLocationId.value[locationId];
   }
 
-  function getCombatByLocation(location: CombatLocation) {
-    // return combatDictionary.value[location];
-    return combatList.value.find((el) => el.location === location);
-  }
-
-  return { combatList, combatDictionary, addCombat, removeCombatByLocation, getCombatByLocation };
+  return { combatsByLocationId, addCombat, removeCombatByLocation };
 });
