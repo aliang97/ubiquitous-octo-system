@@ -1,4 +1,4 @@
-import { type HeroClass } from '@/scripts/entities';
+import type { HeroClass } from '@/types';
 
 const Deadeye: HeroClass = {
   name: 'Deadeye',

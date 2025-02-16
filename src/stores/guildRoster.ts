@@ -1,19 +1,15 @@
-import { HeroEntity, type HeroEntityArgs } from '@/scripts/entities';
-import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/scripts/util';
+import type { HeroEntity } from '@/types';
+import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/utils';
 
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { removeFromObjectListById } from '@/utils/utils';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
-  const guildRoster: HeroEntity[] = [];
+  let guildRoster: HeroEntity[] = [];
   const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    // Need to convert the JSON to actual objects so I can use the attached methods!
-    recoveredState.heroList.forEach((heroData: HeroEntityArgs) => {
-      guildRoster.push(new HeroEntity(heroData));
-    });
+    guildRoster = recoveredState.heroList;
   }
 
   const heroList = ref(guildRoster);
@@ -25,8 +21,16 @@ export const useGuildRosterStore = defineStore('guildRoster', () => {
     }
   }
 
-  function removeHero(hero: HeroEntity) {
-    removeFromObjectListById(hero.id, heroList.value);
+  function removeHero(h: HeroEntity) {
+    // Remove Hero from the recruitment roster
+    const i = heroList.value.findIndex((el) => el.id === h.id);
+    if (i === -1) {
+      console.error(
+        `Error recruiting hero (id: ${h.id}) which could not be found in the recruitment list`,
+      );
+      return;
+    }
+    heroList.value.splice(i, 1);
   }
 
   return { heroList, addHero, removeHero };

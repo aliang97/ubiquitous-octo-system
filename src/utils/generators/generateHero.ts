@@ -1,7 +1,8 @@
-import { type EquippedItemLoadout, type HeroClass, HeroEntity } from '@/scripts/entities';
-import { allClasses } from './classes';
-import { basicHelmet, basicSword } from './equippableItems';
+import type { EquippedItemLoadout, HeroClass, HeroEntity } from '@/types';
+import { allClasses } from '@/data/classes';
+import { basicHelmet, basicSword } from '@/data/equippableItems';
 import TestImage from '@/assets/characters/classes/guy-idle.png';
+import { generateId } from '@/utils';
 
 type GenerateHeroFixedParams = {
   name?: string;
@@ -9,7 +10,7 @@ type GenerateHeroFixedParams = {
   equipment?: EquippedItemLoadout;
 };
 
-export const generateHero = (fixedParams?: GenerateHeroFixedParams) => {
+export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity => {
   const params: GenerateHeroFixedParams = {};
 
   // Determine class;
@@ -33,10 +34,12 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams) => {
   if (fixedParams?.name) {
     params.name = fixedParams.name;
   } else {
-    params.name = new Date().toISOString();
+    params.name = `name ${performance.now().toString(8)}`;
   }
 
-  return new HeroEntity({
+  return {
+    id: generateId(),
+    currentHitPoints: 1,
     animations: {
       idle: {
         spriteSrc: TestImage,
@@ -45,6 +48,7 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams) => {
         durationMS: 800,
       },
     },
+    renderList: [],
     ...params,
-  });
+  } as HeroEntity;
 };

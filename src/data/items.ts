@@ -1,16 +1,20 @@
-import { ItemEntity, RarityType } from '@/scripts/entities';
+import type { ItemEntity } from '@/types';
+import { generateId, Rarity } from '@/utils';
 
-export const SlimeCore = new ItemEntity({
+export const SlimeCore: ItemEntity = {
+  id: generateId(),
   name: 'Slime Core',
-  rarity: RarityType.Common,
-});
+  rarity: Rarity.Common,
+};
 
-export const CrookCorpse = new ItemEntity({
+export const CrookCorpse: ItemEntity = {
+  id: generateId(),
   name: 'Crook Corpse',
-  rarity: RarityType.Common,
-});
+  rarity: Rarity.Common,
+};
 
-export const BossCorpse = new ItemEntity({
+export const BossCorpse: ItemEntity = {
+  id: generateId(),
   name: 'Boss Corpse',
-  rarity: RarityType.Common,
-});
+  rarity: Rarity.Common,
+};

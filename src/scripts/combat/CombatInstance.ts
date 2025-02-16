@@ -1,6 +1,7 @@
 import type { CharacterEntity } from '@/scripts/entities';
 import { SERVER_TICK_RATE_MS } from '@/scripts/util';
 import { CombatLocation, CombatStatus, QueuedAction, resolveQueuedActions } from '@/scripts/combat';
+import { useCombatManagerStore } from '@/stores/combatManager';
 
 export type CombatInstanceArgs = {
   c1: CharacterEntity;
@@ -10,6 +11,7 @@ export type CombatInstanceArgs = {
 };
 
 export class CombatInstance {
+  combatManager: number;
   c1: CharacterEntity;
   c2: CharacterEntity;
   location: CombatLocation;
@@ -77,6 +79,10 @@ export class CombatInstance {
     // TODO: Resolve animations
     // TODO: Resolve damage
     // TODO: Resolve combat end state
+
+    this.combatManager.$patch((state: typeof this.combatManager) => {
+      state.combatDictionary[this.location] = this;
+    });
   }
 
   pause(durationMS?: number) {
