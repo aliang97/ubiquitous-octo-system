@@ -12,12 +12,19 @@ const props = defineProps<{
 
 const DEBUG = true;
 const combatManager = useCombatManagerStore();
+const cc = computed(() => {
+  console.log('huh');
+  const c = combatManager.getCombatByLocation(props.locationProfile.id)?.status;
+  console.log(combatManager.getCombatByLocation(props.locationProfile.id));
+  return c;
+});
 const currentCombat = computed(() => combatManager.combatDictionary[props.locationProfile.id]);
-const gameTick = computed(() => props.combat.gameTick);
-const trueTick = computed(() => props.combat.trueTick);
-const combatStatus = computed(() => props.combat.status);
+// const gameTick = computed(() => currentCombat.value.gameTick);
+// const trueTick = computed(() => currentCombat.value.trueTick);
+// const combatStatus = computed(() => currentCombat.value.status);
 const showCombatStatus = computed(() => {
-  return props.combat.status === CombatStatusType.Ongoing;
+  return true;
+  // return currentCombat.value.status === CombatStatusType.Ongoing;
 });
 function exitCombat() {
   combatManager.removeCombatByLocation(props.locationProfile.id);
@@ -26,23 +33,24 @@ function exitCombat() {
 
 <template>
   <div class="CombatHUD">
-    <div v-if="DEBUG" class="timer">
+    {{ cc }}
+    <!-- <div v-if="DEBUG" class="timer">
       <div>Game Tick {{ gameTick }}</div>
       <div>True Tick {{ trueTick }}</div>
       <div>Status {{ combatStatus }}</div>
     </div>
     <CombatStatus
-      :character="combat.c1"
+      :character="currentCombat.c1"
       :gameTick="gameTick"
       class="statusWindow-position1"
       :class="showCombatStatus ? 'onscreen-left' : ''"
     />
     <CombatStatus
-      :character="combat.c2"
+      :character="currentCombat.c2"
       :gameTick="gameTick"
       class="statusWindow-position2"
       :class="showCombatStatus ? 'onscreen-right' : ''"
-    />
+    /> -->
     <div class="buttonBox">
       <div class="button" v-on:click="exitCombat">Leave Combat</div>
       <div class="button" v-on:click="currentCombat?.pause()">Pause</div>

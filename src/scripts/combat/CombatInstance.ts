@@ -1,6 +1,6 @@
 import type { CharacterEntity } from '@/scripts/entities';
 import { SERVER_TICK_RATE_MS } from '@/scripts/util';
-import { CombatLocation, CombatStatus } from '@/scripts/combat';
+import { CombatLocation, CombatStatus, QueuedAction, resolveQueuedActions } from '@/scripts/combat';
 
 export type CombatInstanceArgs = {
   c1: CharacterEntity;
@@ -20,6 +20,8 @@ export class CombatInstance {
   status: CombatStatus = CombatStatus.Starting;
   clockId: number = 0;
 
+  actionQueue: QueuedAction[] = [];
+
   constructor(args: CombatInstanceArgs) {
     this.c1 = args.c1;
     this.c2 = args.c2;
@@ -30,39 +32,63 @@ export class CombatInstance {
   }
 
   startCombat() {
-    // Pause
-    // intro
-    this.clockId = setInterval(this.combatInstanceStep, SERVER_TICK_RATE_MS);
+    this.clockId = setInterval(() => this.combatInstanceStep(), SERVER_TICK_RATE_MS);
+    this.pause(1500);
+    // Changing the status triggers the fade-in animation
+    this.actionQueue.push(
+      new QueuedAction({
+        waitUntilTrueTick: 1,
+        doAction: () => {
+          console.log('what');
+          this.status = CombatStatus.Ongoing;
+        },
+      }),
+    );
   }
 
   endCombat() {
-    // Pause
-    // outro
-    // loot
-    // reset character(s)
+    // TODO: Pause
+    // TODO: outro
+    // TODO: loot
+    // TODO: reset character(s)
     clearInterval(this.clockId);
   }
 
   combatInstanceStep() {
     this.trueTick++;
 
-    // Continue resolving particle effects
+    // Resolve Queued Actions that are bound to trueTick
+    resolveQueuedActions({
+      actionQueue: this.actionQueue,
+      trueTick: this.trueTick,
+    });
+    // TODO: Continue resolving particle effects
     if (this.isPaused) {
       return;
     }
 
     this.gameTick++;
-    // Resolve animations
-    // Resolve damage
-    // Resolve combat end state
+
+    // Resolve Queued Actions that are bound to gameTick
+    resolveQueuedActions({
+      actionQueue: this.actionQueue,
+      gameTick: this.gameTick,
+    });
+    // TODO: Resolve animations
+    // TODO: Resolve damage
+    // TODO: Resolve combat end state
   }
 
   pause(durationMS?: number) {
     this.isPaused = true;
     if (durationMS) {
-      setTimeout(() => {
-        this.isPaused = false;
-      }, durationMS);
+      const durationTicks = durationMS / SERVER_TICK_RATE_MS;
+      this.actionQueue.push(
+        new QueuedAction({
+          waitUntilTrueTick: this.trueTick + durationTicks,
+          doAction: () => this.unpause(),
+        }),
+      );
     }
   }
 
