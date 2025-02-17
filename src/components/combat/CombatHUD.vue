@@ -20,7 +20,7 @@ const showCombatStatus = computed(() => {
   return combat.value?.status === CombatInstanceStatus.Ongoing;
 });
 function exitCombat() {
-  combatManager.removeCombatByLocation(props.location.id);
+  combatManager.removeCombatByLocation(props.location.id, true);
 }
 </script>
 
@@ -71,25 +71,27 @@ function exitCombat() {
 }
 
 .statusWindow-position1 {
-  transition: left 1s ease;
+  transition: transform 1s ease;
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
+  transform: translateX(-100%);
 }
 
 .statusWindow-position2 {
-  transition: right 1s ease;
+  transition: transform 1s ease;
   position: absolute;
   bottom: 0;
-  right: -100%;
+  right: 0;
+  transform: translateX(100%);
 }
 
 .onscreen-left {
-  left: 0;
+  transform: translateX(0);
 }
 
 .onscreen-right {
-  right: 0;
+  transform: translateX(0);
 }
 
 .buttonBox {

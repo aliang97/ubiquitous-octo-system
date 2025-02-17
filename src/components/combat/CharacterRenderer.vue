@@ -1,37 +1,40 @@
 <script setup lang="ts">
 import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
-import CSSAnimation from '@/components/combat/CSSAnimation.vue';
-import type { RenderableEntity } from '@/types';
+import type { RenderableEntity, CombatInstance } from '@/types';
 import { computed } from 'vue';
+
 const props = defineProps<{
   character: RenderableEntity;
+  combat: CombatInstance;
 }>();
-const DEBUG = false;
-const renderList = computed(() => props.character.renderList);
-const spriteProps = computed(() => props.character.animations?.['idle']);
-const debugPrintRenderList = computed(() =>
-  (renderList.value || []).map((el) => el.command).join(', '),
-);
-const animateDie = computed(
-  () => (renderList.value || []).filter((el) => el.command === 'die').length > 0,
-);
+
+const defaultAnimation = computed(() => props.character.defaultAnimation || 'idle');
+const currentAnimation = computed(() => props.character.currentAnimation || defaultAnimation.value);
+const animationIsPaused = computed(() => props.character.pauseAnimations);
 </script>
 
 <template>
   <div class="CharacterRenderer">
-    <div v-if="DEBUG" class="debug">{{ debugPrintRenderList }}</div>
-
     <div class="character">
-      <div :class="animateDie ? 'die' : 'alive'">
-        <template v-if="spriteProps">
-          <AnimatedSprite v-bind="spriteProps" />
+      <template v-if="character.animations">
+        <div class="debug">
+          <div>{{ currentAnimation }}</div>
+          <!-- <div>{{ animationIsPaused }}</div> -->
+        </div>
+        <template v-for="(spriteProps, name) in props.character.animations">
+          <AnimatedSprite
+            v-if="name === currentAnimation"
+            v-bind="spriteProps"
+            :key="name"
+            :paused="animationIsPaused"
+          />
         </template>
-        <template v-else>
-          <div class="PLACEHOLDER_SPRITE">{{ character.name }}</div>
-        </template>
-      </div>
+      </template>
+      <template v-else>
+        <div class="spritePlaceholder">{{ character.name }}</div>
+      </template>
     </div>
-    <template v-for="instruction in renderList" :key="instruction.id">
+    <!-- <template v-for="instruction in renderList" :key="instruction.id">
       <CSSAnimation
         v-if="instruction.command === 'takeHit'"
         class="target-self"
@@ -40,7 +43,7 @@ const animateDie = computed(
       >
         <div class="takeHit">-{{ (instruction.params as any).damage }}</div>
       </CSSAnimation>
-    </template>
+    </template> -->
   </div>
 </template>
 
@@ -49,19 +52,14 @@ const animateDie = computed(
   position: absolute;
 }
 
-.character {
-  overflow: hidden;
-}
-
 .debug {
   color: black;
   position: absolute;
-  top: -30px;
+  top: -80px;
   left: 0;
-  width: 200px;
 }
 
-.PLACEHOLDER_SPRITE {
+.spritePlaceholder {
   height: 80px;
   width: 80px;
   background-color: navy;
@@ -69,17 +67,6 @@ const animateDie = computed(
   align-items: center;
   justify-content: center;
   text-align: center;
-}
-
-.alive {
-  transition: transform 0.8s ease;
-  transform-origin: center center;
-  transform: none;
-}
-
-.die {
-  transition: transform 0.8s ease;
-  transform: translateY(100%);
 }
 
 .takeHit {

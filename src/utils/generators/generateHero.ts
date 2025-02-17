@@ -1,7 +1,9 @@
 import type { EquippedItemLoadout, HeroClass, HeroEntity } from '@/types';
 import { allClasses } from '@/data/classes';
-import TestImage from '@/assets/characters/classes/guy-idle.png';
-import { CharacterType, EquippableItemType, generateId } from '@/utils';
+// import TestImage from '@/assets/characters/classes/guy-idle.png';
+// import AttackImage from '@/assets/characters/classes/guy-attack.png';
+import RogueSprite from '@/assets/characters/classes/rogue.png';
+import { CharacterStatus, CharacterType, EquippableItemType, generateId } from '@/utils';
 import { generateEquippableItem } from './generateEquippableItem';
 import { getDerivedCharacterStats } from '../combat';
 
@@ -40,17 +42,33 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
 
   const h = {
     id: generateId(),
+    characterStatus: CharacterStatus.Alive,
     characterType: CharacterType.Hero,
     actionLockoutDurationMS: 0,
     currentHitPoints: 1,
     animations: {
       idle: {
-        spriteSrc: TestImage,
+        spriteSrc: RogueSprite,
         size: { x: 64, y: 64 },
-        frames: 2,
+        frames: 10,
         durationMS: 800,
       },
+      attack: {
+        spriteSrc: RogueSprite,
+        offset: { x: 0, y: 192 },
+        size: { x: 64, y: 64 },
+        frames: 10,
+        durationMS: 200,
+      },
+      die: {
+        spriteSrc: RogueSprite,
+        offset: { x: 0, y: 256 },
+        size: { x: 64, y: 64 },
+        frames: 10,
+        durationMS: 1000,
+      },
     },
+    defaultAnimation: 'idle',
     renderList: [],
     ...params,
   } as HeroEntity;

@@ -16,11 +16,11 @@ const showCombat = computed(() => {
   <div class="CombatScene">
     <div class="platform-position1" :class="showCombat ? 'onscreen-position1' : ''">
       <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.h1" />
+      <CharacterRenderer class="on-platform" :character="combat.h1" :combat="combat" />
     </div>
     <div class="platform-position2" :class="showCombat ? 'onscreen-position2' : ''">
       <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.m1" />
+      <CharacterRenderer class="on-platform" :character="combat.m1" :combat="combat" />
     </div>
   </div>
 </template>
@@ -46,25 +46,27 @@ const showCombat = computed(() => {
 }
 
 .platform-position1 {
-  transition: left 1s ease;
+  transition: transform 1s ease;
   position: absolute;
   bottom: -20px;
-  left: -100%;
+  left: 80px;
+  transform: translateX(-150%);
 }
 
 .onscreen-position1 {
-  left: 80px;
+  transform: translateX(0);
 }
 
 .platform-position2 {
-  transition: right 1s ease;
+  transition: transform 1s ease;
   position: absolute;
   top: 80px;
-  right: -100%;
+  right: 80px;
+  transform: translateX(150%);
 }
 
 .onscreen-position2 {
-  right: 80px;
+  transform: translateX(0);
 }
 
 .on-platform,

@@ -40,12 +40,15 @@ export const useCombatManagerStore = defineStore('combatManager', () => {
     startCombat(newCombat.locationId);
   }
 
-  function removeCombatByLocation(locationId: LocationId) {
+  function removeCombatByLocation(locationId: LocationId, breakLoop?: boolean, cb?: () => void) {
     const targetCombat = combatsByLocationId.value[locationId];
     if (!targetCombat) {
+      if (cb) {
+        cb();
+      }
       return;
     }
-    endCombat(targetCombat.locationId);
+    endCombat(targetCombat.locationId, breakLoop, cb);
   }
 
   return { combatsByLocationId, addCombat, removeCombatByLocation };

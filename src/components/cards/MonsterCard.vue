@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { MonsterEntity } from '@/types';
 import AnimatedSprite from '../combat/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
+import { generateEnemy, type EnemyType } from '@/utils';
 
-defineProps<{
-  monsterEntity: MonsterEntity;
+const props = defineProps<{
+  enemyType: EnemyType;
   isHighlighted?: boolean;
 }>();
+
+const monsterEntity = generateEnemy({ type: props.enemyType });
 </script>
 
 <template>

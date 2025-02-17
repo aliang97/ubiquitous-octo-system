@@ -1,29 +1,36 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 const props = defineProps<{
-  spriteSrc: string, // Filepath of the sprite sheet
-  size: {x: number, y: number}, // Size of one frame
-  frames: number, // number of images in the spritemap
-  durationMS: number, // how many ms the animation should last
-}>()
-const cssBackgroundImage = ref(`url(${props.spriteSrc})`);
-const cssHeight = ref(`${props.size.y}px`);
-const cssWidth = ref(`${props.size.x}px`);
-const cssAnimationDuration = ref(`${props.durationMS / 1000}s`);
-const cssAnimationTFunc = ref(`steps(${props.frames})`);
-const keyframeStart = ref(`0 0`);
-const keyframeEnd = ref(`${props.size.x * props.frames}px 0`);
+  spriteSrc: string; // Filepath of the sprite sheet
+  offset?: { x: number; y: number }; // if your spritemap has multiple animations in one file
+  size: { x: number; y: number }; // Size the final image should be rendered
+  frames: number; // number of images in the spritemap
+  durationMS: number; // how many ms the animation should last
+  paused?: boolean;
+}>();
+
+const _offset = {
+  x: props.offset?.x ? props.offset.x : 0,
+  y: props.offset?.y ? props.offset.y : 0,
+};
+const cssBackgroundSize = computed(() => `${100 * props.frames}% auto`);
+const cssBackgroundImage = computed(() => `url(${props.spriteSrc})`);
+const cssHeight = computed(() => `${props.size.y}px`);
+const cssWidth = computed(() => `${props.size.x}px`);
+const cssAnimationDuration = computed(() => `${props.durationMS / 1000}s`);
+const cssAnimationTFunc = computed(() => `steps(${props.frames})`);
+const keyframeStart = computed(() => `-${_offset.x}px -${_offset.y}px`);
+const keyframeEnd = computed(() => `-${_offset.x + props.size.x * props.frames}px -${_offset.y}px`);
+const cssAnimationPlayState = computed(() => (props.paused ? 'paused' : 'running'));
 </script>
 
 <template>
-<div class="AnimatedSprite">
-  <div class="animate"></div>
-</div>
+  <div class="AnimatedSprite"></div>
 </template>
 
 <style scoped>
-.animate {
-  background-size: cover;
+.AnimatedSprite {
+  background-size: v-bind(cssBackgroundSize);
   background-image: v-bind(cssBackgroundImage);
   height: v-bind(cssHeight);
   width: v-bind(cssWidth);
@@ -31,10 +38,15 @@ const keyframeEnd = ref(`${props.size.x * props.frames}px 0`);
   animation-timing-function: v-bind(cssAnimationTFunc);
   animation-duration: v-bind(cssAnimationDuration);
   animation-iteration-count: infinite;
+  animation-play-state: v-bind(cssAnimationPlayState);
 }
 
 @keyframes animationKeyframes {
-  from { background-position: v-bind(keyframeStart); }
-  to { background-position: v-bind(keyframeEnd); }
+  from {
+    background-position: v-bind(keyframeStart);
+  }
+  to {
+    background-position: v-bind(keyframeEnd);
+  }
 }
 </style>

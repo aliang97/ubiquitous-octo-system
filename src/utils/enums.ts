@@ -33,3 +33,8 @@ export enum CharacterType {
   Hero = 'CHARACTER_HERO',
   Monster = 'CHARACTER_MONSTER',
 }
+
+export enum CharacterStatus {
+  Alive = 'CHARACTERSTATUS_ALIVE',
+  Dead = 'CHARACTERSTATUS_DEAD',
+}

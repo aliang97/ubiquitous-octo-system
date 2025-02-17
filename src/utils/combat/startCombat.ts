@@ -25,6 +25,11 @@ export function startCombat(locationId: LocationId) {
   });
 
   // Reset the ActionLockoutDurations for each character
+  //  also currentAnimation
   c.h1.actionLockoutDurationMS = 0;
   c.m1.actionLockoutDurationMS = 0;
+  c.h1.currentAnimation = c.h1.defaultAnimation;
+  c.m1.currentAnimation = c.m1.defaultAnimation;
+  c.h1.pauseAnimations = false;
+  c.m1.pauseAnimations = false;
 }

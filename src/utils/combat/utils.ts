@@ -13,6 +13,7 @@ export function pauseCombat(c?: CombatInstance, durationMS?: number) {
     return;
   }
   c.isPaused = true;
+
   if (durationMS) {
     const delayedUnpause: DelayedAction = {
       id: generateId('da'),

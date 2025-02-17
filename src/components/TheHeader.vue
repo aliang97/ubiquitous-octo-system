@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { RouterLink, useRoute } from 'vue-router';
 import { computed } from 'vue';
+import {
+  COMBATMANAGER_LOCALSTORAGE_KEY,
+  GUILDROSTER_LOCALSTORAGE_KEY,
+  RECRUITMENTROSTER_LOCALSTORAGE_KEY,
+} from '@/utils';
 
 const route = useRoute();
 // TODO: need to compute route parent because this doesn't work if we're at /home/inventory for example
 const currentRouteName = computed(() => {
   return route.name;
-})
+});
 const tabs = [
   {
     name: 'home',
@@ -24,7 +29,13 @@ const tabs = [
     name: 'combat',
     label: 'Combat',
   },
-]
+];
+
+const clearLocalstorage = () => {
+  localStorage.removeItem(COMBATMANAGER_LOCALSTORAGE_KEY);
+  localStorage.removeItem(GUILDROSTER_LOCALSTORAGE_KEY);
+  localStorage.removeItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
+};
 </script>
 
 <template>
@@ -35,9 +46,14 @@ const tabs = [
     </div>
     <nav>
       <div v-for="tab in tabs" :key="tab.name">
-        <RouterLink :to="tab" :class="{'is-selected': tab.name === currentRouteName}">{{ tab.label }}</RouterLink>
+        <RouterLink :to="tab" :class="{ 'is-selected': tab.name === currentRouteName }">{{
+          tab.label
+        }}</RouterLink>
       </div>
     </nav>
+    <button :style="{ color: 'white' }" v-on:click="() => clearLocalstorage()">
+      Clear Localstorage
+    </button>
   </header>
 </template>
 
@@ -78,6 +94,6 @@ a {
 }
 
 a.is-selected {
-  color: white
+  color: white;
 }
 </style>

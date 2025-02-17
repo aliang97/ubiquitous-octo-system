@@ -6,7 +6,7 @@ export function arraySum(a: (number | undefined)[]): number {
 }
 
 export function msToTicks(durationMS: number) {
-  return durationMS / SERVER_TICK_RATE_MS;
+  return Math.round(durationMS / SERVER_TICK_RATE_MS);
 }
 
 export function isMonster(c: CharacterEntity): c is MonsterEntity {

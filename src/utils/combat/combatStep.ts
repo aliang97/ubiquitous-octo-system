@@ -1,7 +1,10 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { computed } from 'vue';
-import { LocationId } from '../enums';
+import { CharacterStatus, LocationId } from '../enums';
 import { resolveDelayedActions } from './delayedActions';
+import { takeAction } from './takeAction';
+import { handleDeath } from './handleDeath';
+import { endCombat } from './endCombat';
 
 export function combatStep(locationId: LocationId) {
   const combatManager = useCombatManagerStore();
@@ -21,19 +24,33 @@ export function combatStep(locationId: LocationId) {
   }
 
   c.gameTick++;
+
   // TODO: Resolve animations
-  // TODO: Resolve damage
-  if (c.h1.actionLockoutDurationMS <= 0) {
-    // what does this character want to do?
+  if (c.h1.characterStatus !== CharacterStatus.Dead && c.h1.actionLockoutDurationMS <= 0) {
+    takeAction(c.h1, c);
   } else {
     c.h1.actionLockoutDurationMS--;
   }
 
-  if (c.m1.actionLockoutDurationMS <= 0) {
-    // what does this character want to do?
+  if (c.m1.characterStatus !== CharacterStatus.Dead && c.m1.actionLockoutDurationMS <= 0) {
+    takeAction(c.m1, c);
   } else {
     c.m1.actionLockoutDurationMS--;
   }
 
-  // TODO: Resolve combat end state
+  // Combat finishes if either participant dies
+  if (c.m1.currentHitPoints <= 0 && c.m1.characterStatus !== CharacterStatus.Dead) {
+    handleDeath(c.m1, c).then(() => {
+      endCombat(locationId);
+    });
+    return;
+  }
+
+  if (c.h1.currentHitPoints <= 0 && c.h1.characterStatus !== CharacterStatus.Dead) {
+    handleDeath(c.h1, c).then(() => {
+      endCombat(locationId);
+    });
+
+    return;
+  }
 }
