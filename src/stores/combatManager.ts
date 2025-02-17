@@ -1,9 +1,9 @@
-import { CombatInstanceStatus, COMBATMANAGER_LOCALSTORAGE_KEY, LocationId } from '@/utils';
 import type { CombatInstance } from '@/types';
+import { COMBATMANAGER_LOCALSTORAGE_KEY } from '@/utils';
+import { CombatInstanceStatus, LocationId } from '@/utils/enums';
+import { startCombat, endCombat, rehydrateCombat } from '@/utils/combat';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { startCombat, endCombat } from '@/utils/combat';
-import { rehydrateCombat } from '@/utils/combat/rehydrateCombat';
 
 export const useCombatManagerStore = defineStore('combatManager', () => {
   let c: Partial<Record<LocationId, CombatInstance>> = {};

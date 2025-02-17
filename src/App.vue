@@ -5,7 +5,7 @@ import {
   RECRUITMENTROSTER_LOCALSTORAGE_KEY,
   GUILDROSTER_LOCALSTORAGE_KEY,
   COMBATMANAGER_LOCALSTORAGE_KEY,
-} from '@/scripts/util';
+} from '@/utils';
 import { useGuildRosterStore } from './stores/guildRoster';
 import { useRecruitmentRosterStore } from './stores/recruitmentRoster';
 import { useCombatManagerStore } from './stores/combatManager';

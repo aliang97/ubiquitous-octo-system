@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { Location } from '@/types';
-import { CombatInstanceStatus } from '@/utils';
+import { CombatInstanceStatus } from '@/utils/enums';
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { pauseCombat, unpauseCombat } from '@/utils/combat';
 import CharacterStatus from './CharacterStatus/CharacterStatus.vue';

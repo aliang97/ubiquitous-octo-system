@@ -1,8 +1,8 @@
 import type { HeroEntity, MonsterEntity, LootTable, CombatInstance } from '@/types';
-import { isHero, isMonster, msToTicks } from '../utils';
+import { isHero, isMonster, msToTicks } from '@/utils';
+import { CharacterStatus } from '@/utils/enums';
+import { generateId } from '@/utils/generators';
 import { doAnimation } from './doAnimation';
-import { generateId } from '../generators/generateId';
-import { CharacterStatus } from '../enums';
 
 export function handleDeath(c: HeroEntity | MonsterEntity, combat: CombatInstance): Promise<void> {
   c.characterStatus = CharacterStatus.Dead;

@@ -1,8 +1,9 @@
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
-import { generateHero, RECRUITMENTROSTER_LOCALSTORAGE_KEY } from '@/utils';
-import { useGuildRosterStore } from './guildRoster';
 import type { HeroEntity } from '@/types';
+import { useGuildRosterStore } from '@/stores/guildRoster';
+import { RECRUITMENTROSTER_LOCALSTORAGE_KEY } from '@/utils';
+import { generateHero } from '@/utils/generators';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => {
   let recruitmentRoster: HeroEntity[] = [];

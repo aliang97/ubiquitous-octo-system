@@ -4,9 +4,9 @@ import type {
   CharacterEntity,
   DerivedCharacterStats,
 } from '@/types';
-import { msToTicks, isHero, isMonster } from '../utils';
-import { deriveHeroStats, deriveMonsterStats } from './deriveCharacterStats';
-import { generateId, SERVER_TICK_RATE_MS } from '@/utils';
+import { msToTicks, isHero, isMonster, SERVER_TICK_RATE_MS } from '@/utils';
+import { generateId } from '@/utils/generators';
+import { deriveHeroStats, deriveMonsterStats } from '@/utils/combat/deriveCharacterStats';
 
 export function pauseCombat(c?: CombatInstance, durationMS?: number) {
   if (c === undefined) {

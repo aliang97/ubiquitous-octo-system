@@ -1,5 +1,5 @@
 import type { CharacterEntity, LootTable, CombatInstance } from '@/types';
-import type { EnemyType } from '@/utils';
+import { EnemyType } from '@/utils/enums';
 
 export interface MonsterEntity extends CharacterEntity {
   enemyType: EnemyType;

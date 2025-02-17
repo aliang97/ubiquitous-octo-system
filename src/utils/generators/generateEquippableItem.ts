@@ -1,5 +1,6 @@
 import type { EquippableItemEntity } from '@/types';
-import { Rarity, EquippableItemType, generateId } from '@/utils';
+import { Rarity, EquippableItemType } from '@/utils/enums';
+import { generateId } from '@/utils/generators';
 
 type generateEquippableItemArgs = {
   type?: EquippableItemType;

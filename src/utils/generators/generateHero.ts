@@ -1,11 +1,10 @@
 import type { EquippedItemLoadout, HeroClass, HeroEntity } from '@/types';
-import { allClasses } from '@/data/classes';
-// import TestImage from '@/assets/characters/classes/guy-idle.png';
-// import AttackImage from '@/assets/characters/classes/guy-attack.png';
 import RogueSprite from '@/assets/characters/classes/rogue.png';
-import { CharacterStatus, CharacterType, EquippableItemType, generateId } from '@/utils';
+import { allClasses } from '@/data/classes';
+import { CharacterStatus, CharacterType, EquippableItemType } from '@/utils/enums';
+import { generateId } from '@/utils/generators';
+import { getDerivedCharacterStats } from '@/utils/combat';
 import { generateEquippableItem } from './generateEquippableItem';
-import { getDerivedCharacterStats } from '../combat';
 
 type GenerateHeroFixedParams = {
   name?: string;
@@ -37,7 +36,7 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
   if (fixedParams?.name) {
     params.name = fixedParams.name;
   } else {
-    params.name = `name ${performance.now().toString()}`;
+    params.name = `name-${performance.now().toString().slice(-5)}`;
   }
 
   const h = {

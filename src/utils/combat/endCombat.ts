@@ -1,11 +1,9 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { computed } from 'vue';
-import { CombatInstanceStatus, LocationId } from '../enums';
-import { pauseCombat } from './utils';
-import { generateId } from '../generators/generateId';
-import { msToTicks } from '../utils';
-import { generateEnemy } from '../generators/generateEnemy';
-import { generateCombat } from '../generators/generateCombat';
+import { msToTicks } from '@/utils';
+import { CombatInstanceStatus, LocationId } from '@/utils/enums';
+import { pauseCombat } from '@/utils/combat';
+import { generateId, generateEnemy, generateCombat } from '@/utils/generators';
 
 export function endCombat(locationId: LocationId, breakLoop?: boolean, cb?: () => void) {
   const combatManager = useCombatManagerStore();

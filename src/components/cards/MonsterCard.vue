@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AnimatedSprite from '../combat/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
-import { generateEnemy, type EnemyType } from '@/utils';
+import { EnemyType } from '@/utils/enums';
+import { generateEnemy } from '@/utils/generators';
 
 const props = defineProps<{
   enemyType: EnemyType;

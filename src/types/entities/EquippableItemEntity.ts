@@ -1,5 +1,5 @@
 import type { ItemEntity } from '@/types';
-import { EquippableItemType } from '@/utils';
+import { EquippableItemType } from '@/utils/enums';
 
 export type EquipmentEffects = Record<string, number>;
 

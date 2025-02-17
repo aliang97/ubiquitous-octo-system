@@ -1,5 +1,5 @@
 import type { HeroEntity, MonsterEntity } from '@/types';
-import type { CombatInstanceStatus, LocationId } from '@/utils';
+import type { CombatInstanceStatus, LocationId } from '@/utils/enums';
 import type { DelayedAction } from './DelayedAction';
 
 export interface CombatInstance {

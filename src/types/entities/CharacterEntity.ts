@@ -1,5 +1,5 @@
 import type { DerivedCharacterStats, RenderableEntity } from '@/types';
-import type { CharacterType, CharacterStatus } from '@/utils';
+import { CharacterType, CharacterStatus } from '@/utils/enums';
 
 export interface CharacterEntity extends RenderableEntity {
   characterStatus: CharacterStatus;

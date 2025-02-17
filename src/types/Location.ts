@@ -1,4 +1,4 @@
-import { EnemyType, LocationId } from '@/utils';
+import { EnemyType, LocationId } from '@/utils/enums';
 
 export interface Location {
   id: LocationId;

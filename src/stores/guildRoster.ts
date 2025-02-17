@@ -1,8 +1,7 @@
 import type { HeroEntity } from '@/types';
 import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/utils';
-
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
   let guildRoster: HeroEntity[] = [];

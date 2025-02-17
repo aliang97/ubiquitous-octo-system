@@ -1,5 +1,5 @@
 import type { CombatInstance, HeroEntity, MonsterEntity } from '@/types';
-import { CombatInstanceStatus, type LocationId } from '../enums';
+import { CombatInstanceStatus, LocationId } from '@/utils/enums';
 
 export type generateCombatArgs = {
   h1: HeroEntity;

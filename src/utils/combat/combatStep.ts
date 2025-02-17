@@ -1,10 +1,10 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
+import { CharacterStatus, LocationId } from '@/utils/enums';
+import { resolveDelayedActions } from '@/utils/combat/delayedActions';
+import { endCombat } from '@/utils/combat/endCombat';
+import { handleDeath } from '@/utils/combat/handleDeath';
+import { takeAction } from '@/utils/combat/takeAction';
 import { computed } from 'vue';
-import { CharacterStatus, LocationId } from '../enums';
-import { resolveDelayedActions } from './delayedActions';
-import { takeAction } from './takeAction';
-import { handleDeath } from './handleDeath';
-import { endCombat } from './endCombat';
 
 export function combatStep(locationId: LocationId) {
   const combatManager = useCombatManagerStore();

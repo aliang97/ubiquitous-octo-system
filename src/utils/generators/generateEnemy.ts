@@ -1,9 +1,9 @@
 import type { MonsterEntity } from '@/types';
-import { CharacterStatus, CharacterType, EnemyType } from '@/utils';
 import SlimeSpritesheet from '@/assets/characters/enemies/slime/purple-slime-idle.png';
 import SlimeDie from '@/assets/characters/enemies/slime/purple-slime-die.png';
 import { SlimeCore, CrookCorpse, BossCorpse } from '@/data/items';
-import { generateId } from '@/utils';
+import { CharacterStatus, CharacterType, EnemyType } from '@/utils/enums';
+import { generateId } from '@/utils/generators';
 
 export const slime: MonsterEntity = {
   id: generateId(),

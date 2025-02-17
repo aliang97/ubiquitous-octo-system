@@ -5,10 +5,10 @@ import type {
   CharacterEntity,
   CombatInstance,
 } from '@/types';
-import { isHero, isMonster } from '../utils';
-import { getAttackIntervalMS, getDerivedCharacterStats } from './utils';
+import { isHero, isMonster } from '@/utils';
+import { getAttackIntervalMS, getDerivedCharacterStats } from '@/utils/combat';
 import { doAnimation } from './doAnimation';
-import { CharacterStatus } from '../enums';
+import { CharacterStatus } from '@/utils/enums';
 
 export function takeAction(character: HeroEntity | MonsterEntity, combat: CombatInstance) {
   if (combat === undefined) {

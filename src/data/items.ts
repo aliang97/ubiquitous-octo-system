@@ -1,5 +1,6 @@
 import type { ItemEntity } from '@/types';
-import { generateId, Rarity } from '@/utils';
+import { Rarity } from '@/utils/enums';
+import { generateId } from '@/utils/generators';
 
 export const SlimeCore: ItemEntity = {
   id: generateId(),

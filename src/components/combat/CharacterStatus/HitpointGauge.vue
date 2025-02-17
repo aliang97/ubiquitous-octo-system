@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { CharacterEntity } from '@/types';
 import { getDerivedCharacterStats } from '@/utils/combat';
+import { computed } from 'vue';
 
 const props = defineProps<{
   character: CharacterEntity;

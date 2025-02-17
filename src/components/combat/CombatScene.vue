@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import CharacterRenderer from '@/components/combat/CharacterRenderer.vue';
 import type { CombatInstance } from '@/types';
-import { CombatInstanceStatus } from '@/utils';
+import { CombatInstanceStatus } from '@/utils/enums';
 import { computed } from 'vue';
 const props = defineProps<{
   combat: CombatInstance;

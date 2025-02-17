@@ -1,5 +1,5 @@
 import type { DerivedCharacterStats, HeroEntity, MonsterEntity } from '@/types';
-import { arraySum } from '../utils';
+import { arraySum } from '@/utils';
 
 export function deriveHeroStats(h: HeroEntity): DerivedCharacterStats {
   return {

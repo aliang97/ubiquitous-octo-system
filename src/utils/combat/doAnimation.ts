@@ -1,6 +1,6 @@
 import type { CombatInstance, RenderableEntity } from '@/types';
-import { generateId } from '../generators/generateId';
-import { msToTicks } from '../utils';
+import { msToTicks } from '@/utils';
+import { generateId } from '@/utils/generators';
 
 export type doAnimationArgs = {
   combat: CombatInstance;

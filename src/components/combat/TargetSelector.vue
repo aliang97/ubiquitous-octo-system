@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import type { Location, CombatInstance } from '@/types';
-
-import MonsterCard from '../cards/MonsterCard.vue';
-import { computed } from 'vue';
+import MonsterCard from '@/components/cards/MonsterCard.vue';
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { useGuildRosterStore } from '@/stores/guildRoster';
+import { EnemyType } from '@/utils/enums';
+import { generateCombat, generateEnemy } from '@/utils/generators';
 import { storeToRefs } from 'pinia';
-import { generateCombat } from '@/utils';
-import { generateEnemy } from '@/utils';
-import { EnemyType } from '@/utils';
+import { computed } from 'vue';
 
 const props = defineProps<{
   location: Location;

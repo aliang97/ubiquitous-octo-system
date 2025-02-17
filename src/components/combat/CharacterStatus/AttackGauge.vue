@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { CharacterEntity } from '@/types';
-import type { ComputedRef } from 'vue';
-import { computed } from 'vue';
 import { getAttackIntervalMS, getDerivedCharacterStats } from '@/utils/combat';
+import { computed } from 'vue';
 
 const props = defineProps<{
   character: CharacterEntity;
@@ -13,7 +12,7 @@ const attackIntervalMS = computed(() => {
   const d = getDerivedCharacterStats(props.character);
   return getAttackIntervalMS(d.attacksPerSecond);
 });
-const attackPercentage: ComputedRef<number> = computed(() => {
+const attackPercentage = computed(() => {
   if (attackIntervalMS.value) {
     return Math.round((100 * (props.gameTick % attackIntervalMS.value)) / attackIntervalMS.value);
   }

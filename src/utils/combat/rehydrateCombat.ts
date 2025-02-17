@@ -1,6 +1,7 @@
-import { combatStep } from './combatStep';
-import { CombatInstanceStatus, SERVER_TICK_RATE_MS } from '@/utils';
 import type { CombatInstance } from '@/types';
+import { SERVER_TICK_RATE_MS } from '@/utils';
+import { CombatInstanceStatus } from '@/utils/enums';
+import { combatStep } from './combatStep';
 
 export function rehydrateCombat(c: CombatInstance) {
   clearInterval(c.clockId);
