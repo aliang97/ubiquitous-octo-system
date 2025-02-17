@@ -1,8 +1,9 @@
 import type { EquippedItemLoadout, HeroClass, HeroEntity } from '@/types';
 import { allClasses } from '@/data/classes';
 import TestImage from '@/assets/characters/classes/guy-idle.png';
-import { EquippableItemType, generateId } from '@/utils';
+import { CharacterType, EquippableItemType, generateId } from '@/utils';
 import { generateEquippableItem } from './generateEquippableItem';
+import { getDerivedCharacterStats } from '../combat';
 
 type GenerateHeroFixedParams = {
   name?: string;
@@ -34,11 +35,13 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
   if (fixedParams?.name) {
     params.name = fixedParams.name;
   } else {
-    params.name = `name ${performance.now().toString(8)}`;
+    params.name = `name ${performance.now().toString()}`;
   }
 
-  return {
+  const h = {
     id: generateId(),
+    characterType: CharacterType.Hero,
+    actionLockoutDurationMS: 0,
     currentHitPoints: 1,
     animations: {
       idle: {
@@ -51,4 +54,11 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
     renderList: [],
     ...params,
   } as HeroEntity;
+
+  // Calling this will do the initial calculation & cache the results on the Hero object
+  getDerivedCharacterStats(h);
+  if (h.derivedStats?.maximumHitPoints) {
+    h.currentHitPoints = h.derivedStats.maximumHitPoints;
+  }
+  return h;
 };

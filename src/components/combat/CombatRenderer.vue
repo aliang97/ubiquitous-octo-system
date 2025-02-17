@@ -1,76 +1,52 @@
 <script setup lang="ts">
-import CharacterRenderer from '@/components/combat/CharacterRenderer.vue';
-import { CombatInstance, CombatStatus } from '@/scripts/combat';
+import type { Location } from '@/types';
+import CombatHUD from '@/components/combat/CombatHUD.vue';
+import BackgroundRenderer from './BackgroundRenderer.vue';
+import CombatScene from './CombatScene.vue';
+
 import { computed } from 'vue';
+import { useCombatManagerStore } from '@/stores/combatManager';
+
 const props = defineProps<{
-  combat: CombatInstance;
+  location: Location;
 }>();
 
-const showCombat = computed(() => {
-  return props.combat.status === CombatStatus.Ongoing;
-});
+const combatManager = useCombatManagerStore();
+const currentCombat = computed(() => combatManager.combatsByLocationId[props.location.id]);
 </script>
 
 <template>
   <div class="CombatRenderer">
-    <div class="platform-position1" :class="showCombat ? 'onscreen-position1' : ''">
-      <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.c1" />
-    </div>
-    <div class="platform-position2" :class="showCombat ? 'onscreen-position2' : ''">
-      <div class="platform"></div>
-      <CharacterRenderer class="on-platform" :character="combat.c2" />
-    </div>
+    <BackgroundRenderer :location="location" />
+    <template v-if="currentCombat">
+      <CombatHUD :location="location" />
+      <CombatScene :combat="currentCombat" />
+    </template>
+    <template v-else>
+      <div class="prompt">Pick an enemy to fight!</div>
+    </template>
   </div>
 </template>
 
 <style scoped>
 .CombatRenderer {
-  z-index: 5;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.background {
   width: 100%;
   height: 100%;
 }
 
-.platform {
-  border: 2px solid black;
-  height: 180px;
-  width: 180px;
-  background-color: rgba(180, 180, 180, 1);
-  border-radius: 50%;
-  transform: rotateX(70deg);
-}
-
-.platform-position1 {
-  transition: left 1s ease;
+.prompt {
   position: absolute;
-  bottom: -20px;
-  left: -100%;
-}
-
-.onscreen-position1 {
-  left: 80px;
-}
-
-.platform-position2 {
-  transition: right 1s ease;
-  position: absolute;
-  top: 80px;
-  right: -100%;
-}
-
-.onscreen-position2 {
-  right: 80px;
-}
-
-.on-platform,
-.sprite {
-  position: absolute;
-  bottom: 50%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
+  padding: 16px 32px;
+  background-color: black;
+  color: white;
 }
 </style>

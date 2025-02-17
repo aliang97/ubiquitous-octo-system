@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
+import HeroCard from '@/components/cards/HeroCard.vue';
 import { useRecruitmentRosterStore } from '@/stores/recruitmentRoster';
 import { storeToRefs } from 'pinia';
 
@@ -15,10 +15,10 @@ const { heroList } = storeToRefs(recruitmentRosterStore);
     </div>
 
     <ul>
-      <li v-for="character in heroList" :key="character.id">
-        <ProfileCard :profile="character">
-          <button v-on:click="recruitmentRosterStore.recruitHero(character)">Hire</button>
-        </ProfileCard>
+      <li v-for="hero in heroList" :key="hero.id">
+        <HeroCard :heroEntity="hero">
+          <button v-on:click="recruitmentRosterStore.recruitHero(hero)">Hire</button>
+        </HeroCard>
       </li>
     </ul>
   </main>

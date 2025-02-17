@@ -12,5 +12,5 @@ export interface CombatInstance {
   isPaused: boolean;
   status: CombatInstanceStatus;
   clockId?: number;
-  actionQueue: DelayedAction[];
+  delayedActions: DelayedAction[];
 }

@@ -1,5 +1,6 @@
 import {
   type CharacterEntity,
+  type HeroClass,
   type LootTable,
   type RenderableEntityArgs,
   RenderableEntity,
@@ -9,6 +10,7 @@ export type MonsterEntityArgs = RenderableEntityArgs & {
   name: string;
   maximumHitPoints: number;
   attacksPerSecond: number;
+  attackIntervalMS: number;
   hitDamageMaximum: number;
   hitDamageMinimum: number;
   lootTable?: LootTable;
@@ -35,4 +37,7 @@ export class MonsterEntity extends RenderableEntity implements CharacterEntity {
     this.hitDamageMaximum = args.hitDamageMaximum;
     this.hitDamageMinimum = args.hitDamageMinimum;
   }
+  heroClass?: HeroClass | undefined;
+  attackIntervalMS: number;
+  getMaximumHitPoints?: (() => number) | undefined;
 }

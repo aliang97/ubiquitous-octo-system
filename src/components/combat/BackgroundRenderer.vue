@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import ForestBackground from '@/assets/locations/forest.jpg';
+import type { Location } from '@/types';
+
+defineProps<{
+  location: Location;
+}>();
 </script>
 
 <template>
-  <div class="ForestRenderer">
-    <div class="background" :style="{'background-image': `url(${ForestBackground})`}"></div>
+  <div class="BackgroundRenderer">
+    <div
+      class="background"
+      :style="{ 'background-image': `url(${location.backgroundImageSrc})` }"
+    ></div>
     <div class="shader"></div>
   </div>
 </template>
 
 <style scoped>
-.ForestRenderer {
+.BackgroundRenderer {
   z-index: -1;
   position: absolute;
   width: 100%;

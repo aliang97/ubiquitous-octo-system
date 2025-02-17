@@ -14,7 +14,7 @@ export function generateCombat(args: generateCombatArgs): CombatInstance {
     trueTick: 0,
     isPaused: false,
     status: CombatInstanceStatus.Uninitialized,
-    actionQueue: [],
+    delayedActions: [],
     ...args,
   };
 }

@@ -9,7 +9,9 @@ export const useGuildRosterStore = defineStore('guildRoster', () => {
   const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    guildRoster = recoveredState.heroList;
+    if (recoveredState.heroList) {
+      guildRoster = recoveredState.heroList;
+    }
   }
 
   const heroList = ref(guildRoster);

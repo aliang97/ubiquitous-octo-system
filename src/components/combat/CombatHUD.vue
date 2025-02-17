@@ -1,60 +1,52 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { LocationEntity } from '@/scripts/entities';
-import { CombatInstance, CombatStatus as CombatStatusType } from '@/scripts/combat';
-import CombatStatus from '@/components/combat/CombatStatus.vue';
+import type { Location } from '@/types';
+import { CombatInstanceStatus } from '@/utils';
 import { useCombatManagerStore } from '@/stores/combatManager';
+import { pauseCombat, unpauseCombat } from '@/utils/combat';
+import CharacterStatus from './CharacterStatus/CharacterStatus.vue';
 
 const props = defineProps<{
-  locationProfile: LocationEntity;
-  combat: CombatInstance;
+  location: Location;
 }>();
 
 const DEBUG = true;
 const combatManager = useCombatManagerStore();
-const cc = computed(() => {
-  console.log('huh');
-  const c = combatManager.getCombatByLocation(props.locationProfile.id)?.status;
-  console.log(combatManager.getCombatByLocation(props.locationProfile.id));
-  return c;
-});
-const currentCombat = computed(() => combatManager.combatsByLocationId[props.locationProfile.id]);
-// const gameTick = computed(() => currentCombat.value.gameTick);
-// const trueTick = computed(() => currentCombat.value.trueTick);
-// const combatStatus = computed(() => currentCombat.value.status);
+const combat = computed(() => combatManager.combatsByLocationId[props.location.id]);
+const gameTick = computed(() => combat.value?.gameTick);
+const trueTick = computed(() => combat.value?.trueTick);
+const combatStatus = computed(() => combat.value?.status);
 const showCombatStatus = computed(() => {
-  return true;
-  // return currentCombat.value.status === CombatStatusType.Ongoing;
+  return combat.value?.status === CombatInstanceStatus.Ongoing;
 });
 function exitCombat() {
-  combatManager.removeCombatByLocation(props.locationProfile.id);
+  combatManager.removeCombatByLocation(props.location.id);
 }
 </script>
 
 <template>
-  <div class="CombatHUD">
-    {{ cc }}
-    <!-- <div v-if="DEBUG" class="timer">
+  <div v-if="combat" class="CombatHUD">
+    <div v-if="DEBUG" class="timer">
       <div>Game Tick {{ gameTick }}</div>
       <div>True Tick {{ trueTick }}</div>
       <div>Status {{ combatStatus }}</div>
     </div>
-    <CombatStatus
-      :character="currentCombat.c1"
+    <CharacterStatus
+      :character="combat.h1"
       :gameTick="gameTick"
       class="statusWindow-position1"
       :class="showCombatStatus ? 'onscreen-left' : ''"
     />
-    <CombatStatus
-      :character="currentCombat.c2"
+    <CharacterStatus
+      :character="combat.m1"
       :gameTick="gameTick"
       class="statusWindow-position2"
       :class="showCombatStatus ? 'onscreen-right' : ''"
-    /> -->
+    />
     <div class="buttonBox">
       <div class="button" v-on:click="exitCombat">Leave Combat</div>
-      <div class="button" v-on:click="currentCombat?.pause()">Pause</div>
-      <div class="button" v-on:click="currentCombat?.unpause()">Play</div>
+      <div class="button" v-on:click="pauseCombat(combat)">Pause</div>
+      <div class="button" v-on:click="unpauseCombat(combat)">Play</div>
     </div>
   </div>
 </template>

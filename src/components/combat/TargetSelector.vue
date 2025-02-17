@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Location, MonsterEntity, CombatInstance } from '@/types';
 
-import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
+import MonsterCard from '../cards/MonsterCard.vue';
 import { computed } from 'vue';
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { useGuildRosterStore } from '@/stores/guildRoster';
@@ -16,13 +16,14 @@ const locationId = props.location.id;
 const enemyList = props.location.enemyList;
 
 const combatManager = useCombatManagerStore();
-const currentMonsterId = computed(() => combatManager.combatsByLocationId[locationId]?.m1.id);
+const currentMonsterId = computed(() => combatManager.combatsByLocationId[locationId]?.m1?.id);
 
 const guildRoster = useGuildRosterStore();
 const { heroList } = storeToRefs(guildRoster);
 
 function selectTarget(target: MonsterEntity, isInfinite?: boolean) {
   if (heroList.value[0] === undefined) {
+    console.error('Error selecting combat target: you have no selected hero');
     return;
   }
   const newCombat: CombatInstance = generateCombat({
@@ -40,10 +41,10 @@ function selectTarget(target: MonsterEntity, isInfinite?: boolean) {
   <div class="window">
     <ul>
       <li v-for="enemy in enemyList" :key="enemy.id">
-        <ProfileCard :profile="enemy" :isHighlighted="currentMonsterId === enemy.id">
+        <MonsterCard :monsterEntity="enemy" :isHighlighted="currentMonsterId === enemy.id">
           <button v-on:click="selectTarget(enemy)">Fight 1</button>
           <button v-on:click="selectTarget(enemy, true)">Fight infinite</button>
-        </ProfileCard>
+        </MonsterCard>
       </li>
     </ul>
   </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
 import CSSAnimation from '@/components/combat/CSSAnimation.vue';
-import { RenderableEntity } from '@/scripts/entities';
+import type { RenderableEntity } from '@/types';
 import { computed } from 'vue';
 const props = defineProps<{
   character: RenderableEntity;

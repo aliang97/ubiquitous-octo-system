@@ -1,29 +1,24 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/scripts/entities';
+import type { CharacterEntity } from '@/types';
 import type { ComputedRef } from 'vue';
 import { computed } from 'vue';
-import { SERVER_TICK_RATE_MS } from '@/scripts/util';
+import { getAttackIntervalMS, getDerivedCharacterStats } from '@/utils/combat';
 
 const props = defineProps<{
   character: CharacterEntity;
   gameTick: number;
 }>();
 
-// TODO: put somewhere better
-function getAttackIntervalMS(c: CharacterEntity): number | undefined {
-  if (c.attacksPerSecond === undefined) {
-    return undefined;
+const attackIntervalMS = computed(() => {
+  const d = getDerivedCharacterStats(props.character);
+  return getAttackIntervalMS(d.attacksPerSecond);
+});
+const attackPercentage: ComputedRef<number> = computed(() => {
+  if (attackIntervalMS.value) {
+    return Math.round((100 * (props.gameTick % attackIntervalMS.value)) / attackIntervalMS.value);
   }
-  const ticksPerSecond = 1000 / SERVER_TICK_RATE_MS;
-  return Math.round(ticksPerSecond / c.attacksPerSecond);
-}
 
-const attackIntervalMS = getAttackIntervalMS(props.character);
-const attackPercentage: ComputedRef<number | undefined> = computed(() => {
-  if (attackIntervalMS) {
-    return Math.round((100 * (props.gameTick % attackIntervalMS)) / attackIntervalMS);
-  }
-  return undefined;
+  return 0;
 });
 </script>
 

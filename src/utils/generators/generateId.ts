@@ -4,8 +4,9 @@ const idCreator = function* () {
 };
 
 const idsGenerator = idCreator();
-export const generateId = () => {
+
+export const generateId = (prefix?: string) => {
   const timestamp = new Date().getTime().toString(16);
   const unique = idsGenerator.next().value;
-  return `e-${unique}-${timestamp}`;
+  return `${prefix || 'e'}-${unique}-${timestamp}`;
 };

@@ -22,8 +22,14 @@ export enum EnemyType {
 }
 
 export enum CombatInstanceStatus {
-  Uninitialized = 'COMBATINSTANCESTATUS_UNINITIALIZED',
-  Starting = 'COMBATINSTANCESTATUS_STARTING',
-  Ongoing = 'COMBATINSTANCESTATUS_ONGOING',
-  Ending = 'COMBATINSTANCESTATUS_ENDING',
+  Uninitialized = 'CISTATUS_UNINITIALIZED',
+  Starting = 'CISTATUS_STARTING',
+  Ongoing = 'CISTATUS_ONGOING',
+  Ending = 'CISTATUS_ENDING',
+  Dehydrated = 'CISTATUS_DEHYDRATED',
+}
+
+export enum CharacterType {
+  Hero = 'CHARACTER_HERO',
+  Monster = 'CHARACTER_MONSTER',
 }

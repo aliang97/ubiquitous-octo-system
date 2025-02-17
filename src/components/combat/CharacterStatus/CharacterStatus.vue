@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import HitpointGauge from '@/components/combat/HitpointGauge.vue';
-import AttackGauge from '@/components/combat/AttackGauge.vue';
-import type { CharacterEntity } from '@/scripts/entities';
-
+import HitpointGauge from '@/components/combat/CharacterStatus/HitpointGauge.vue';
+import AttackGauge from '@/components/combat/CharacterStatus/AttackGauge.vue';
+import type { CharacterEntity } from '@/types';
 defineProps<{
   character: CharacterEntity;
   gameTick?: number;
@@ -10,10 +9,9 @@ defineProps<{
 </script>
 
 <template>
-  <div class="CombatStatus">
+  <div class="CharacterStatus">
     <div class="info">
       <div class="name">{{ character.name }}</div>
-      <div class="class">{{ character.heroClass?.name }}</div>
     </div>
     <HitpointGauge :character="character" />
     <AttackGauge v-if="gameTick" :character="character" :gameTick="gameTick" />
@@ -21,7 +19,7 @@ defineProps<{
 </template>
 
 <style scoped>
-.CombatStatus {
+.CharacterStatus {
   padding: 8px;
   border: 1px solid white;
   background-color: var(--color-background-soft);

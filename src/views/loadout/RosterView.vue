@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ProfileCard from '@/components/characterEntity/ProfileCard.vue';
+import HeroCard from '@/components/cards/HeroCard.vue';
 import { useGuildRosterStore } from '@/stores/guildRoster';
 
 const guildRoster = useGuildRosterStore();
@@ -10,9 +10,9 @@ const guildRoster = useGuildRosterStore();
     These are your adventurers:
     <ul>
       <li v-for="hero in guildRoster.heroList" :key="hero.id">
-        <ProfileCard :profile="hero">
+        <HeroCard :heroEntity="hero">
           <button v-on:click="guildRoster.removeHero(hero)">Delete</button>
-        </ProfileCard>
+        </HeroCard>
       </li>
     </ul>
   </main>

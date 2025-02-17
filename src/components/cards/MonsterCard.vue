@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import type { CharacterEntity } from '@/types';
+import type { MonsterEntity } from '@/types';
 import AnimatedSprite from '../combat/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
 
 defineProps<{
-  profile: CharacterEntity;
+  monsterEntity: MonsterEntity;
   isHighlighted?: boolean;
 }>();
 </script>
 
 <template>
-  <div class="card" :class="{ 'is-highlighted': isHighlighted }">
+  <div class="MonsterCard" :class="{ 'is-highlighted': isHighlighted }">
     <div class="top">
       <div class="icon">
-        <template v-if="profile.animations?.['idle']">
-          <AnimatedSprite v-bind="profile.animations['idle']" :size="{ x: 24, y: 24 }" />
+        <template v-if="monsterEntity.animations?.['idle']">
+          <AnimatedSprite v-bind="monsterEntity.animations['idle']" :size="{ x: 24, y: 24 }" />
         </template>
         <template v-else>
           <div
@@ -25,8 +25,7 @@ defineProps<{
       </div>
 
       <div class="topSummary">
-        <div class="class">{{ profile.heroClass?.name }}</div>
-        <div class="name">{{ profile.name }}</div>
+        <div class="name">{{ monsterEntity.name }}</div>
       </div>
 
       <div class="buttonBox">
@@ -37,7 +36,7 @@ defineProps<{
 </template>
 
 <style scoped>
-.card {
+.MonsterCard {
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -46,7 +45,7 @@ defineProps<{
   border: 1px solid var(--color-background-soft);
 }
 
-.card.is-highlighted {
+.MonsterCard.is-highlighted {
   border-color: white;
 }
 

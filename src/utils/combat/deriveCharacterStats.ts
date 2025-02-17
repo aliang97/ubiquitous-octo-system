@@ -28,6 +28,11 @@ function getHitDamageMinimum(h: HeroEntity) {
 }
 
 // TODO: implement?
-export function deriveMonsterState(m: MonsterEntity): DerivedCharacterStats {
-  return m;
+export function deriveMonsterStats(m: MonsterEntity): DerivedCharacterStats {
+  return {
+    maximumHitPoints: m.maximumHitPoints,
+    attacksPerSecond: m.attacksPerSecond,
+    hitDamageMaximum: m.hitDamageMaximum,
+    hitDamageMinimum: m.hitDamageMinimum,
+  };
 }

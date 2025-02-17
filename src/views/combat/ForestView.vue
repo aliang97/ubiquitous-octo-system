@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import CombatWindow from '@/components/combat/CombatWindow.vue';
+import CombatRenderer from '@/components/combat/CombatRenderer.vue';
 import TargetSelector from '@/components/combat/TargetSelector.vue';
 import ForestData from '@/data/locations/Forest';
 import type { Location } from '@/types';
-import { computed } from 'vue';
 
 const location: Location = ForestData;
 const locationName = ForestData.name;
-
-const h1_d = computed(() => {
-  return {};
-});
 </script>
 
 <template>
   <main>
-    <CombatWindow :location="location" />
+    <CombatRenderer :location="location" />
     <h1>{{ locationName }}</h1>
     <TargetSelector :location="location" />
   </main>

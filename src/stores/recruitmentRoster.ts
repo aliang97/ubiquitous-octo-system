@@ -9,12 +9,11 @@ export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => 
   const localStorageData = localStorage.getItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
-    recruitmentRoster = recoveredState.heroList;
+    if (recoveredState.heroList) {
+      recruitmentRoster = recoveredState.heroList;
+    }
   } else {
-    // Generate the first set of heros
-    [...Array(4)].forEach(() => {
-      recruitmentRoster.push(generateHero({}));
-    });
+    generateNewHeros(4);
   }
 
   const heroList = ref(recruitmentRoster);
@@ -22,10 +21,7 @@ export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => 
   function randomize(quantity: number) {
     // Delete all heros
     heroList.value = [];
-    // Generate [quantity] new heros
-    [...Array(quantity)].forEach(() => {
-      heroList.value.push(generateHero({}));
-    });
+    generateNewHeros(quantity);
   }
 
   function recruitHero(h: HeroEntity) {
@@ -42,6 +38,12 @@ export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => 
     // Add hero to the guild roster
     const guildRoster = useGuildRosterStore();
     guildRoster.addHero(h);
+  }
+
+  function generateNewHeros(quantity: number) {
+    [...Array(quantity)].forEach(() => {
+      heroList.value.push(generateHero());
+    });
   }
 
   return { heroList, randomize, recruitHero };
