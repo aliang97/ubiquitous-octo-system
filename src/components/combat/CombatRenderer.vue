@@ -31,6 +31,7 @@ const currentCombat = computed(() => combatManager.combatsByLocationId[props.loc
 <style scoped>
 .CombatRenderer {
   width: 100%;
+  max-width: 600px;
   height: 300px;
   position: relative;
 }

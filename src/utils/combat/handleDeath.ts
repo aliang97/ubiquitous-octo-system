@@ -1,6 +1,5 @@
 import type { HeroEntity, MonsterEntity, LootTable, CombatInstance } from '@/types';
 import { isHero, isMonster, msToTicks } from '../utils';
-import { getDerivedCharacterStats } from './utils';
 import { doAnimation } from './doAnimation';
 import { generateId } from '../generators/generateId';
 import { CharacterStatus } from '../enums';
@@ -9,10 +8,6 @@ export function handleDeath(c: HeroEntity | MonsterEntity, combat: CombatInstanc
   c.characterStatus = CharacterStatus.Dead;
 
   if (isHero(c)) {
-    // TEMP:: reset char hp for dev
-    const derived = getDerivedCharacterStats(c);
-    c.currentHitPoints = derived.maximumHitPoints;
-    c.characterStatus = CharacterStatus.Alive;
   }
 
   if (isMonster(c)) {

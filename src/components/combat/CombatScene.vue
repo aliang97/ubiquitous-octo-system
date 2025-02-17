@@ -49,7 +49,7 @@ const showCombat = computed(() => {
   transition: transform 1s ease;
   position: absolute;
   bottom: -20px;
-  left: 80px;
+  left: 40px;
   transform: translateX(-150%);
 }
 
@@ -61,7 +61,7 @@ const showCombat = computed(() => {
   transition: transform 1s ease;
   position: absolute;
   top: 80px;
-  right: 80px;
+  right: 40px;
   transform: translateX(150%);
 }
 
