@@ -15,35 +15,23 @@ const animationIsPaused = computed(() => props.character.pauseAnimations);
 
 <template>
   <div class="CharacterRenderer">
-    <div class="character">
-      <template v-if="character.animations">
-        <div class="debug">
-          <div>{{ currentAnimation }}</div>
-          <!-- <div>{{ animationIsPaused }}</div> -->
-        </div>
-        <template v-for="(spriteProps, name) in props.character.animations">
-          <AnimatedSprite
-            v-if="name === currentAnimation"
-            v-bind="spriteProps"
-            :key="name"
-            :paused="animationIsPaused"
-          />
-        </template>
+    <template v-if="character.animations">
+      <div class="debug">
+        <div>{{ currentAnimation }}</div>
+        <!-- <div>{{ animationIsPaused }}</div> -->
+      </div>
+      <template v-for="(spriteProps, name) in props.character.animations">
+        <AnimatedSprite
+          v-if="name === currentAnimation"
+          v-bind="spriteProps"
+          :key="name"
+          :paused="animationIsPaused"
+        />
       </template>
-      <template v-else>
-        <div class="spritePlaceholder">{{ character.name }}</div>
-      </template>
-    </div>
-    <!-- <template v-for="instruction in renderList" :key="instruction.id">
-      <CSSAnimation
-        v-if="instruction.command === 'takeHit'"
-        class="target-self"
-        animationId="float-up"
-        :animationDurationMS="800"
-      >
-        <div class="takeHit">-{{ (instruction.params as any).damage }}</div>
-      </CSSAnimation>
-    </template> -->
+    </template>
+    <template v-else>
+      <div class="spritePlaceholder">{{ character.name }}</div>
+    </template>
   </div>
 </template>
 

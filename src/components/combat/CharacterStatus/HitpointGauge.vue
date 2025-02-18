@@ -54,6 +54,7 @@ const healthPercentage = computed(() =>
 }
 
 .gauge-internal {
+  transition: width 0.1s ease;
   border-radius: 999px;
   z-index: 10;
   position: absolute;
