@@ -49,7 +49,7 @@ export const slime: MonsterEntity = {
   },
 };
 
-export const level1Crook: MonsterEntity = {
+export const crook: MonsterEntity = {
   id: generateId(),
   characterStatus: CharacterStatus.Alive,
   characterType: CharacterType.Monster,
@@ -65,7 +65,7 @@ export const level1Crook: MonsterEntity = {
   particleEffects: [],
 };
 
-export const level100Boss: MonsterEntity = {
+export const boss: MonsterEntity = {
   id: generateId(),
   characterStatus: CharacterStatus.Alive,
   characterType: CharacterType.Monster,
@@ -81,21 +81,70 @@ export const level100Boss: MonsterEntity = {
   particleEffects: [],
 };
 
+export const rock: MonsterEntity = {
+  id: generateId(),
+  characterStatus: CharacterStatus.Alive,
+  characterType: CharacterType.Monster,
+  name: 'Small Rock',
+  enemyType: EnemyType.Rock,
+  actionLockoutDurationMS: 0,
+  maximumHitPoints: 100,
+  currentHitPoints: 100,
+  hitDamageMaximum: 0,
+  hitDamageMinimum: 0,
+  attacksPerSecond: 0,
+  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  particleEffects: [],
+};
+
+export const rock2: MonsterEntity = {
+  id: generateId(),
+  characterStatus: CharacterStatus.Alive,
+  characterType: CharacterType.Monster,
+  name: 'Bigger Rock',
+  enemyType: EnemyType.Rock2,
+  actionLockoutDurationMS: 0,
+  maximumHitPoints: 100,
+  currentHitPoints: 100,
+  hitDamageMaximum: 0,
+  hitDamageMinimum: 0,
+  attacksPerSecond: 0,
+  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  particleEffects: [],
+};
+
+export const frogzard: MonsterEntity = {
+  id: generateId(),
+  characterStatus: CharacterStatus.Alive,
+  characterType: CharacterType.Monster,
+  name: 'Frogzard from AdventureQuest',
+  enemyType: EnemyType.Frogzard,
+  actionLockoutDurationMS: 0,
+  maximumHitPoints: 100,
+  currentHitPoints: 100,
+  hitDamageMaximum: 0,
+  hitDamageMinimum: 0,
+  attacksPerSecond: 0,
+  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  particleEffects: [],
+};
+
 type generateEnemyArgs = {
   type?: string;
 };
 
 export const generateEnemy = (args: generateEnemyArgs): MonsterEntity => {
-  if (args.type === EnemyType.Slime) {
-    return { ...slime };
-  }
+  const monsterByType: Record<string, MonsterEntity> = {
+    [EnemyType.Slime]: { ...slime },
+    [EnemyType.Crook]: { ...crook },
+    [EnemyType.Boss]: { ...boss },
+    [EnemyType.Rock]: { ...rock },
+    [EnemyType.Rock2]: { ...rock2 },
+    [EnemyType.Frogzard]: { ...frogzard },
+  };
 
-  if (args.type === EnemyType.Crook) {
-    return { ...level1Crook };
-  }
-
-  if (args.type === EnemyType.Boss) {
-    return { ...level100Boss };
+  if (args.type && monsterByType[args.type]) {
+    return monsterByType[args.type];
   }
 
   return { ...slime };

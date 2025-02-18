@@ -1,11 +1,20 @@
-import type { Inventory } from "@/types/Inventory";
-import type { ItemEntity } from "@/types/ItemEntity";
+import type { ItemEntity, Inventory } from '@/types';
 
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { INVENTORY_LOCALSTORAGE_KEY } from '@/utils';
 
 export const useInventoryStore = defineStore('inventory', () => {
-  const inventory = ref(<Inventory>{});
+  let i: Inventory = {};
+  const localStorageData = localStorage.getItem(INVENTORY_LOCALSTORAGE_KEY);
+  if (localStorageData) {
+    const recoveredState = JSON.parse(localStorageData);
+    if (recoveredState.inventory) {
+      i = recoveredState.inventory;
+    }
+  }
+
+  const inventory = ref(i);
 
   function addItemEntity(newItem: ItemEntity, quantity?: number) {
     const amountToAdd = quantity === undefined ? 1 : quantity;
@@ -16,19 +25,19 @@ export const useInventoryStore = defineStore('inventory', () => {
         inventory.value[newItem.id] = {
           itemEntity: newItem,
           quantity: amountToAdd,
-        }
+        };
       }
     }
   }
 
   function removeItemEntity(oldItem: ItemEntity, quantity?: number) {
     const amountToRemove = quantity === undefined ? 1 : quantity;
-    if ((amountToRemove >= 1) && inventory.value[oldItem.id]) {
-      const newQuantity = inventory.value[oldItem.id].quantity - amountToRemove
+    if (amountToRemove >= 1 && inventory.value[oldItem.id]) {
+      const newQuantity = inventory.value[oldItem.id].quantity - amountToRemove;
       if (newQuantity <= 0) {
         delete inventory.value[oldItem.id];
       } else {
-        inventory.value[oldItem.id].quantity = newQuantity
+        inventory.value[oldItem.id].quantity = newQuantity;
       }
     }
   }
@@ -49,8 +58,7 @@ export const useInventoryStore = defineStore('inventory', () => {
       } else {
         inventory.value[id].quantity = newQuantity;
       }
-
     }
   }
-  return {inventory, addItemEntity, removeItemEntity, removeItemById}
-})
+  return { inventory, addItemEntity, removeItemEntity, removeItemById };
+});

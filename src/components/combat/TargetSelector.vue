@@ -12,12 +12,12 @@ const props = defineProps<{
   location: Location;
 }>();
 
-const locationId = props.location.id;
-const enemyList = props.location.enemyList;
+const locationId = computed(() => props.location.id);
+const enemyList = computed(() => props.location.enemyList);
 
 const combatManager = useCombatManagerStore();
 const currentMonsterType = computed(
-  () => combatManager.combatsByLocationId[locationId]?.m1?.enemyType,
+  () => combatManager.combatsByLocationId[locationId.value]?.m1?.enemyType,
 );
 
 const guildRoster = useGuildRosterStore();
@@ -31,10 +31,10 @@ function selectTarget(target: EnemyType, isInfinite?: boolean) {
   const newCombat: CombatInstance = generateCombat({
     h1: heroList.value[0],
     m1: generateEnemy({ type: target }),
-    locationId: locationId,
+    locationId: locationId.value,
     loop: isInfinite,
   });
-  combatManager.removeCombatByLocation(locationId, true, () => {
+  combatManager.removeCombatByLocation(locationId.value, true, () => {
     combatManager.addCombat(newCombat);
   });
 }

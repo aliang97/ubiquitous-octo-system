@@ -3,8 +3,11 @@ import { isHero, isMonster, msToTicks } from '@/utils';
 import { CharacterStatus } from '@/utils/enums';
 import { generateId } from '@/utils/generators';
 import { doAnimation } from './doAnimation';
+import { useInventoryStore } from '@/stores/inventory';
 
 export function handleDeath(c: HeroEntity | MonsterEntity, combat: CombatInstance): Promise<void> {
+  const inventoryStore = useInventoryStore();
+
   c.characterStatus = CharacterStatus.Dead;
 
   if (isHero(c)) {
@@ -17,7 +20,9 @@ export function handleDeath(c: HeroEntity | MonsterEntity, combat: CombatInstanc
 
     if (c.lootTable) {
       const lootList = rollLoot(c);
-      lootList.forEach((entry) => console.log(`got ${entry.itemEntity.name}`));
+      lootList.forEach((entry) => {
+        inventoryStore.addItemEntity(entry.itemEntity, entry.quantity);
+      });
     }
   }
 

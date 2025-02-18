@@ -19,6 +19,9 @@ export enum EnemyType {
   Slime = 'ENEMY_SLIME',
   Crook = 'ENEMY_CROOK',
   Boss = 'ENEMY_BOSS',
+  Rock = 'ENEMY_ROCK',
+  Rock2 = 'ENEMY_ROCK2',
+  Frogzard = 'ENEMY_FROGZARD',
 }
 
 export enum CombatInstanceStatus {

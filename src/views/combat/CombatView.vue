@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import CombatRenderer from '@/components/combat/CombatRenderer.vue';
 import TargetSelector from '@/components/combat/TargetSelector.vue';
-import ForestData from '@/data/locations/Forest';
 import type { Location } from '@/types';
 
-const location: Location = ForestData;
-const locationName = ForestData.name;
+defineProps<{
+  location: Location;
+}>();
 </script>
 
 <template>
   <main>
     <CombatRenderer :location="location" />
-    <h1>{{ locationName }}</h1>
+    <h1>{{ location.name }}</h1>
     <TargetSelector :location="location" />
   </main>
 </template>

@@ -4,7 +4,7 @@ import ForestImage from '@/assets/locations/forest.jpg';
 
 const data: Location = {
   id: LocationId.Forest,
-  name: 'Generic RPG Forest Zone',
+  name: 'Friendly Forest',
   backgroundImageSrc: ForestImage,
   enemyList: [EnemyType.Slime, EnemyType.Crook, EnemyType.Boss],
 };
