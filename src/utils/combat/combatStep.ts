@@ -5,6 +5,7 @@ import { endCombat } from '@/utils/combat/endCombat';
 import { handleDeath } from '@/utils/combat/handleDeath';
 import { takeAction } from '@/utils/combat/takeAction';
 import { computed } from 'vue';
+import { SERVER_TICK_RATE_MS } from '..';
 
 export function combatStep(locationId: LocationId) {
   const combatManager = useCombatManagerStore();
@@ -18,6 +19,10 @@ export function combatStep(locationId: LocationId) {
 
   c.trueTick++;
   // TODO: resolve particle effects
+  c.h1.particleEffects = c.h1.particleEffects.filter((el) => el.durationMS > 0);
+  c.h1.particleEffects.forEach((el) => (el.durationMS -= SERVER_TICK_RATE_MS));
+  c.m1.particleEffects = c.m1.particleEffects.filter((el) => el.durationMS > 0);
+  c.m1.particleEffects.forEach((el) => (el.durationMS -= SERVER_TICK_RATE_MS));
 
   if (c.isPaused) {
     return;
@@ -25,7 +30,6 @@ export function combatStep(locationId: LocationId) {
 
   c.gameTick++;
 
-  // TODO: Resolve animations
   if (c.h1.characterStatus !== CharacterStatus.Dead && c.h1.actionLockoutDurationMS <= 0) {
     takeAction(c.h1, c);
   } else {

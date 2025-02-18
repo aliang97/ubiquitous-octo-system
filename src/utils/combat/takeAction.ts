@@ -9,6 +9,7 @@ import { isHero, isMonster } from '@/utils';
 import { getAttackIntervalMS, getDerivedCharacterStats } from '@/utils/combat';
 import { doAnimation } from './doAnimation';
 import { CharacterStatus } from '@/utils/enums';
+import { floatingDamageNumber } from './particleEffects/floatingText';
 
 export function takeAction(character: HeroEntity | MonsterEntity, combat: CombatInstance) {
   if (combat === undefined) {
@@ -47,6 +48,7 @@ function takeActionMonster(m: MonsterEntity, combat: CombatInstance) {
   doAttack(m, combat.h1);
   const derivedStats = getDerivedCharacterStats(m);
   m.actionLockoutDurationMS = getAttackIntervalMS(derivedStats.attacksPerSecond);
+  doAnimation({ r: m, animationName: 'attack', combat });
 }
 
 function rollDamage(d: DerivedCharacterStats) {
@@ -60,4 +62,5 @@ function doAttack(source: CharacterEntity, target: CharacterEntity) {
   const sourceDerivedStats = getDerivedCharacterStats(source);
   const damage = rollDamage(sourceDerivedStats);
   target.currentHitPoints = Math.max(0, target.currentHitPoints - damage);
+  target.particleEffects.push(floatingDamageNumber(damage));
 }

@@ -2,6 +2,7 @@
 import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
 import type { RenderableEntity, CombatInstance } from '@/types';
 import { computed } from 'vue';
+import ParticleRenderer from './ParticleRenderer.vue';
 
 const props = defineProps<{
   character: RenderableEntity;
@@ -15,6 +16,7 @@ const animationIsPaused = computed(() => props.character.pauseAnimations);
 
 <template>
   <div class="CharacterRenderer">
+    <ParticleRenderer :c="character" />
     <template v-if="character.animations">
       <div class="debug">
         <div>{{ currentAnimation }}</div>

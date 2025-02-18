@@ -34,6 +34,8 @@ export function startCombat(locationId: LocationId) {
   c.m1.currentAnimation = c.m1.defaultAnimation;
   c.h1.pauseAnimations = false;
   c.m1.pauseAnimations = false;
+  c.h1.particleEffects = [];
+  c.m1.particleEffects = [];
 
   // TEMP:: reset char hp if he died for dev
   if (c.h1.characterStatus === CharacterStatus.Dead) {

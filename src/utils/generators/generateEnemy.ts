@@ -1,6 +1,7 @@
 import type { MonsterEntity } from '@/types';
 import SlimeSpritesheet from '@/assets/characters/enemies/slime/purple-slime-idle.png';
 import SlimeDie from '@/assets/characters/enemies/slime/purple-slime-die.png';
+import SlimeAttack from '@/assets/characters/enemies/slime/purple-slime-attack.png';
 import { SlimeCore, CrookCorpse, BossCorpse } from '@/data/items';
 import { CharacterStatus, CharacterType, EnemyType } from '@/utils/enums';
 import { generateId } from '@/utils/generators';
@@ -28,6 +29,12 @@ export const slime: MonsterEntity = {
       frames: 2,
       durationMS: 800,
     },
+    attack: {
+      spriteSrc: SlimeAttack,
+      size: { x: 64, y: 64 },
+      frames: 4,
+      durationMS: 200,
+    },
     die: {
       spriteSrc: SlimeDie,
       size: { x: 64, y: 64 },
@@ -36,7 +43,7 @@ export const slime: MonsterEntity = {
     },
   },
   defaultAnimation: 'idle',
-  renderList: [],
+  particleEffects: [],
   onDeath: (c) => {
     console.log(`${c.h1.name} killed slime`);
   },
@@ -55,7 +62,7 @@ export const level1Crook: MonsterEntity = {
   hitDamageMinimum: 0,
   attacksPerSecond: 0,
   lootTable: [{ itemEntity: CrookCorpse, quantity: 1, chance: 100 }],
-  renderList: [],
+  particleEffects: [],
 };
 
 export const level100Boss: MonsterEntity = {
@@ -71,7 +78,7 @@ export const level100Boss: MonsterEntity = {
   hitDamageMinimum: 100,
   attacksPerSecond: 1,
   lootTable: [{ itemEntity: BossCorpse, quantity: 1, chance: 100 }],
-  renderList: [],
+  particleEffects: [],
 };
 
 type generateEnemyArgs = {

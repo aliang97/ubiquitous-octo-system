@@ -68,7 +68,7 @@ export const generateHero = (fixedParams?: GenerateHeroFixedParams): HeroEntity 
       },
     },
     defaultAnimation: 'idle',
-    renderList: [],
+    particleEffects: [],
     ...params,
   } as HeroEntity;
 

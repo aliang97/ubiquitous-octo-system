@@ -35,7 +35,7 @@ export const basicSword: EquippableItemEntity = {
   rarity: Rarity.Common,
   type: EquippableItemType.Sword,
   effects: {
-    attacksPerSecond: 0.9,
+    attacksPerSecond: 1.6,
     hitDamageMaximum: 2,
     hitDamageMinimum: 4,
   },
