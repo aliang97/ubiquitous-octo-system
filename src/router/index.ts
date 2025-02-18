@@ -3,11 +3,9 @@ import GenericView from '@/views/GenericView.vue';
 import HomeInventoryView from '@/views/home/InventoryView.vue';
 import RecruitmentView from '@/views/home/RecruitmentView.vue';
 import RosterView from '@/views/loadout/RosterView.vue';
-import TransmutationView from '@/views/crafting/TransmutationView.vue';
-import RitualView from '@/views/crafting/RitualView.vue';
-import CombatView from '@/views/combat/CombatView.vue';
-import ForestData from '@/data/locations/Forest';
-import CaveData from '@/data/locations/Cave';
+import { craftingRoutes } from './crafting';
+import { combatRoutes } from './combat';
+import { processingRoutes } from './processing';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +14,7 @@ const router = createRouter({
       path: '/',
       component: GenericView,
       props: {
+        tabLabel: 'Town Hall',
         sidebarOptions: [
           { name: 'home', label: 'Inventory' },
           { name: 'recruitment', label: 'Recruitment' },
@@ -25,6 +24,7 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
+          alias: 'home',
           component: HomeInventoryView,
         },
         {
@@ -38,6 +38,7 @@ const router = createRouter({
       path: '/loadout',
       component: GenericView,
       props: {
+        tabLabel: 'Dormitory',
         sidebarOptions: [{ name: 'loadout', label: 'Roster' }],
       },
       children: [
@@ -48,52 +49,9 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: '/crafting',
-      component: GenericView,
-      props: {
-        sidebarOptions: [
-          { name: 'crafting', label: 'Transmutation' },
-          { name: 'ritual', label: 'Ritual' },
-        ],
-      },
-      children: [
-        {
-          path: '',
-          name: 'crafting',
-          component: TransmutationView,
-        },
-        {
-          path: 'ritual',
-          name: 'ritual',
-          component: RitualView,
-        },
-      ],
-    },
-    {
-      path: '/combat',
-      component: GenericView,
-      props: {
-        sidebarOptions: [
-          { name: 'combat', label: 'Forest' },
-          { name: 'cave', label: 'Cave' },
-        ],
-      },
-      children: [
-        {
-          path: '',
-          name: 'combat',
-          component: CombatView,
-          props: { location: ForestData },
-        },
-        {
-          path: 'cave',
-          name: 'cave',
-          component: CombatView,
-          props: { location: CaveData },
-        },
-      ],
-    },
+    { ...craftingRoutes },
+    { ...combatRoutes },
+    { ...processingRoutes },
   ],
 });
 

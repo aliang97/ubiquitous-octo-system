@@ -2,7 +2,7 @@ import type { MonsterEntity } from '@/types';
 import SlimeSpritesheet from '@/assets/characters/enemies/slime/purple-slime-idle.png';
 import SlimeDie from '@/assets/characters/enemies/slime/purple-slime-die.png';
 import SlimeAttack from '@/assets/characters/enemies/slime/purple-slime-attack.png';
-import { SlimeCore, CrookCorpse, BossCorpse } from '@/data/items';
+import { SlimeCore, CrookCorpse, BossCorpse, ScrapMetal } from '@/data/items/items';
 import { CharacterStatus, CharacterType, EnemyType } from '@/utils/enums';
 import { generateId } from '@/utils/generators';
 
@@ -20,7 +20,7 @@ export const slime: MonsterEntity = {
   attacksPerSecond: 0.7,
   lootTable: [
     { itemEntity: SlimeCore, quantity: 1, chance: 100 },
-    { itemEntity: SlimeCore, quantity: 1, chance: 50 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
   ],
   animations: {
     idle: {
@@ -61,7 +61,10 @@ export const crook: MonsterEntity = {
   hitDamageMaximum: 0,
   hitDamageMinimum: 0,
   attacksPerSecond: 0,
-  lootTable: [{ itemEntity: CrookCorpse, quantity: 1, chance: 100 }],
+  lootTable: [
+    { itemEntity: CrookCorpse, quantity: 1, chance: 100 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
+  ],
   particleEffects: [],
 };
 
@@ -77,7 +80,10 @@ export const boss: MonsterEntity = {
   hitDamageMaximum: 100,
   hitDamageMinimum: 100,
   attacksPerSecond: 1,
-  lootTable: [{ itemEntity: BossCorpse, quantity: 1, chance: 100 }],
+  lootTable: [
+    { itemEntity: BossCorpse, quantity: 1, chance: 100 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
+  ],
   particleEffects: [],
 };
 
@@ -93,7 +99,10 @@ export const rock: MonsterEntity = {
   hitDamageMaximum: 0,
   hitDamageMinimum: 0,
   attacksPerSecond: 0,
-  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  lootTable: [
+    { itemEntity: SlimeCore, quantity: 1, chance: 100 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
+  ],
   particleEffects: [],
 };
 
@@ -109,7 +118,10 @@ export const rock2: MonsterEntity = {
   hitDamageMaximum: 0,
   hitDamageMinimum: 0,
   attacksPerSecond: 0,
-  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  lootTable: [
+    { itemEntity: SlimeCore, quantity: 1, chance: 100 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
+  ],
   particleEffects: [],
 };
 
@@ -125,7 +137,10 @@ export const frogzard: MonsterEntity = {
   hitDamageMaximum: 0,
   hitDamageMinimum: 0,
   attacksPerSecond: 0,
-  lootTable: [{ itemEntity: SlimeCore, quantity: 1, chance: 100 }],
+  lootTable: [
+    { itemEntity: SlimeCore, quantity: 1, chance: 100 },
+    { itemEntity: ScrapMetal, quantity: 1, chance: 100 },
+  ],
   particleEffects: [],
 };
 

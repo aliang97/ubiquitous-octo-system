@@ -36,7 +36,7 @@ ul {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--color-background-soft);
+  border: 2px solid var(--color-bg-2);
 }
 
 .mouse-hoverable:hover {
@@ -51,6 +51,6 @@ ul {
 }
 
 .button:hover {
-  background-color: var(--color-background-mute);
+  background-color: var(--color-bg-3);
 }
 </style>

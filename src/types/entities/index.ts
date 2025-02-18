@@ -4,4 +4,9 @@ export type { CharacterEntity } from './CharacterEntity';
 export type { MonsterEntity } from './MonsterEntity';
 export type { HeroEntity } from './HeroEntity';
 export type { ItemEntity } from './ItemEntity';
-export type { EquippableItemEntity, EquipmentEffects } from './EquippableItemEntity';
+export type {
+  EquippableItemEntity,
+  EquipmentAffixes,
+  EquippableItemTemplate,
+  EquipmentAffixRanges,
+} from './EquippableItemEntity';

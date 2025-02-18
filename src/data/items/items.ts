@@ -1,21 +1,26 @@
 import type { ItemEntity } from '@/types';
 import { Rarity } from '@/utils/enums';
-import { generateId } from '@/utils/generators';
 
 export const SlimeCore: ItemEntity = {
-  id: generateId(),
+  id: 'ie-slime-core',
   name: 'Slime Core',
   rarity: Rarity.Common,
 };
 
 export const CrookCorpse: ItemEntity = {
-  id: generateId(),
+  id: 'ie-crook-corpse',
   name: 'Crook Corpse',
   rarity: Rarity.Common,
 };
 
 export const BossCorpse: ItemEntity = {
-  id: generateId(),
+  id: 'ie-boss-corpse',
   name: 'Boss Corpse',
+  rarity: Rarity.Common,
+};
+
+export const ScrapMetal: ItemEntity = {
+  id: 'ie-scrap-metal',
+  name: 'Scrap Metal',
   rarity: Rarity.Common,
 };

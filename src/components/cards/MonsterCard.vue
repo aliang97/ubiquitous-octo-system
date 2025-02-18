@@ -44,8 +44,8 @@ const monsterEntity = generateEnemy({ type: props.enemyType });
   padding: 16px;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-soft);
-  border: 1px solid var(--color-background-soft);
+  background-color: var(--color-bg-2);
+  border: 1px solid var(--color-bg-2);
 }
 
 .MonsterCard.is-highlighted {

@@ -57,4 +57,11 @@ export function combatStep(locationId: LocationId) {
 
     return;
   }
+
+  if (
+    c.m1.characterStatus === CharacterStatus.Dead ||
+    c.h1.characterStatus === CharacterStatus.Dead
+  ) {
+    endCombat(locationId);
+  }
 }

@@ -22,7 +22,7 @@ defineProps<{
 .CharacterStatus {
   padding: 8px;
   border: 1px solid white;
-  background-color: var(--color-background-soft);
+  background-color: var(--color-bg-2);
   display: flex;
   flex-direction: column;
   justify-content: center;

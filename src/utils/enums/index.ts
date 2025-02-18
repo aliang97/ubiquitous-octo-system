@@ -1,6 +1,11 @@
 export enum EquippableItemType {
   Helmet = 'ITEM_HELMET',
   Sword = 'ITEM_SWORD',
+  Body = 'ITEM_BODY',
+  Gloves = 'ITEM_GLOVES',
+  Boots = 'ITEM_BOOTS',
+  Bow = 'ITEM_BOW',
+  Daggers = 'ITEM_DAGGERS',
 }
 
 export enum Rarity {
@@ -40,4 +45,16 @@ export enum CharacterType {
 export enum CharacterStatus {
   Alive = 'CHARACTERSTATUS_ALIVE',
   Dead = 'CHARACTERSTATUS_DEAD',
+}
+
+export enum AffixType {
+  HitPointsBase = 'AFFIX_HITPOINTSBASE',
+  HitPointsIncr = 'AFFIX_HITPOINTSINCR',
+  AttacksPerSecondBase = 'AFFIX_ATTACKSPERSECONDBASE',
+  AttacksPerSecondIncr = 'AFFIX_ATTACKSPERSECONDINCR',
+  HitDamageMaxBase = 'AFFIX_HITDAMAGEMAXBASE',
+  HitDamageMinBase = 'AFFIX_HITDAMAGEMINBASE',
+  HitDamageIncr = 'AFFIX_HITDAMAGEINCR',
+  ArmorBase = 'AFFIX_ARMORBASE',
+  ArmorIncr = 'AFFIX_ARMORINCR',
 }

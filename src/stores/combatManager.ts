@@ -1,32 +1,23 @@
 import type { CombatInstance } from '@/types';
 import { COMBATMANAGER_LOCALSTORAGE_KEY } from '@/utils';
-import { CombatInstanceStatus, LocationId } from '@/utils/enums';
-import { startCombat, endCombat, rehydrateCombat } from '@/utils/combat';
+import { LocationId } from '@/utils/enums';
+import { startCombat, endCombat } from '@/utils/combat';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useCombatManagerStore = defineStore('combatManager', () => {
-  let c: Partial<Record<LocationId, CombatInstance>> = {};
+  const combats: Partial<Record<LocationId, CombatInstance>> = {};
+  let recoveredCombats: Partial<Record<LocationId, CombatInstance>> = {};
   const localStorageData = localStorage.getItem(COMBATMANAGER_LOCALSTORAGE_KEY);
   if (localStorageData) {
     const recoveredState = JSON.parse(localStorageData);
     if (recoveredState.combatsByLocationId) {
-      c = recoveredState.combatsByLocationId;
-      // Mark these combats as dehydrated so we can rehydrate them later
-      Object.values(c).forEach((c) => {
-        c.status = CombatInstanceStatus.Dehydrated;
-      });
+      recoveredCombats = recoveredState.combatsByLocationId;
     }
   }
 
-  const combatsByLocationId = ref(c);
-
-  // Rehydrate the recovered combats
-  Object.values(combatsByLocationId.value).forEach((c) => {
-    if (c.status === CombatInstanceStatus.Dehydrated) {
-      rehydrateCombat(c);
-    }
-  });
+  const combatsByLocationId = ref(combats);
+  const recoveredCombatsByLocationId = ref(recoveredCombats);
 
   function addCombat(newCombat: CombatInstance) {
     if (combatsByLocationId.value[newCombat.locationId]) {
@@ -51,5 +42,5 @@ export const useCombatManagerStore = defineStore('combatManager', () => {
     endCombat(targetCombat.locationId, breakLoop, cb);
   }
 
-  return { combatsByLocationId, addCombat, removeCombatByLocation };
+  return { combatsByLocationId, recoveredCombatsByLocationId, addCombat, removeCombatByLocation };
 });
