@@ -48,13 +48,24 @@ export enum CharacterStatus {
 }
 
 export enum AffixType {
-  HitPointsBase = 'AFFIX_HITPOINTSBASE',
-  HitPointsIncr = 'AFFIX_HITPOINTSINCR',
-  AttacksPerSecondBase = 'AFFIX_ATTACKSPERSECONDBASE',
-  AttacksPerSecondIncr = 'AFFIX_ATTACKSPERSECONDINCR',
-  HitDamageMaxBase = 'AFFIX_HITDAMAGEMAXBASE',
-  HitDamageMinBase = 'AFFIX_HITDAMAGEMINBASE',
-  HitDamageIncr = 'AFFIX_HITDAMAGEINCR',
   ArmorBase = 'AFFIX_ARMORBASE',
-  ArmorIncr = 'AFFIX_ARMORINCR',
+  AttacksPerSecondBase = 'AFFIX_ATTACKSPERSECONDBASE',
+  HitDamageBase = 'AFFIX_HITDAMAGEBASE',
+}
+
+export enum StatType {
+  ArmorBase = 'STAT_ARMORBASE',
+  ArmorIncr = 'STAT_ARMORINCR',
+  AttacksPerSecondBase = 'STAT_ATTACKSPERSECONDBASE',
+  HitDamageMaxBase = 'STAT_HITDAMAGEMAXBASE',
+  HitDamageMinBase = 'STAT_HITDAMAGEMINBASE',
+  // HitPointsBase = 'STAT_HITPOINTSBASE',
+  // HitPointsIncr = 'STAT_HITPOINTSINCR',
+  // AttacksPerSecondIncr = 'STAT_ATTACKSPERSECONDINCR',
+  // HitDamageIncr = 'STAT_HITDAMAGEINCR',
+}
+
+export enum StatScope {
+  Local = 'STATSCOPE_LOCAL',
+  Global = 'STATSCOPE_GLOBAL',
 }

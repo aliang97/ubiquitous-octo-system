@@ -1,5 +1,5 @@
 import type { EquippableItemTemplate } from '@/types';
-import { AffixType, EquippableItemType } from '@/utils/enums';
+import { StatType, AffixType, EquippableItemType, StatScope } from '@/utils/enums';
 import BodySprite from '@/assets/items/Body.png';
 import BootsSprite from '@/assets/items/Boots.png';
 import BowSprite from '@/assets/items/Bow2.png';
@@ -15,9 +15,21 @@ export const bodyTemplate: EquippableItemTemplate = {
   type: EquippableItemType.Body,
   spriteSrc: BodySprite,
   requirements: { strength: 28 },
-  implicitAffixes: {
-    [AffixType.ArmorBase]: { min: 48, max: 58 },
-  },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Local Base Armor',
+      type: AffixType.ArmorBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.ArmorBase,
+          range: { min: 48, max: 58 },
+        },
+      ],
+    },
+  ],
 };
 
 export const bootsTemplate: EquippableItemTemplate = {
@@ -27,37 +39,21 @@ export const bootsTemplate: EquippableItemTemplate = {
   type: EquippableItemType.Boots,
   spriteSrc: BootsSprite,
   requirements: { strength: 28 },
-  implicitAffixes: {
-    [AffixType.ArmorBase]: { min: 24, max: 33 },
-  },
-};
-
-export const bowTemplate: EquippableItemTemplate = {
-  name: 'Basic Bow',
-  itemLevel: { min: 1, max: 10 },
-  quality: { min: 1, max: 10 },
-  type: EquippableItemType.Bow,
-  spriteSrc: BowSprite,
-  requirements: { dexterity: 28 },
-  implicitAffixes: {
-    [AffixType.AttacksPerSecondBase]: { min: 1, max: 1.2 },
-    [AffixType.HitDamageMinBase]: { min: 2, max: 3 },
-    [AffixType.HitDamageMaxBase]: { min: 4, max: 6 },
-  },
-};
-
-export const daggersTemplate: EquippableItemTemplate = {
-  name: 'Basic Daggers',
-  itemLevel: { min: 1, max: 10 },
-  quality: { min: 1, max: 10 },
-  type: EquippableItemType.Daggers,
-  spriteSrc: DaggerSprite,
-  requirements: { dexterity: 28 },
-  implicitAffixes: {
-    [AffixType.AttacksPerSecondBase]: { min: 1.4, max: 1.8 },
-    [AffixType.HitDamageMinBase]: { min: 1, max: 2 },
-    [AffixType.HitDamageMaxBase]: { min: 3, max: 4 },
-  },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Armor',
+      type: AffixType.ArmorBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.ArmorBase,
+          range: { min: 24, max: 33 },
+        },
+      ],
+    },
+  ],
 };
 
 export const glovesTemplate: EquippableItemTemplate = {
@@ -67,9 +63,21 @@ export const glovesTemplate: EquippableItemTemplate = {
   type: EquippableItemType.Gloves,
   spriteSrc: GlovesSprite,
   requirements: { strength: 28 },
-  implicitAffixes: {
-    [AffixType.ArmorBase]: { min: 13, max: 18 },
-  },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Armor',
+      type: AffixType.ArmorBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.ArmorBase,
+          range: { min: 13, max: 18 },
+        },
+      ],
+    },
+  ],
 };
 
 export const helmetTemplate: EquippableItemTemplate = {
@@ -79,9 +87,105 @@ export const helmetTemplate: EquippableItemTemplate = {
   type: EquippableItemType.Helmet,
   spriteSrc: HelmetSprite,
   requirements: { strength: 28 },
-  implicitAffixes: {
-    [AffixType.ArmorBase]: { min: 36, max: 42 },
-  },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Armor',
+      type: AffixType.ArmorBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.ArmorBase,
+          range: { min: 36, max: 42 },
+        },
+      ],
+    },
+  ],
+};
+
+export const bowTemplate: EquippableItemTemplate = {
+  name: 'Basic Bow',
+  itemLevel: { min: 1, max: 10 },
+  quality: { min: 1, max: 10 },
+  type: EquippableItemType.Bow,
+  spriteSrc: BowSprite,
+  requirements: { dexterity: 28 },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Attack Speed',
+      type: AffixType.AttacksPerSecondBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.AttacksPerSecondBase,
+          range: { min: 1, max: 1.2 },
+        },
+      ],
+    },
+    {
+      tier: 1,
+      name: 'Base Hit Damage',
+      type: AffixType.HitDamageBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMaxBase,
+          range: { min: 4, max: 6 },
+        },
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMinBase,
+          range: { min: 2, max: 3 },
+        },
+      ],
+    },
+  ],
+};
+
+export const daggersTemplate: EquippableItemTemplate = {
+  name: 'Basic Daggers',
+  itemLevel: { min: 1, max: 10 },
+  quality: { min: 1, max: 10 },
+  type: EquippableItemType.Daggers,
+  spriteSrc: DaggerSprite,
+  requirements: { dexterity: 28 },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Attack Speed',
+      type: AffixType.AttacksPerSecondBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.AttacksPerSecondBase,
+          range: { min: 1.4, max: 1.8 },
+        },
+      ],
+    },
+    {
+      tier: 1,
+      name: 'Base Hit Damage',
+      type: AffixType.HitDamageBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMaxBase,
+          range: { min: 3, max: 4 },
+        },
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMinBase,
+          range: { min: 1, max: 2 },
+        },
+      ],
+    },
+  ],
 };
 
 export const swordTemplate: EquippableItemTemplate = {
@@ -91,11 +195,39 @@ export const swordTemplate: EquippableItemTemplate = {
   type: EquippableItemType.Sword,
   spriteSrc: SwordSprite,
   requirements: { strength: 28 },
-  implicitAffixes: {
-    [AffixType.AttacksPerSecondBase]: { min: 0.6, max: 0.8 },
-    [AffixType.HitDamageMinBase]: { min: 4, max: 7 },
-    [AffixType.HitDamageMaxBase]: { min: 8, max: 11 },
-  },
+  implicitAffixes: [
+    {
+      tier: 1,
+      name: 'Base Attack Speed',
+      type: AffixType.AttacksPerSecondBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.AttacksPerSecondBase,
+          range: { min: 0.6, max: 0.8 },
+        },
+      ],
+    },
+    {
+      tier: 1,
+      name: 'Base Hit Damage',
+      type: AffixType.HitDamageBase,
+      hidden: true,
+      stats: [
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMaxBase,
+          range: { min: 8, max: 11 },
+        },
+        {
+          scope: StatScope.Local,
+          type: StatType.HitDamageMinBase,
+          range: { min: 4, max: 7 },
+        },
+      ],
+    },
+  ],
 };
 
 export const templatesByType: Record<EquippableItemType, EquippableItemTemplate> = {

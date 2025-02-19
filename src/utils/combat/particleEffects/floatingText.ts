@@ -1,4 +1,4 @@
-import type { ParticleEffectData } from '@/types/entities/RenderableEntity';
+import type { ParticleEffectData } from '@/types';
 import FloatingText from '@/components/particleEffects/FloatingText.vue';
 import { generateId } from '@/utils/generators';
 import { shallowRef } from 'vue';

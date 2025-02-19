@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EquippableItemType } from '@/utils/enums';
-import ItemTemplateCard from './ItemTemplateCard.vue';
+import ItemTemplateCard from './ItemTemplateCard/ItemTemplateCard.vue';
 import { templatesByType } from '@/data/items/itemTemplates';
 
 const props = defineProps<{

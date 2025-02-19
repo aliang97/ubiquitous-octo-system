@@ -108,3 +108,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.color-text-1 {
+  color: var(--color-text-1);
+}
+
+.color-text-muted {
+  color: var(--color-sub);
+}
+
+.color-text-soft {
+  color: var(--color-text-3);
+}
+
+.color-text-highlight {
+  color: var(--color-rarity-magic);
+}

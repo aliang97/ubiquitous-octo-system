@@ -1,8 +1,30 @@
 import type { ItemEntity, Range } from '@/types';
-import { EquippableItemType, AffixType } from '@/utils/enums';
+import { EquippableItemType, AffixType, StatType, StatScope } from '@/utils/enums';
 
-export type EquipmentAffixes = Partial<Record<AffixType, number>>;
-export type EquipmentAffixRanges = Partial<Record<AffixType, Range>>;
+export interface AffixStatRange {
+  type: StatType;
+  scope: StatScope;
+  range: Range;
+}
+
+export interface AffixStat extends AffixStatRange {
+  magnitude: number;
+}
+
+interface _EquipmentAffix {
+  type: AffixType;
+  tier: number;
+  name: string;
+  hidden?: boolean;
+}
+
+export interface EquipmentAffix extends _EquipmentAffix {
+  stats: AffixStat[];
+}
+
+export interface EquipmentAffixRange extends _EquipmentAffix {
+  stats: AffixStatRange[];
+}
 
 export interface EquippableItemEntity extends ItemEntity {
   itemLevel: number;
@@ -14,8 +36,16 @@ export interface EquippableItemEntity extends ItemEntity {
   };
   type: EquippableItemType;
 
-  implicitAffixes?: EquipmentAffixes;
-  explicitAffixes?: EquipmentAffixes;
+  // Affixes which are a fixed part of the base item
+  implicitAffixes?: EquipmentAffix[];
+
+  // Affixes which can be modified by regular crafting
+  explicitAffixes?: EquipmentAffix[];
+
+  // Resolve all of the local affixes into global stats
+  //  and copy over any global stats from global affixes
+  // All final stats that effect the character should be in here
+  computedStats?: Omit<AffixStat, 'range'>[];
 }
 
 export interface EquippableItemTemplate {
@@ -30,5 +60,5 @@ export interface EquippableItemTemplate {
   };
   type: EquippableItemType;
 
-  implicitAffixes?: EquipmentAffixRanges;
+  implicitAffixes?: EquipmentAffixRange[];
 }
