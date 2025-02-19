@@ -1,7 +1,7 @@
-import { EnemyType, LocationId } from '@/utils/enums';
+import { EnemyType, CombatLocationId } from '@/utils/enums';
 
 export interface Location {
-  id: LocationId;
+  id: CombatLocationId;
   name: string;
   backgroundImageSrc: string;
   enemyList?: EnemyType[];

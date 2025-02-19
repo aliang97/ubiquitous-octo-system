@@ -1,17 +1,39 @@
 <script setup lang="ts">
-import type { EquippableItemType } from '@/utils/enums';
+import { ProcessingLocation, type EquippableItemType } from '@/utils/enums';
 import ItemTemplateCard from './ItemTemplateCard/ItemTemplateCard.vue';
 import { templatesByType } from '@/data/items/itemTemplates';
+import { generateProcessingInstance } from '@/utils/generators/generateInstance';
+import { useProcessingManagerStore } from '@/stores/processingManager';
+import { computed } from 'vue';
 
 const props = defineProps<{
   itemType: EquippableItemType;
+  location: ProcessingLocation;
 }>();
 
+const processingManager = useProcessingManagerStore();
 const template = templatesByType[props.itemType];
+async function selectAction(amountLoops: number) {
+  const p = generateProcessingInstance({
+    location: ProcessingLocation.Blacksmith,
+    amountLoops: amountLoops,
+    outputItem: template,
+  });
+  await processingManager.removeInstanceByLocation(props.location);
+  processingManager.addInstance(p);
+}
+
+const isHighlighted = computed(() => {
+  const instance = processingManager.instancesByLocation[props.location];
+  if (instance === undefined) {
+    return false;
+  }
+  return instance.outputItem.name === template.name;
+});
 </script>
 
 <template>
-  <div class="ActionCard">
+  <div class="ActionCard" :class="{ 'is-highlighted': isHighlighted }">
     <div class="content">
       <h2>Create {{ template.name }}</h2>
       <div class="cost">
@@ -22,21 +44,25 @@ const template = templatesByType[props.itemType];
     </div>
 
     <div class="buttonBox">
-      <button>1 time</button>
-      <button>10 times</button>
-      <button>infinite</button>
+      <button v-on:click="() => selectAction(1)">1 time</button>
+      <button v-on:click="() => selectAction(10)">10 times</button>
+      <button v-on:click="() => selectAction(-1)">infinite</button>
     </div>
   </div>
 </template>
 
 <style scoped>
 .ActionCard {
-  background-color: var(--color-bg-2);
+  background-color: var(--color-bg-3);
   border-radius: 16px;
   overflow: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.ActionCard.is-highlighted {
+  background-color: var(--color-bg-5);
 }
 
 .content {

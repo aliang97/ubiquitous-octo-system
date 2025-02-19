@@ -30,6 +30,7 @@ const cssAnimationPlayState = computed(() => (props.paused ? 'paused' : 'running
 
 <style scoped>
 .AnimatedSprite {
+  background-repeat: no-repeat;
   background-size: v-bind(cssBackgroundSize);
   background-image: v-bind(cssBackgroundImage);
   height: v-bind(cssHeight);

@@ -1,5 +1,5 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
-import { CharacterStatus, LocationId } from '@/utils/enums';
+import { CharacterStatus, CombatLocationId } from '@/utils/enums';
 import { resolveDelayedActions } from '@/utils/combat/delayedActions';
 import { endCombat } from '@/utils/combat/endCombat';
 import { handleDeath } from '@/utils/combat/handleDeath';
@@ -7,7 +7,7 @@ import { takeAction } from '@/utils/combat/takeAction';
 import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS } from '..';
 
-export function combatStep(locationId: LocationId) {
+export function combatStep(locationId: CombatLocationId) {
   const combatManager = useCombatManagerStore();
   const c = computed(() => combatManager.combatsByLocationId[locationId]).value;
   if (c === undefined) {

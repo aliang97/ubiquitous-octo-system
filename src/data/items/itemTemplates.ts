@@ -7,6 +7,7 @@ import DaggerSprite from '@/assets/items/Dagger.png';
 import GlovesSprite from '@/assets/items/Gloves.png';
 import HelmetSprite from '@/assets/items/Helmet.png';
 import SwordSprite from '@/assets/items/Sword.png';
+import { ScrapMetal } from './items';
 
 export const bodyTemplate: EquippableItemTemplate = {
   name: 'Basic Body',
@@ -30,6 +31,8 @@ export const bodyTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const bootsTemplate: EquippableItemTemplate = {
@@ -54,6 +57,8 @@ export const bootsTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const glovesTemplate: EquippableItemTemplate = {
@@ -78,6 +83,8 @@ export const glovesTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const helmetTemplate: EquippableItemTemplate = {
@@ -102,6 +109,8 @@ export const helmetTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const bowTemplate: EquippableItemTemplate = {
@@ -144,6 +153,8 @@ export const bowTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const daggersTemplate: EquippableItemTemplate = {
@@ -186,6 +197,8 @@ export const daggersTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const swordTemplate: EquippableItemTemplate = {
@@ -228,6 +241,8 @@ export const swordTemplate: EquippableItemTemplate = {
       ],
     },
   ],
+  craftingTimeMS: 6000,
+  craftingRecipe: [{ item: ScrapMetal, quantity: 1 }],
 };
 
 export const templatesByType: Record<EquippableItemType, EquippableItemTemplate> = {

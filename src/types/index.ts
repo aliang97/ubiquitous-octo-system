@@ -7,6 +7,7 @@ export type { InventoryItem, Inventory } from './Inventory';
 
 export * from './entities';
 export * from './combat';
+export * from './instances';
 
 export interface Range {
   max: number;

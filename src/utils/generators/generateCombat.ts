@@ -1,10 +1,10 @@
 import type { CombatInstance, HeroEntity, MonsterEntity } from '@/types';
-import { CombatInstanceStatus, LocationId } from '@/utils/enums';
+import { CombatInstanceStatus, CombatLocationId } from '@/utils/enums';
 
 export type generateCombatArgs = {
   h1: HeroEntity;
   m1: MonsterEntity;
-  locationId: LocationId;
+  locationId: CombatLocationId;
   loop?: boolean;
 };
 

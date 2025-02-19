@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { EquippableItemType } from '@/utils/enums';
+import { EquippableItemType, ProcessingLocation } from '@/utils/enums';
 import ActionCard from './ActionCard.vue';
+defineProps<{
+  location: ProcessingLocation;
+}>();
 </script>
 
 <template>
   <div class="ActionSelector">
     <ul>
       <li v-for="type in EquippableItemType" :key="type">
-        <ActionCard :itemType="type" />
+        <ActionCard :itemType="type" :location />
       </li>
     </ul>
   </div>

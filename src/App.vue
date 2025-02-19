@@ -6,30 +6,27 @@ import {
   GUILDROSTER_LOCALSTORAGE_KEY,
   COMBATMANAGER_LOCALSTORAGE_KEY,
   INVENTORY_LOCALSTORAGE_KEY,
+  PROCESSING_LOCALSTORAGE_KEY,
 } from '@/utils';
 import { useGuildRosterStore } from './stores/guildRoster';
 import { useRecruitmentRosterStore } from './stores/recruitmentRoster';
 import { useCombatManagerStore } from './stores/combatManager';
 import { useInventoryStore } from './stores/inventory';
-import type { LocationId } from './utils/enums';
+import type { CombatLocationId } from './utils/enums';
 import type { CombatInstance } from './types';
 import { storeToRefs } from 'pinia';
 import { generateCombat } from './utils/generators';
+import { saveStateToLocalStorage } from '@/utils';
+import { useProcessingManagerStore } from './stores/processingManager';
 
 const guildRoster = useGuildRosterStore();
-guildRoster.$subscribe((_, state) => {
-  localStorage.setItem(GUILDROSTER_LOCALSTORAGE_KEY, JSON.stringify(state));
-});
+saveStateToLocalStorage(guildRoster, GUILDROSTER_LOCALSTORAGE_KEY);
 
 const recruitmentRoster = useRecruitmentRosterStore();
-recruitmentRoster.$subscribe((_, state) => {
-  localStorage.setItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY, JSON.stringify(state));
-});
+saveStateToLocalStorage(recruitmentRoster, RECRUITMENTROSTER_LOCALSTORAGE_KEY);
 
 const combatManager = useCombatManagerStore();
-combatManager.$subscribe((_, state) => {
-  localStorage.setItem(COMBATMANAGER_LOCALSTORAGE_KEY, JSON.stringify(state));
-});
+saveStateToLocalStorage(combatManager, COMBATMANAGER_LOCALSTORAGE_KEY);
 
 const { recoveredCombatsByLocationId } = storeToRefs(combatManager);
 Object.entries(recoveredCombatsByLocationId.value).forEach(
@@ -42,14 +39,16 @@ Object.entries(recoveredCombatsByLocationId.value).forEach(
       loop: combat.loop,
     });
     combatManager.addCombat(restartedCombat);
-    delete recoveredCombatsByLocationId.value[location as LocationId];
+    delete recoveredCombatsByLocationId.value[location as CombatLocationId];
   },
 );
 
 const inventory = useInventoryStore();
-inventory.$subscribe((_, state) => {
-  localStorage.setItem(INVENTORY_LOCALSTORAGE_KEY, JSON.stringify(state));
-});
+saveStateToLocalStorage(inventory, INVENTORY_LOCALSTORAGE_KEY);
+
+// const processing = useProcessingManagerStore();
+// saveStateToLocalStorage(processing, PROCESSING_LOCALSTORAGE_KEY);
+// processing.restartRecoveredInstances();
 </script>
 
 <template>

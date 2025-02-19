@@ -44,9 +44,9 @@ export const slime: MonsterEntity = {
   },
   defaultAnimation: 'idle',
   particleEffects: [],
-  onDeath: (c) => {
-    console.log(`${c.h1.name} killed slime`);
-  },
+  // onDeath: (c) => {
+  //   console.log(`${c.h1.name} killed slime`);
+  // },
 };
 
 export const crook: MonsterEntity = {

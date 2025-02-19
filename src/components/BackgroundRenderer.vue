@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import type { Location } from '@/types';
+import { computed } from 'vue';
 
-defineProps<{
-  location: Location;
+const props = defineProps<{
+  imageSrc: string;
+  backgroundPosition?: string;
 }>();
+
+const cssBackgroundPosition = computed(() => `${props.backgroundPosition}`);
 </script>
 
 <template>
   <div class="BackgroundRenderer">
-    <div
-      class="background"
-      :style="{ 'background-image': `url(${location.backgroundImageSrc})` }"
-    ></div>
+    <div class="background" :style="{ 'background-image': `url(${imageSrc})` }"></div>
     <div class="shader"></div>
   </div>
 </template>
@@ -29,7 +29,7 @@ defineProps<{
   height: 100%;
   width: 100%;
   background-size: cover;
-  background-position: bottom center;
+  background-position: v-bind(cssBackgroundPosition);
 }
 
 .shader {

@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import CurrentAction from '@/components/processing/currentAction/CurrentAction.vue';
 import ActionSelector from '@/components/processing/ActionSelector.vue';
+import { ProcessingLocation } from '@/utils/enums';
 </script>
 
 <template>
   <main>
-    <CurrentAction />
-    <ActionSelector />
+    <CurrentAction :location="ProcessingLocation.Blacksmith" />
+    <ActionSelector :location="ProcessingLocation.Blacksmith" />
   </main>
 </template>
 
@@ -14,6 +15,5 @@ import ActionSelector from '@/components/processing/ActionSelector.vue';
 main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 </style>

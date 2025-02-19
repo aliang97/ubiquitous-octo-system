@@ -1,4 +1,4 @@
-import type { ItemEntity, Range } from '@/types';
+import type { CraftableItemEntity, Range } from '@/types';
 import { EquippableItemType, AffixType, StatType, StatScope } from '@/utils/enums';
 
 export interface AffixStatRange {
@@ -26,7 +26,7 @@ export interface EquipmentAffixRange extends _EquipmentAffix {
   stats: AffixStatRange[];
 }
 
-export interface EquippableItemEntity extends ItemEntity {
+export interface EquippableItemEntity extends CraftableItemEntity {
   itemLevel: number;
   quality: number;
   requirements: {
@@ -48,9 +48,7 @@ export interface EquippableItemEntity extends ItemEntity {
   computedStats?: Omit<AffixStat, 'range'>[];
 }
 
-export interface EquippableItemTemplate {
-  name: string;
-  spriteSrc?: string;
+export interface EquippableItemTemplate extends Omit<CraftableItemEntity, 'id'> {
   itemLevel: Range;
   quality: Range;
   requirements: {
