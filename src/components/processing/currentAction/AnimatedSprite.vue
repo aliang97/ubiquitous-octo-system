@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
-import bored2 from '@/assets/characters/blacksmith/bored_02.png';
-import work1 from '@/assets/characters/blacksmith/work_01.png';
+import bored2 from '@/assets/characters/blacksmith/bored_02_larger.png';
+import work1 from '@/assets/characters/blacksmith/work_01_larger.png';
 import { useProcessingManagerStore } from '@/stores/processingManager';
 import { computed } from 'vue';
 import { ProcessingLocation } from '@/utils/enums';
