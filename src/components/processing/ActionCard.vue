@@ -2,9 +2,9 @@
 import { ProcessingLocation, type EquippableItemType } from '@/utils/enums';
 import ItemTemplateCard from './ItemTemplateCard/ItemTemplateCard.vue';
 import { templatesByType } from '@/data/items/itemTemplates';
-import { generateProcessingInstance } from '@/utils/generators/generateInstance';
 import { useProcessingManagerStore } from '@/stores/processingManager';
 import { computed } from 'vue';
+import { addItemToProcessingQueue } from '@/utils/processing';
 
 const props = defineProps<{
   itemType: EquippableItemType;
@@ -13,22 +13,17 @@ const props = defineProps<{
 
 const processingManager = useProcessingManagerStore();
 const template = templatesByType[props.itemType];
-async function selectAction(amountLoops: number) {
-  const p = generateProcessingInstance({
-    location: ProcessingLocation.Blacksmith,
-    amountLoops: amountLoops,
-    outputItem: template,
-  });
-  await processingManager.removeInstanceByLocation(props.location);
-  processingManager.addInstance(p);
+const instance = computed(() => processingManager.instancesByLocation[props.location]);
+
+async function selectAction(quantity: number) {
+  addItemToProcessingQueue(props.location, template, quantity);
 }
 
 const isHighlighted = computed(() => {
-  const instance = processingManager.instancesByLocation[props.location];
-  if (instance === undefined) {
+  if (instance.value === undefined || instance.value.processingQueue?.[0] === undefined) {
     return false;
   }
-  return instance.outputItem.name === template.name;
+  return instance.value.processingQueue[0].item.id === template.id;
 });
 </script>
 

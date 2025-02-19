@@ -48,7 +48,7 @@ export interface EquippableItemEntity extends CraftableItemEntity {
   computedStats?: Omit<AffixStat, 'range'>[];
 }
 
-export interface EquippableItemTemplate extends Omit<CraftableItemEntity, 'id'> {
+export interface EquippableItemTemplate extends CraftableItemEntity {
   itemLevel: Range;
   quality: Range;
   requirements: {

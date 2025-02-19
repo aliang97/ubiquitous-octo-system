@@ -1,45 +1,38 @@
 import type {
   Instance,
   ProcessingInstance,
-  CraftableItemEntity,
   HeroEntity,
   MonsterEntity,
   CombatInstance2,
 } from '@/types';
 import { CombatInstanceStatus, CombatLocationId, ProcessingLocation } from '@/utils/enums';
 
-interface generateArgs {
-  amountLoops?: number;
-}
-
-export function generateInstance(args: generateArgs): Instance {
+export function generateInstance(): Instance {
   return {
     gameTick: 0,
     trueTick: 0,
     isPaused: false,
-    amountLoops: args.amountLoops || 1,
-    currentLoop: 0,
   };
 }
 
-interface generatePArgs extends generateArgs {
+interface generatePArgs {
   location: ProcessingLocation;
-  outputItem: Omit<CraftableItemEntity, 'id'>;
 }
 
 export function generateProcessingInstance(args: generatePArgs): ProcessingInstance {
   return {
     location: args.location,
-    outputItem: args.outputItem,
+    processingQueue: [],
     ticksUntilNextAction: 0,
-    ...generateInstance(args),
+    ...generateInstance(),
   };
 }
 
-interface generateCArgs extends generateArgs {
+interface generateCArgs {
   h1: HeroEntity;
   m1: MonsterEntity;
   locationId: CombatLocationId;
+  loop?: boolean;
 }
 export function generateCombatInstance(args: generateCArgs): CombatInstance2 {
   return {
@@ -48,6 +41,7 @@ export function generateCombatInstance(args: generateCArgs): CombatInstance2 {
     m1: args.m1,
     status: CombatInstanceStatus.Uninitialized,
     delayedActions: [],
-    ...generateInstance(args),
+    loop: args.loop,
+    ...generateInstance(),
   };
 }

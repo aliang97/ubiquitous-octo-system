@@ -3,6 +3,4 @@ export interface Instance {
   gameTick: number;
   isPaused: boolean;
   clockId?: number;
-  amountLoops: number;
-  currentLoop: number;
 }

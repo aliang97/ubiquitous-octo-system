@@ -14,7 +14,7 @@ const progressPercent = computed(() => {
   if (instance.value === undefined) {
     return 0;
   }
-  const recipeDuration = msToTicks(instance.value.outputItem.craftingTimeMS) || 1;
+  const recipeDuration = msToTicks(instance.value.processingQueue[0]?.item.craftingTimeMS) || 1;
   const remainingTicks = instance.value.ticksUntilNextAction;
 
   return Math.round(((recipeDuration - remainingTicks) / recipeDuration) * 100);

@@ -3,19 +3,12 @@ import { ProcessingLocation } from '@/utils/enums';
 import ProgressBar from './ProgressBar.vue';
 import BackgroundRenderer from '@/components/BackgroundRenderer.vue';
 import BlacksmithBackground from '@/assets/locations/blacksmith.jpg';
-import CraftingOutput from './CraftingOutput.vue';
 import AnimatedSprite from './AnimatedSprite.vue';
-import { useProcessingManagerStore } from '@/stores/processingManager';
-import { computed } from 'vue';
+import CraftingQueue from './CraftingQueue.vue';
 
-const props = defineProps<{
+defineProps<{
   location: ProcessingLocation;
 }>();
-
-const processingManager = useProcessingManagerStore();
-const instance = computed(() => processingManager.instancesByLocation[props.location]);
-const amountLoops = computed(() => instance.value?.amountLoops);
-const currentLoop = computed(() => instance.value?.currentLoop);
 </script>
 
 <template>
@@ -28,8 +21,7 @@ const currentLoop = computed(() => instance.value?.currentLoop);
     <div class="top">
       <div class="left">
         <h1>Blacksmith</h1>
-        <div class="description">Crafting ({{ currentLoop }} of {{ amountLoops }}) ...</div>
-        <CraftingOutput class="CraftingOutput" :location />
+        <CraftingQueue :location />
       </div>
       <div class="right">
         <AnimatedSprite />
@@ -76,11 +68,6 @@ h1 {
   font-weight: 600;
   line-height: 1;
   border-bottom: 3px solid var(--t-c-black-1);
-}
-
-.description {
-  padding: 4px 0;
-  color: var(--t-c-black-2);
 }
 
 .CraftingOutput {

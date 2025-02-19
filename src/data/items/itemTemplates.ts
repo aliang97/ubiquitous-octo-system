@@ -10,6 +10,7 @@ import SwordSprite from '@/assets/items/Sword.png';
 import { ScrapMetal } from './items';
 
 export const bodyTemplate: EquippableItemTemplate = {
+  id: 'it-basic-body',
   name: 'Basic Body',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -36,6 +37,7 @@ export const bodyTemplate: EquippableItemTemplate = {
 };
 
 export const bootsTemplate: EquippableItemTemplate = {
+  id: 'it-basic-boots',
   name: 'Basic Boots',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -62,6 +64,7 @@ export const bootsTemplate: EquippableItemTemplate = {
 };
 
 export const glovesTemplate: EquippableItemTemplate = {
+  id: 'it-basic-gloves',
   name: 'Basic Gloves',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -88,6 +91,7 @@ export const glovesTemplate: EquippableItemTemplate = {
 };
 
 export const helmetTemplate: EquippableItemTemplate = {
+  id: 'it-basic-helmet',
   name: 'Basic Helmet',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -114,6 +118,7 @@ export const helmetTemplate: EquippableItemTemplate = {
 };
 
 export const bowTemplate: EquippableItemTemplate = {
+  id: 'it-basic-bow',
   name: 'Basic Bow',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -158,6 +163,7 @@ export const bowTemplate: EquippableItemTemplate = {
 };
 
 export const daggersTemplate: EquippableItemTemplate = {
+  id: 'it-basic-daggers',
   name: 'Basic Daggers',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },
@@ -202,6 +208,7 @@ export const daggersTemplate: EquippableItemTemplate = {
 };
 
 export const swordTemplate: EquippableItemTemplate = {
+  id: 'it-basic-sword',
   name: 'Basic Sword',
   itemLevel: { min: 1, max: 10 },
   quality: { min: 1, max: 10 },

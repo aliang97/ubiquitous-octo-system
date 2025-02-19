@@ -8,4 +8,5 @@ export interface CombatInstance extends Instance {
   locationId: CombatLocationId;
   status: CombatInstanceStatus;
   delayedActions: DelayedAction[];
+  loop?: boolean;
 }
