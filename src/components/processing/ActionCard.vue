@@ -13,7 +13,7 @@ const props = defineProps<{
 
 const processingManager = useProcessingManagerStore();
 const template = templatesByType[props.itemType];
-const instance = computed(() => processingManager.instancesByLocation[props.location]);
+const instance = computed(() => processingManager.getInstance(props.location));
 
 async function selectAction(quantity: number) {
   addItemToProcessingQueue(props.location, template, quantity);

@@ -3,4 +3,5 @@ export interface Instance {
   gameTick: number;
   isPaused: boolean;
   clockId?: number;
+  errorMsg?: string;
 }

@@ -1,2 +1,2 @@
 export { startProcessing, instanceStep, endProcessing } from './processingManagerHandlers';
-export { addItemToProcessingQueue } from './addItemToProcessingQueue';
+export { addItemToProcessingQueue, getQueueLength, cancelQueuedItem } from './queue';

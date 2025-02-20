@@ -4,14 +4,18 @@ import { computed } from 'vue';
 import { ProcessingLocation } from '../enums';
 import { generateProcessingInstance } from '../generators/generateInstance';
 import { msToTicks } from '..';
+import type { ProcessingQueueItem } from '@/types/instances/ProcessingInstance';
+import type { Ref } from 'vue';
 
-export const addItemToProcessingQueue = async (
+type QueueRef = Ref<ProcessingQueueItem[] | undefined>;
+
+export const addItemToProcessingQueue = (
   location: ProcessingLocation,
   item: CraftableItemEntity,
   quantity: number,
 ) => {
   const store = useProcessingManagerStore();
-  const instance = computed(() => store.instancesByLocation[location]);
+  const instance = computed(() => store.getInstance(location));
 
   // If there is no existing ProcessingInstance
   if (instance.value === undefined) {
@@ -48,4 +52,30 @@ export const addItemToProcessingQueue = async (
 
   // Otherwise just append to queue
   instance.value.processingQueue.push({ item, quantity });
+};
+
+export const getQueueLength = (queue: QueueRef) => {
+  if (queue.value === undefined) {
+    return 0;
+  }
+  return queue.value.reduce((sum, item) => sum + item.quantity, 0);
+};
+
+export const cancelQueuedItem = (location: ProcessingLocation, queue: QueueRef, itemId: string) => {
+  const store = useProcessingManagerStore();
+  const instance = computed(() => store.getInstance(location));
+  if (queue.value === undefined) {
+    return;
+  }
+
+  const index = queue.value.findIndex((el) => el.item.id === itemId);
+  queue.value.splice(index, 1);
+  if (queue.value.length <= 0) {
+    store.removeInstanceByLocation(location);
+  } else {
+    if (instance.value === undefined) {
+      return;
+    }
+    instance.value.ticksUntilNextAction = msToTicks(queue.value[0].item.craftingTimeMS);
+  }
 };

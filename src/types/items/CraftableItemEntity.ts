@@ -1,11 +1,7 @@
 import type { ItemEntity } from './ItemEntity';
-
-interface CraftingIngredient {
-  item: ItemEntity;
-  quantity: number;
-}
+import type { ItemWithQuantity } from './misc';
 
 export interface CraftableItemEntity extends ItemEntity {
   craftingTimeMS: number;
-  craftingRecipe: CraftingIngredient[];
+  craftingRecipe: ItemWithQuantity[];
 }

@@ -21,7 +21,7 @@ export function handleDeath(c: HeroEntity | MonsterEntity, combat: CombatInstanc
     if (c.lootTable) {
       const lootList = rollLoot(c);
       lootList.forEach((entry) => {
-        inventoryStore.addItemEntity(entry.itemEntity, entry.quantity);
+        inventoryStore.addMaterial(entry.itemEntity, entry.quantity);
       });
     }
   }

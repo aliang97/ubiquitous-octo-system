@@ -46,9 +46,9 @@ Object.entries(recoveredCombatsByLocationId.value).forEach(
 const inventory = useInventoryStore();
 saveStateToLocalStorage(inventory, INVENTORY_LOCALSTORAGE_KEY);
 
-// const processing = useProcessingManagerStore();
-// saveStateToLocalStorage(processing, PROCESSING_LOCALSTORAGE_KEY);
-// processing.restartRecoveredInstances();
+const processing = useProcessingManagerStore();
+saveStateToLocalStorage(processing, PROCESSING_LOCALSTORAGE_KEY);
+processing.restartRecoveredInstances();
 </script>
 
 <template>

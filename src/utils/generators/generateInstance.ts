@@ -5,6 +5,7 @@ import type {
   MonsterEntity,
   CombatInstance2,
 } from '@/types';
+import type { ProcessingQueueItem } from '@/types/instances/ProcessingInstance';
 import { CombatInstanceStatus, CombatLocationId, ProcessingLocation } from '@/utils/enums';
 
 export function generateInstance(): Instance {
@@ -17,13 +18,15 @@ export function generateInstance(): Instance {
 
 interface generatePArgs {
   location: ProcessingLocation;
+  processingQueue?: ProcessingQueueItem[];
+  ticksUntilNextAction?: number;
 }
 
 export function generateProcessingInstance(args: generatePArgs): ProcessingInstance {
   return {
     location: args.location,
-    processingQueue: [],
-    ticksUntilNextAction: 0,
+    processingQueue: args.processingQueue || [],
+    ticksUntilNextAction: args.ticksUntilNextAction || 0,
     ...generateInstance(),
   };
 }

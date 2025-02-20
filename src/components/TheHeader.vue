@@ -7,6 +7,8 @@ import {
   RECRUITMENTROSTER_LOCALSTORAGE_KEY,
   INVENTORY_LOCALSTORAGE_KEY,
 } from '@/utils';
+import { useInventoryStore } from '@/stores/inventory';
+import { ScrapMetal, SlimeCore } from '@/data/items/items';
 
 const route = useRoute();
 const router = useRouter();
@@ -26,6 +28,13 @@ const clearLocalstorage = () => {
   localStorage.removeItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
   localStorage.removeItem(INVENTORY_LOCALSTORAGE_KEY);
 };
+
+const inventoryStore = useInventoryStore();
+
+const addMaterials = () => {
+  inventoryStore.addMaterial(SlimeCore, 999);
+  inventoryStore.addMaterial(ScrapMetal, 999);
+};
 </script>
 
 <template>
@@ -43,6 +52,7 @@ const clearLocalstorage = () => {
         >
       </div>
     </nav>
+    <button :style="{ color: 'white' }" v-on:click="() => addMaterials()">Add Materials</button>
     <button :style="{ color: 'white' }" v-on:click="() => clearLocalstorage()">
       Clear Localstorage
     </button>

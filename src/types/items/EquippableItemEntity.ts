@@ -1,30 +1,6 @@
 import type { CraftableItemEntity, Range } from '@/types';
-import { EquippableItemType, AffixType, StatType, StatScope } from '@/utils/enums';
-
-export interface AffixStatRange {
-  type: StatType;
-  scope: StatScope;
-  range: Range;
-}
-
-export interface AffixStat extends AffixStatRange {
-  magnitude: number;
-}
-
-interface _EquipmentAffix {
-  type: AffixType;
-  tier: number;
-  name: string;
-  hidden?: boolean;
-}
-
-export interface EquipmentAffix extends _EquipmentAffix {
-  stats: AffixStat[];
-}
-
-export interface EquipmentAffixRange extends _EquipmentAffix {
-  stats: AffixStatRange[];
-}
+import { EquippableItemType } from '@/utils/enums';
+import type { EquipmentAffix, EquipmentAffixRange, AffixStat } from './misc';
 
 export interface EquippableItemEntity extends CraftableItemEntity {
   itemLevel: number;

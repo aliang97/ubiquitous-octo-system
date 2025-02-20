@@ -19,9 +19,7 @@ const spriteDataIdle = {
 };
 
 const processingManager = useProcessingManagerStore();
-const instance = computed(
-  () => processingManager.instancesByLocation[ProcessingLocation.Blacksmith],
-);
+const instance = computed(() => processingManager.getInstance(ProcessingLocation.Blacksmith));
 </script>
 
 <template>

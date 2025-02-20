@@ -4,24 +4,41 @@ import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS, msToTicks } from '@/utils';
 import { generateBasicEquippableItem } from '@/data/items/baseEquippableItems';
 import type { EquippableItemTemplate } from '@/types';
+import { canCraftEquipment } from './craftPrechecks';
+import { useInventoryStore } from '@/stores/inventory';
 
 export function startProcessing(location: ProcessingLocation) {
   const store = useProcessingManagerStore();
-  const instance = computed(() => store.instancesByLocation[location]).value;
+  const instance = computed(() => store.getInstance(location)).value;
   if (instance === undefined) {
+    console.error('this should literally never happen');
     return;
   }
 
-  // start the clock
-  instance.clockId = setInterval(() => instanceStep(location), SERVER_TICK_RATE_MS);
+  const firstItem = computed(() => instance.processingQueue[0]);
+  if (firstItem.value === undefined) {
+    store.removeInstanceByLocation(location);
+    console.error('Error: first item in processingQueue is undefined');
+    return;
+  }
+
+  if (!canCraftEquipment(firstItem.value)) {
+    store.removeInstanceByLocation(location);
+    console.error('Error: unable to craft first item in processingQueue');
+    return;
+  }
 
   // queue up the first item
   instance.ticksUntilNextAction = msToTicks(instance.processingQueue[0]?.item.craftingTimeMS || 0);
+
+  // start the clock
+  instance.clockId = setInterval(() => instanceStep(location), SERVER_TICK_RATE_MS);
 }
 
 export function instanceStep(location: ProcessingLocation) {
-  const store = useProcessingManagerStore();
-  const instance = computed(() => store.instancesByLocation[location]).value;
+  const inventoryStore = useInventoryStore();
+  const processingStore = useProcessingManagerStore();
+  const instance = computed(() => processingStore.getInstance(location)).value;
   if (instance === undefined) {
     return;
   }
@@ -42,12 +59,11 @@ export function instanceStep(location: ProcessingLocation) {
 
   // generate a new output item
   // TODO: handle not EquippableItemEntity
-  const outputItem = instance.processingQueue[0].item as EquippableItemTemplate;
-  const newItem = generateBasicEquippableItem({ type: outputItem.type });
-  console.log('crafted: ');
-  console.log(newItem);
-
-  // TODO: add to inventory
+  const outputTemplate = instance.processingQueue[0].item as EquippableItemTemplate;
+  const newItem = generateBasicEquippableItem({ type: outputTemplate.type });
+  console.log('crafted item: ' + newItem.name);
+  inventoryStore.addEquipment(newItem);
+  inventoryStore.removeMaterials(outputTemplate.craftingRecipe);
 
   // Decrement the ProcessingQueue if not infinite mode (quantity !== -1)
   if (instance.processingQueue[0].quantity > 0) {
@@ -60,22 +76,24 @@ export function instanceStep(location: ProcessingLocation) {
 
   // Remove the instance if the queue is finished
   if (instance.processingQueue.length <= 0 || instance.processingQueue[0].quantity === 0) {
-    store.removeInstanceByLocation(instance.location);
+    processingStore.removeInstanceByLocation(instance.location);
     return;
   }
 
   // Set up the next craft
-
-  // TODO: before next craft checks
-  //  -inventory space
-  //  -ingredients
-
-  instance.ticksUntilNextAction = msToTicks(instance.processingQueue[0].item.craftingTimeMS || 0);
+  const nextCraft = instance.processingQueue[0];
+  if (canCraftEquipment(nextCraft)) {
+    instance.ticksUntilNextAction = msToTicks(instance.processingQueue[0].item.craftingTimeMS || 0);
+  } else {
+    // Remove instance if we can't execute the next craft
+    processingStore.removeInstanceByLocation(instance.location);
+    return;
+  }
 }
 
 export async function endProcessing(location: ProcessingLocation) {
   const store = useProcessingManagerStore();
-  const instance = computed(() => store.instancesByLocation[location]).value;
+  const instance = computed(() => store.getInstance(location)).value;
   if (instance === undefined) {
     return;
   }

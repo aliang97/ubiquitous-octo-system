@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const processingManager = useProcessingManagerStore();
-const instance = computed(() => processingManager.instancesByLocation[props.location]);
+const instance = computed(() => processingManager.getInstance(props.location));
 const progressPercent = computed(() => {
   if (instance.value === undefined) {
     return 0;

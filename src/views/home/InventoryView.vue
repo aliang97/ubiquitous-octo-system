@@ -2,16 +2,27 @@
 import { useInventoryStore } from '@/stores/inventory';
 import { computed } from 'vue';
 const inventoryStore = useInventoryStore();
-const inventory = computed(() => inventoryStore.inventory);
-
+const materials = computed(() => inventoryStore.inventory.materials);
+const equipment = computed(() => inventoryStore.inventory.equipment);
+const deleteAll = () => {
+  [...equipment.value].forEach((item) => inventoryStore.removeEquipmentById(item.id));
+};
 </script>
 
 <template>
   <main>
-    These are your items:
+    These are your materials:
     <ul>
-      <li v-for="item in inventory" :key="item.itemEntity.id">
-        {{ item.itemEntity.name }} : {{ item.quantity }}
+      <li v-for="material in materials" :key="material.item.id">
+        {{ material.item.name }} : {{ material.quantity }}
+      </li>
+    </ul>
+
+    These are your equipments:
+    <button v-on:click="() => deleteAll()">Delete all</button>
+    <ul>
+      <li v-for="item in equipment" :key="item.id">
+        {{ item.name }}
       </li>
     </ul>
   </main>
