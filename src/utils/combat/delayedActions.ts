@@ -1,4 +1,7 @@
 import type { DelayedAction, CombatInstance } from '@/types';
+import { generateId } from '@/utils/generators';
+import { msToTicks } from '@/utils';
+import type { Ref } from 'vue';
 
 export function cleanupDelayedAction(action: DelayedAction, list: DelayedAction[]) {
   const index = list.findIndex((el) => el.id === action.id);
@@ -27,4 +30,20 @@ export function resolveDelayedActions(c: CombatInstance) {
         cleanupDelayedAction(delayedAction, c.delayedActions);
       }
     });
+}
+
+export async function doActionAfterDelay(
+  c: Ref<CombatInstance | undefined>,
+  action: () => void,
+  delayMS: number,
+) {
+  if (c.value === undefined) {
+    console.warn("Couldn't doActionAfterDelay due to invalid CombatInstance");
+    return;
+  }
+  c.value.delayedActions.push({
+    id: generateId('da'),
+    doAction: action,
+    waitUntilTrueTick: c.value.trueTick + msToTicks(delayMS),
+  });
 }

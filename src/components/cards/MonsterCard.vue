@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AnimatedSprite from '../combat/AnimatedSprite.vue';
+import AnimatedSprite from '../rendering/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
 import { EnemyType } from '@/utils/enums';
 import { generateEnemy } from '@/utils/generators';

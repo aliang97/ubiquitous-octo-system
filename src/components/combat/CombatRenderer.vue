@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Location } from '@/types';
 import CombatHUD from '@/components/combat/CombatHUD.vue';
-import BackgroundRenderer from '../BackgroundRenderer.vue';
+import BackgroundRenderer from '../rendering/BackgroundRenderer.vue';
 import CombatScene from './CombatScene.vue';
 
 import { computed } from 'vue';
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const combatManager = useCombatManagerStore();
-const currentCombat = computed(() => combatManager.combatsByLocationId[props.location.id]);
+const currentCombat = computed(() => combatManager.getCombat(props.location.id));
 </script>
 
 <template>

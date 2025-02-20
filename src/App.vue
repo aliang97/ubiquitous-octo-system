@@ -12,10 +12,6 @@ import { useGuildRosterStore } from './stores/guildRoster';
 import { useRecruitmentRosterStore } from './stores/recruitmentRoster';
 import { useCombatManagerStore } from './stores/combatManager';
 import { useInventoryStore } from './stores/inventory';
-import type { CombatLocationId } from './utils/enums';
-import type { CombatInstance } from './types';
-import { storeToRefs } from 'pinia';
-import { generateCombat } from './utils/generators';
 import { saveStateToLocalStorage } from '@/utils';
 import { useProcessingManagerStore } from './stores/processingManager';
 
@@ -27,21 +23,7 @@ saveStateToLocalStorage(recruitmentRoster, RECRUITMENTROSTER_LOCALSTORAGE_KEY);
 
 const combatManager = useCombatManagerStore();
 saveStateToLocalStorage(combatManager, COMBATMANAGER_LOCALSTORAGE_KEY);
-
-const { recoveredCombatsByLocationId } = storeToRefs(combatManager);
-Object.entries(recoveredCombatsByLocationId.value).forEach(
-  ([location, combat]: [string, CombatInstance]) => {
-    console.log('restarting combat at ' + combat.locationId);
-    const restartedCombat = generateCombat({
-      h1: combat.h1,
-      m1: combat.m1,
-      locationId: combat.locationId,
-      loop: combat.loop,
-    });
-    combatManager.addCombat(restartedCombat);
-    delete recoveredCombatsByLocationId.value[location as CombatLocationId];
-  },
-);
+combatManager.restartRecoveredInstances();
 
 const inventory = useInventoryStore();
 saveStateToLocalStorage(inventory, INVENTORY_LOCALSTORAGE_KEY);

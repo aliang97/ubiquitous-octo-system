@@ -2,7 +2,7 @@ import type { ItemEntity, Inventory, ItemWithQuantity, EquippableItemEntity } fr
 
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { INVENTORY_LOCALSTORAGE_KEY } from '@/utils';
+import { INVENTORY_LOCALSTORAGE_KEY, readStateFromLocalStorage } from '@/utils';
 
 export const useInventoryStore = defineStore('inventory', () => {
   let i: Inventory = {
@@ -10,23 +10,20 @@ export const useInventoryStore = defineStore('inventory', () => {
     equipment: [],
     maxEquipmentCount: 20,
   };
-  const localStorageData = localStorage.getItem(INVENTORY_LOCALSTORAGE_KEY);
-  if (localStorageData) {
-    const recoveredState = JSON.parse(localStorageData);
-    if (recoveredState.inventory) {
-      i = recoveredState.inventory;
-    }
+  const _recoveredData = readStateFromLocalStorage(INVENTORY_LOCALSTORAGE_KEY);
+  if (_recoveredData) {
+    i = _recoveredData;
   }
 
-  const inventory = ref(i);
+  const _data = ref(i);
 
   function addMaterial(newMaterial: ItemEntity, quantity?: number) {
     const amountToAdd = quantity === undefined ? 1 : quantity;
     if (amountToAdd >= 1) {
-      if (inventory.value.materials[newMaterial.id]) {
-        inventory.value.materials[newMaterial.id].quantity += amountToAdd;
+      if (_data.value.materials[newMaterial.id]) {
+        _data.value.materials[newMaterial.id].quantity += amountToAdd;
       } else {
-        inventory.value.materials[newMaterial.id] = {
+        _data.value.materials[newMaterial.id] = {
           item: newMaterial,
           quantity: amountToAdd,
         };
@@ -39,15 +36,15 @@ export const useInventoryStore = defineStore('inventory', () => {
       console.error('Error: inventory is full');
       return;
     }
-    inventory.value.equipment.push(newEquipment);
+    _data.value.equipment.push(newEquipment);
   }
 
   function canAddEquipment() {
-    return inventory.value.equipment.length < inventory.value.maxEquipmentCount;
+    return _data.value.equipment.length < _data.value.maxEquipmentCount;
   }
 
   function hasMaterial(item: ItemEntity, quantity?: number) {
-    return inventory.value.materials[item.id]?.quantity >= (quantity ? quantity : 1);
+    return _data.value.materials[item.id]?.quantity >= (quantity ? quantity : 1);
   }
 
   function hasMaterials(materials: ItemWithQuantity[]) {
@@ -62,11 +59,11 @@ export const useInventoryStore = defineStore('inventory', () => {
 
   // Assumes already checked that the material exists in the correct quantity
   function removeMaterial(item: ItemEntity, quantity?: number) {
-    const newQuantity = inventory.value.materials[item.id].quantity - (quantity ? quantity : 1);
+    const newQuantity = _data.value.materials[item.id].quantity - (quantity ? quantity : 1);
     if (newQuantity <= 0) {
-      delete inventory.value.materials[item.id];
+      delete _data.value.materials[item.id];
     } else {
-      inventory.value.materials[item.id].quantity = newQuantity;
+      _data.value.materials[item.id].quantity = newQuantity;
     }
   }
 
@@ -82,17 +79,17 @@ export const useInventoryStore = defineStore('inventory', () => {
   }
 
   function removeEquipmentById(id: string) {
-    const targetIndex = inventory.value.equipment.findIndex((el) => el.id === id);
+    const targetIndex = _data.value.equipment.findIndex((el) => el.id === id);
     if (targetIndex === undefined) {
       console.error(`Error: equipment ${id} does not exist`);
       return;
     }
 
-    inventory.value.equipment.splice(targetIndex, 1);
+    _data.value.equipment.splice(targetIndex, 1);
   }
 
   return {
-    inventory,
+    _data,
     addMaterial,
     hasMaterials,
     removeMaterials,

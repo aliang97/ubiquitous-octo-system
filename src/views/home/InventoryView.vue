@@ -2,8 +2,8 @@
 import { useInventoryStore } from '@/stores/inventory';
 import { computed } from 'vue';
 const inventoryStore = useInventoryStore();
-const materials = computed(() => inventoryStore.inventory.materials);
-const equipment = computed(() => inventoryStore.inventory.equipment);
+const materials = computed(() => inventoryStore._data.materials);
+const equipment = computed(() => inventoryStore._data.equipment);
 const deleteAll = () => {
   [...equipment.value].forEach((item) => inventoryStore.removeEquipmentById(item.id));
 };

@@ -1,38 +1,39 @@
 import type { HeroEntity } from '@/types';
-import { GUILDROSTER_LOCALSTORAGE_KEY } from '@/utils';
+import { GUILDROSTER_LOCALSTORAGE_KEY, readStateFromLocalStorage } from '@/utils';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
 export const useGuildRosterStore = defineStore('guildRoster', () => {
   let guildRoster: HeroEntity[] = [];
-  const localStorageData = localStorage.getItem(GUILDROSTER_LOCALSTORAGE_KEY);
-  if (localStorageData) {
-    const recoveredState = JSON.parse(localStorageData);
-    if (recoveredState.heroList) {
-      guildRoster = recoveredState.heroList;
-    }
+  const _recoveredData = readStateFromLocalStorage(GUILDROSTER_LOCALSTORAGE_KEY);
+  if (_recoveredData) {
+    guildRoster = _recoveredData;
   }
 
-  const heroList = ref(guildRoster);
+  const _data = ref(guildRoster);
 
   function addHero(newHero: HeroEntity) {
-    const index = heroList.value.findIndex((el) => el.id === newHero.id);
+    const index = _data.value.findIndex((el) => el.id === newHero.id);
     if (index === -1) {
-      heroList.value.push(newHero);
+      _data.value.push(newHero);
     }
   }
 
   function removeHero(h: HeroEntity) {
     // Remove Hero from the recruitment roster
-    const i = heroList.value.findIndex((el) => el.id === h.id);
+    const i = _data.value.findIndex((el) => el.id === h.id);
     if (i === -1) {
       console.error(
         `Error recruiting hero (id: ${h.id}) which could not be found in the recruitment list`,
       );
       return;
     }
-    heroList.value.splice(i, 1);
+    _data.value.splice(i, 1);
   }
 
-  return { heroList, addHero, removeHero };
+  function getAllHeroes() {
+    return _data.value;
+  }
+
+  return { _data, addHero, removeHero, getAllHeroes };
 });

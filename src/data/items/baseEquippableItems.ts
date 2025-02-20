@@ -5,12 +5,13 @@ import * as Templates from './itemTemplates';
 import type { Range } from '@/types';
 import { computeStats } from '@/utils/items';
 
-export type generateBasicEquippableItemArgs = {
+export type generateItemFromTemplateArgs = {
   type: EquippableItemType;
   name?: string;
+  explicitAffixes?: EquipmentAffix[];
 };
 
-export function generateBasicEquippableItem(args: generateBasicEquippableItemArgs) {
+export function generateItemFromTemplate(args: generateItemFromTemplateArgs) {
   const template = Templates.templatesByType[args.type];
   const resolvedImplicitAffixes: EquipmentAffix[] = [];
   if (template.implicitAffixes) {
@@ -26,6 +27,7 @@ export function generateBasicEquippableItem(args: generateBasicEquippableItemArg
     itemLevel: randomPickInRange(template.itemLevel),
     quality: randomPickInRange(template.quality),
     implicitAffixes: resolvedImplicitAffixes,
+    explicitAffixes: args.explicitAffixes,
   };
 
   newItem.computedStats = computeStats(newItem);

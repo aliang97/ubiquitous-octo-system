@@ -5,7 +5,6 @@ import { useCombatManagerStore } from '@/stores/combatManager';
 import { useGuildRosterStore } from '@/stores/guildRoster';
 import { EnemyType } from '@/utils/enums';
 import { generateCombat, generateEnemy } from '@/utils/generators';
-import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -16,14 +15,12 @@ const locationId = computed(() => props.location.id);
 const enemyList = computed(() => props.location.enemyList);
 
 const combatManager = useCombatManagerStore();
-const currentMonsterType = computed(
-  () => combatManager.combatsByLocationId[locationId.value]?.m1?.enemyType,
-);
+const currentMonsterType = computed(() => combatManager.getCombat(locationId.value)?.m1?.enemyType);
 
 const guildRoster = useGuildRosterStore();
-const { heroList } = storeToRefs(guildRoster);
+const heroList = computed(() => guildRoster.getAllHeroes());
 
-function selectTarget(target: EnemyType, isInfinite?: boolean) {
+async function selectTarget(target: EnemyType, isInfinite?: boolean) {
   if (heroList.value[0] === undefined) {
     console.error('Error selecting combat target: you have no selected hero');
     return;
@@ -34,9 +31,8 @@ function selectTarget(target: EnemyType, isInfinite?: boolean) {
     locationId: locationId.value,
     loop: isInfinite,
   });
-  combatManager.removeCombatByLocation(locationId.value, true, () => {
-    combatManager.addCombat(newCombat);
-  });
+  await combatManager.removeCombat(locationId.value, true);
+  combatManager.addCombat(newCombat);
 }
 </script>
 

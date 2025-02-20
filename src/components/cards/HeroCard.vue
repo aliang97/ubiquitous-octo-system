@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { HeroEntity } from '@/types';
-import AnimatedSprite from '../combat/AnimatedSprite.vue';
+import AnimatedSprite from '../rendering/AnimatedSprite.vue';
 import QuestionMarkIcon from '@/assets/icons/question-mark.png';
 
 defineProps<{

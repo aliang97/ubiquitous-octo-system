@@ -30,3 +30,11 @@ export function saveStateToLocalStorage(store: Store, localStorageKey: string) {
     localStorage.setItem(localStorageKey, JSON.stringify(state));
   });
 }
+
+export function readStateFromLocalStorage(localStorageKey: string) {
+  const localStorageData = localStorage.getItem(localStorageKey);
+  if (localStorageData) {
+    const recoveredState = JSON.parse(localStorageData);
+    return recoveredState._data;
+  }
+}

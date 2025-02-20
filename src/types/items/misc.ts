@@ -1,5 +1,6 @@
 import type { ItemEntity } from './ItemEntity';
 import { StatType, StatScope, AffixType } from '@/utils/enums';
+import type { Range } from '@/types';
 
 export interface ItemWithQuantity {
   item: ItemEntity;
@@ -15,6 +16,8 @@ export interface AffixStatRange {
 export interface AffixStat extends AffixStatRange {
   magnitude: number;
 }
+
+export type ComputedStat = Omit<AffixStat, 'range'>;
 
 interface _EquipmentAffix {
   type: AffixType;

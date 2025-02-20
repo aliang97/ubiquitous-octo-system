@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import HeroCard from '@/components/cards/HeroCard.vue';
 import { useRecruitmentRosterStore } from '@/stores/recruitmentRoster';
-import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
 
-const recruitmentRosterStore = useRecruitmentRosterStore();
-const { heroList } = storeToRefs(recruitmentRosterStore);
+const store = useRecruitmentRosterStore();
+const heroList = computed(() => store.getAllHeroes());
 </script>
 
 <template>
   <main>
     <div class="top">
       <h1>Recruit some new adventurers to your guild:</h1>
-      <button class="refresh" v-on:click="recruitmentRosterStore.randomize(4)">Refresh</button>
+      <button class="refresh" v-on:click="store.randomize(4)">Refresh</button>
     </div>
 
     <ul>
       <li v-for="hero in heroList" :key="hero.id">
         <HeroCard :heroEntity="hero">
-          <button v-on:click="recruitmentRosterStore.recruitHero(hero)">Hire</button>
+          <button v-on:click="store.recruitHero(hero)">Hire</button>
         </HeroCard>
       </li>
     </ul>

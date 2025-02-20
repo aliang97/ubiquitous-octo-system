@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import HeroCard from '@/components/cards/HeroCard.vue';
 import { useGuildRosterStore } from '@/stores/guildRoster';
+import { computed } from 'vue';
 
-const guildRoster = useGuildRosterStore();
+const store = useGuildRosterStore();
+const heroList = computed(() => store.getAllHeroes());
 </script>
 
 <template>
   <main>
     These are your adventurers:
     <ul>
-      <li v-for="hero in guildRoster.heroList" :key="hero.id">
+      <li v-for="hero in heroList" :key="hero.id">
         <HeroCard :heroEntity="hero">
-          <button v-on:click="guildRoster.removeHero(hero)">Delete</button>
+          <button v-on:click="store.removeHero(hero)">Delete</button>
         </HeroCard>
       </li>
     </ul>

@@ -2,7 +2,7 @@ import { useProcessingManagerStore } from '@/stores/processingManager';
 import type { ProcessingLocation } from '../enums';
 import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS, msToTicks } from '@/utils';
-import { generateBasicEquippableItem } from '@/data/items/baseEquippableItems';
+import { generateItemFromTemplate } from '@/data/items/baseEquippableItems';
 import type { EquippableItemTemplate } from '@/types';
 import { canCraftEquipment } from './craftPrechecks';
 import { useInventoryStore } from '@/stores/inventory';
@@ -60,7 +60,7 @@ export function instanceStep(location: ProcessingLocation) {
   // generate a new output item
   // TODO: handle not EquippableItemEntity
   const outputTemplate = instance.processingQueue[0].item as EquippableItemTemplate;
-  const newItem = generateBasicEquippableItem({ type: outputTemplate.type });
+  const newItem = generateItemFromTemplate({ type: outputTemplate.type });
   console.log('crafted item: ' + newItem.name);
   inventoryStore.addEquipment(newItem);
   inventoryStore.removeMaterials(outputTemplate.craftingRecipe);
@@ -91,7 +91,7 @@ export function instanceStep(location: ProcessingLocation) {
   }
 }
 
-export async function endProcessing(location: ProcessingLocation) {
+export function endProcessing(location: ProcessingLocation) {
   const store = useProcessingManagerStore();
   const instance = computed(() => store.getInstance(location)).value;
   if (instance === undefined) {

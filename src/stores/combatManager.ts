@@ -1,50 +1,81 @@
 import type { CombatInstance } from '@/types';
-import { COMBATMANAGER_LOCALSTORAGE_KEY } from '@/utils';
+import { COMBATMANAGER_LOCALSTORAGE_KEY, readStateFromLocalStorage } from '@/utils';
 import { CombatLocationId } from '@/utils/enums';
 import { startCombat, endCombat } from '@/utils/combat';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, type Ref } from 'vue';
+import { generateCombatInstance } from '@/utils/generators/generateInstance';
+import { generateCombat, generateEnemy } from '@/utils/generators';
+
+type CombatData = Partial<Record<CombatLocationId, CombatInstance>>;
 
 export const useCombatManagerStore = defineStore('combatManager', () => {
-  const combats: Partial<Record<CombatLocationId, CombatInstance>> = {};
-  let recoveredCombats: Partial<Record<CombatLocationId, CombatInstance>> = {};
-  const localStorageData = localStorage.getItem(COMBATMANAGER_LOCALSTORAGE_KEY);
-  if (localStorageData) {
-    const recoveredState = JSON.parse(localStorageData);
-    if (recoveredState.combatsByLocationId) {
-      recoveredCombats = recoveredState.combatsByLocationId;
+  // Initialize internal data structures
+  const _data: Ref<CombatData> = ref({});
+  // Try to recover data from localStorage
+  const _recoveredData = ref(readStateFromLocalStorage(COMBATMANAGER_LOCALSTORAGE_KEY));
+
+  function restartRecoveredInstances() {
+    if (_recoveredData.value === undefined) {
+      return;
     }
+    Object.entries(_recoveredData.value).forEach(([location, instance]) => {
+      // If the recovered data includes valid locations
+      if (Object.values<string>(CombatLocationId).includes(location)) {
+        const newInstance = generateCombatInstance(instance as CombatInstance);
+        addCombat(newInstance);
+      } else {
+        console.warn("Found localStorageData that didn't match the expected data structure");
+      }
+    });
   }
 
-  const combatsByLocationId = ref(combats);
-  const recoveredCombatsByLocationId = ref(recoveredCombats);
-
   function addCombat(newCombat: CombatInstance) {
-    if (combatsByLocationId.value[newCombat.locationId]) {
-      console.error(
-        `Error while adding new combat: Combat already exists at location ${newCombat.locationId}`,
-      );
+    if (_data.value[newCombat.locationId]) {
+      console.error(`Error: Combat already exists at location ${newCombat.locationId}`);
       return;
     }
 
-    combatsByLocationId.value[newCombat.locationId] = newCombat;
+    _data.value[newCombat.locationId] = newCombat;
     startCombat(newCombat.locationId);
   }
 
-  function removeCombatByLocation(
-    locationId: CombatLocationId,
-    breakLoop?: boolean,
-    cb?: () => void,
-  ) {
-    const targetCombat = combatsByLocationId.value[locationId];
-    if (!targetCombat) {
-      if (cb) {
-        cb();
-      }
+  async function removeCombat(locationId: CombatLocationId, breakLoop?: boolean) {
+    const c = getCombat(locationId);
+    if (c === undefined) {
       return;
     }
-    endCombat(targetCombat.locationId, breakLoop, cb);
+    const shouldLoop = !breakLoop && c.loop;
+
+    await endCombat(locationId);
+    delete _data.value[locationId];
+
+    if (shouldLoop) {
+      const newCombat = generateCombat({
+        h1: c.h1,
+        m1: generateEnemy({ type: c.m1.enemyType }),
+        locationId: c.locationId,
+        loop: c.loop,
+      });
+
+      addCombat(newCombat);
+    }
   }
 
-  return { combatsByLocationId, recoveredCombatsByLocationId, addCombat, removeCombatByLocation };
+  function getCombat(location: CombatLocationId) {
+    return _data.value[location];
+  }
+
+  function getAllCombats() {
+    return _data.value;
+  }
+
+  return {
+    _data,
+    addCombat,
+    removeCombat,
+    getCombat,
+    getAllCombats,
+    restartRecoveredInstances,
+  };
 });

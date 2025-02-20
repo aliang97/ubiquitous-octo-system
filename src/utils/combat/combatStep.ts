@@ -1,15 +1,14 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { CharacterStatus, CombatLocationId } from '@/utils/enums';
 import { resolveDelayedActions } from '@/utils/combat/delayedActions';
-import { endCombat } from '@/utils/combat/endCombat';
 import { handleDeath } from '@/utils/combat/handleDeath';
 import { takeAction } from '@/utils/combat/takeAction';
 import { computed } from 'vue';
 import { SERVER_TICK_RATE_MS } from '..';
 
 export function combatStep(locationId: CombatLocationId) {
-  const combatManager = useCombatManagerStore();
-  const c = computed(() => combatManager.combatsByLocationId[locationId]).value;
+  const store = useCombatManagerStore();
+  const c = computed(() => store.getCombat(locationId)).value;
   if (c === undefined) {
     return;
   }
@@ -45,14 +44,14 @@ export function combatStep(locationId: CombatLocationId) {
   // Combat finishes if either participant dies
   if (c.m1.currentHitPoints <= 0 && c.m1.characterStatus !== CharacterStatus.Dead) {
     handleDeath(c.m1, c).then(() => {
-      endCombat(locationId);
+      store.removeCombat(locationId);
     });
     return;
   }
 
   if (c.h1.currentHitPoints <= 0 && c.h1.characterStatus !== CharacterStatus.Dead) {
     handleDeath(c.h1, c).then(() => {
-      endCombat(locationId);
+      store.removeCombat(locationId);
     });
 
     return;
@@ -62,6 +61,6 @@ export function combatStep(locationId: CombatLocationId) {
     c.m1.characterStatus === CharacterStatus.Dead ||
     c.h1.characterStatus === CharacterStatus.Dead
   ) {
-    endCombat(locationId);
+    store.removeCombat(locationId);
   }
 }

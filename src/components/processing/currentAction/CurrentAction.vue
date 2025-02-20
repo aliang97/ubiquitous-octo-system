@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ProcessingLocation } from '@/utils/enums';
 import ProgressBar from './ProgressBar.vue';
-import BackgroundRenderer from '@/components/BackgroundRenderer.vue';
+import BackgroundRenderer from '@/components/rendering/BackgroundRenderer.vue';
 import BlacksmithBackground from '@/assets/locations/blacksmith.jpg';
-import AnimatedSprite from './AnimatedSprite.vue';
 import CraftingQueue from './CraftingQueue.vue';
+import BlacksmithRenderer from './BlacksmithRenderer.vue';
 
 defineProps<{
   location: ProcessingLocation;
@@ -24,7 +24,7 @@ defineProps<{
         <CraftingQueue :location />
       </div>
       <div class="right">
-        <AnimatedSprite />
+        <BlacksmithRenderer />
       </div>
     </div>
   </div>

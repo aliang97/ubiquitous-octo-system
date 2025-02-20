@@ -1,40 +1,33 @@
 import { useCombatManagerStore } from '@/stores/combatManager';
 import { computed } from 'vue';
-import { msToTicks } from '@/utils';
 import { CombatInstanceStatus, CombatLocationId } from '@/utils/enums';
 import { pauseCombat } from '@/utils/combat';
-import { generateId, generateEnemy, generateCombat } from '@/utils/generators';
+import { doActionAfterDelay } from '@/utils/combat';
 
-export function endCombat(locationId: CombatLocationId, breakLoop?: boolean, cb?: () => void) {
-  const combatManager = useCombatManagerStore();
-  const c = computed(() => combatManager.combatsByLocationId[locationId]).value;
-  if (c === undefined) {
+export async function endCombat(locationId: CombatLocationId) {
+  await playEndingAnimation(locationId);
+
+  const store = useCombatManagerStore();
+  const c = computed(() => store.getCombat(locationId));
+  if (c.value === undefined) {
     return;
   }
 
-  pauseCombat(c, 1500);
-  c.status = CombatInstanceStatus.Ending;
-  // TODO: loot
-  // TODO: reset character(s)
-  c.delayedActions.push({
-    id: generateId('da'),
-    doAction: () => {
-      clearInterval(c.clockId);
-      delete combatManager.combatsByLocationId[locationId];
-      if (!breakLoop && c.loop) {
-        const newCombat = generateCombat({
-          h1: c.h1,
-          m1: generateEnemy({ type: c.m1.enemyType }),
-          locationId: c.locationId,
-          loop: c.loop,
-        });
+  // Clear clock
+  clearInterval(c.value.clockId);
+}
 
-        combatManager.addCombat(newCombat);
-      }
-      if (cb) {
-        cb();
-      }
-    },
-    waitUntilTrueTick: c.trueTick + msToTicks(800),
+export async function playEndingAnimation(location: CombatLocationId) {
+  const store = useCombatManagerStore();
+  const c = computed(() => store.getCombat(location));
+  if (c.value === undefined) {
+    return;
+  }
+
+  pauseCombat(c.value, 1500);
+  c.value.status = CombatInstanceStatus.Ending;
+
+  return new Promise((resolve) => {
+    doActionAfterDelay(c, () => resolve(1), 800);
   });
 }

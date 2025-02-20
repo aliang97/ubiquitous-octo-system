@@ -1,10 +1,18 @@
-import type { EquippableItemEntity, EquipmentAffix, AffixStat } from '@/types';
+import type { EquippableItemEntity, EquipmentAffix, AffixStat, ComputedStat } from '@/types';
 import { StatScope, StatType } from '@/utils/enums';
 import * as compute from './compute';
+
+export function sumStat(stats: AffixStat[] | ComputedStat[], statType: StatType) {
+  return stats.filter((el) => el.type === statType).reduce((sum, i) => sum + i.magnitude, 0);
+}
 
 const statToComputeFn: Partial<Record<StatType, compute.ComputeFunction | undefined>> = {
   [StatType.ArmorBase]: compute.armor,
   [StatType.ArmorIncr]: undefined,
+  [StatType.AttacksPerSecondBase]: compute.attackSpeed,
+  [StatType.HealthBase]: compute.health,
+  [StatType.HitDamageMaxBase]: compute.hitDamage,
+  [StatType.HitDamageMinBase]: undefined,
 };
 
 function splitAffixes(affixes: EquipmentAffix[]) {
@@ -20,8 +28,10 @@ function splitAffixes(affixes: EquipmentAffix[]) {
   return [localStats, globalStats];
 }
 
+// returns all global stats on an item
+//  DOES NOT UPDATE item.computed automatically!!!!
 export const computeStats = (item: EquippableItemEntity) => {
-  const computedStats: Omit<AffixStat, 'range'>[] = [];
+  const computedStats: ComputedStat[] = [];
   const allAffixes = [...(item.implicitAffixes || []), ...(item.explicitAffixes || [])];
   const [localStats, globalStats] = splitAffixes(allAffixes);
 
@@ -33,5 +43,6 @@ export const computeStats = (item: EquippableItemEntity) => {
   });
 
   computedStats.push(...globalStats);
+
   return computedStats;
 };

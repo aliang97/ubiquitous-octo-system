@@ -1,30 +1,39 @@
-import type { DerivedCharacterStats, HeroEntity, MonsterEntity } from '@/types';
+import type { DerivedCharacterStats, HeroEntity, MonsterEntity, ComputedStat } from '@/types';
 import { arraySum } from '@/utils';
+import { computeStats, sumStat } from '@/utils/items';
+import { StatType } from '@/utils/enums';
 
 export function deriveHeroStats(h: HeroEntity): DerivedCharacterStats {
+  const equipmentStats: ComputedStat[] = [];
+  Object.values(h.equipment).forEach((item) => {
+    if (!item.computedStats) {
+      item.computedStats = computeStats(item);
+    }
+    equipmentStats.push(...item.computedStats);
+  });
   return {
-    maximumHitPoints: getMaximumHitPoints(h),
-    attacksPerSecond: getAttacksPerSecond(h),
-    hitDamageMaximum: getHitDamageMaximum(h),
-    hitDamageMinimum: getHitDamageMinimum(h),
+    maximumHitPoints: getMaximumHitPoints(h, equipmentStats),
+    attacksPerSecond: getAttacksPerSecond(h, equipmentStats),
+    hitDamageMaximum: getHitDamageMaximum(h, equipmentStats),
+    hitDamageMinimum: getHitDamageMinimum(h, equipmentStats),
   };
 }
 
-function getMaximumHitPoints(h: HeroEntity) {
-  const sources = [h.heroClass?.baseHitPoints, h.equipment['helmet']?.effects?.['baseHitPoints']];
+function getMaximumHitPoints(h: HeroEntity, equipmentStats: ComputedStat[]) {
+  const sources = [h.heroClass?.baseHitPoints, sumStat(equipmentStats, StatType.HealthBase)];
   return arraySum(sources);
 }
 
-function getAttacksPerSecond(h: HeroEntity) {
-  return h.equipment['weapon1']?.effects?.['attacksPerSecond'] || 0;
+function getAttacksPerSecond(h: HeroEntity, equipmentStats: ComputedStat[]) {
+  return sumStat(equipmentStats, StatType.AttacksPerSecondBase);
 }
 
-function getHitDamageMaximum(h: HeroEntity) {
-  return h.equipment['weapon1']?.effects?.['hitDamageMaximum'] || 0;
+function getHitDamageMaximum(h: HeroEntity, equipmentStats: ComputedStat[]) {
+  return sumStat(equipmentStats, StatType.HitDamageMaxBase);
 }
 
-function getHitDamageMinimum(h: HeroEntity) {
-  return h.equipment['weapon1']?.effects?.['hitDamageMinimum'] || 0;
+function getHitDamageMinimum(h: HeroEntity, equipmentStats: ComputedStat[]) {
+  return sumStat(equipmentStats, StatType.HitDamageMinBase);
 }
 
 // TODO: implement?

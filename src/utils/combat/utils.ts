@@ -40,7 +40,10 @@ export function getDerivedCharacterStats(c: CharacterEntity): DerivedCharacterSt
   }
 
   // If the derived stats haven't been calculated yet
+  return updateDerivedCharacterStats(c);
+}
 
+export function updateDerivedCharacterStats(c: CharacterEntity): DerivedCharacterStats {
   if (isHero(c)) {
     const d = deriveHeroStats(c);
     // cache them
@@ -55,7 +58,7 @@ export function getDerivedCharacterStats(c: CharacterEntity): DerivedCharacterSt
     return c.derivedStats;
   }
 
-  console.log('Error in getDerivedCharacterStats: CharacterEntity is not a Hero or Monster');
+  console.error('Error: CharacterEntity is not a Hero or Monster');
   return {
     maximumHitPoints: -1,
     attacksPerSecond: -1,

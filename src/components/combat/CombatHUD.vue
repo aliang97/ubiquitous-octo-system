@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const DEBUG = true;
 const combatManager = useCombatManagerStore();
-const combat = computed(() => combatManager.combatsByLocationId[props.location.id]);
+const combat = computed(() => combatManager.getCombat(props.location.id));
 const gameTick = computed(() => combat.value?.gameTick);
 const trueTick = computed(() => combat.value?.trueTick);
 const combatStatus = computed(() => combat.value?.status);
@@ -20,7 +20,7 @@ const showCombatStatus = computed(() => {
   return combat.value?.status === CombatInstanceStatus.Ongoing;
 });
 function exitCombat() {
-  combatManager.removeCombatByLocation(props.location.id, true);
+  combatManager.removeCombat(props.location.id, true);
 }
 </script>
 

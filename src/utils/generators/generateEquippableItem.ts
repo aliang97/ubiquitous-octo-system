@@ -1,6 +1,6 @@
+import { generateItemFromTemplate } from '@/data/items/baseEquippableItems';
 import type { EquippableItemEntity } from '@/types';
-import { Rarity, EquippableItemType } from '@/utils/enums';
-import { generateId } from '@/utils/generators';
+import { EquippableItemType, AffixType, StatType, StatScope } from '@/utils/enums';
 
 type generateEquippableItemArgs = {
   type?: EquippableItemType;
@@ -19,24 +19,46 @@ export const generateEquippableItem = (args: generateEquippableItemArgs): Equipp
   return basicHelmet;
 };
 
-export const basicHelmet: EquippableItemEntity = {
-  id: generateId(),
-  name: 'Bucket',
-  rarity: Rarity.Common,
+export const basicHelmet = generateItemFromTemplate({
   type: EquippableItemType.Helmet,
-  effects: {
-    baseHitPoints: 7,
-  },
-};
+  explicitAffixes: [
+    {
+      type: AffixType.HealthBase,
+      tier: 1,
+      name: 'Health',
+      stats: [
+        {
+          type: StatType.HealthBase,
+          scope: StatScope.Global,
+          range: { max: 10, min: 8 },
+          magnitude: 8,
+        },
+      ],
+    },
+  ],
+});
 
-export const basicSword: EquippableItemEntity = {
-  id: generateId(),
-  name: 'Shortsword',
-  rarity: Rarity.Common,
+export const basicSword = generateItemFromTemplate({
   type: EquippableItemType.Sword,
-  effects: {
-    attacksPerSecond: 1.6,
-    hitDamageMaximum: 2,
-    hitDamageMinimum: 4,
-  },
-};
+  explicitAffixes: [
+    {
+      type: AffixType.HitDamageBase,
+      tier: 1,
+      name: 'Flat Hit Damage',
+      stats: [
+        {
+          type: StatType.HitDamageMaxBase,
+          scope: StatScope.Global,
+          range: { max: 4, min: 3 },
+          magnitude: 4,
+        },
+        {
+          type: StatType.HitDamageMinBase,
+          scope: StatScope.Global,
+          range: { max: 2, min: 1 },
+          magnitude: 1,
+        },
+      ],
+    },
+  ],
+});

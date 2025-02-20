@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import AnimatedSprite from '@/components/combat/AnimatedSprite.vue';
-import type { RenderableEntity, CombatInstance } from '@/types';
+import AnimatedSprite from '@/components/rendering/AnimatedSprite.vue';
+import type { RenderableEntity } from '@/types';
 import { computed } from 'vue';
-import ParticleRenderer from './ParticleRenderer.vue';
+import ParticleRenderer from '../rendering/ParticleRenderer.vue';
 
 const props = defineProps<{
   character: RenderableEntity;
-  combat: CombatInstance;
 }>();
 
 const defaultAnimation = computed(() => props.character.defaultAnimation || 'idle');
@@ -20,7 +19,7 @@ const animationIsPaused = computed(() => props.character.pauseAnimations);
     <template v-if="character.animations">
       <div class="debug">
         <div>{{ currentAnimation }}</div>
-        <!-- <div>{{ animationIsPaused }}</div> -->
+        <div>{{ animationIsPaused }}</div>
       </div>
       <template v-for="(spriteProps, name) in props.character.animations">
         <AnimatedSprite

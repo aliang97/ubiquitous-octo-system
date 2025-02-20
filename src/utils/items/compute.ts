@@ -1,14 +1,8 @@
-import type { EquippableItemEntity, AffixStat } from '@/types';
+import type { EquippableItemEntity, AffixStat, ComputedStat } from '@/types';
 import { StatScope, StatType } from '@/utils/enums';
+import { sumStat } from './computeStats';
 
-export type ComputeFunction = (
-  stats: AffixStat[],
-  item: EquippableItemEntity,
-) => Omit<AffixStat, 'range'>[];
-
-export function sumStat(stats: AffixStat[], statType: StatType) {
-  return stats.filter((el) => el.type === statType).reduce((sum, i) => sum + i.magnitude, 0);
-}
+export type ComputeFunction = (stats: AffixStat[], item: EquippableItemEntity) => ComputedStat[];
 
 export const armor: ComputeFunction = (stats, item) => {
   const baseArmor = sumStat(stats, StatType.ArmorBase);
@@ -33,7 +27,7 @@ export const attackSpeed: ComputeFunction = (stats, item) => {
     {
       type: StatType.AttacksPerSecondBase,
       scope: StatScope.Global,
-      magnitude: Math.floor(baseAS * qualMult),
+      magnitude: baseAS * qualMult,
     },
   ];
 };
@@ -55,4 +49,9 @@ export const hitDamage: ComputeFunction = (stats, item) => {
       magnitude: Math.floor(baseDamageMin * qualMult),
     },
   ];
+};
+
+export const health: ComputeFunction = (stats, item) => {
+  console.warn('health compute function not implemented');
+  return;
 };

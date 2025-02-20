@@ -4,37 +4,36 @@ import { RECRUITMENTROSTER_LOCALSTORAGE_KEY } from '@/utils';
 import { generateHero } from '@/utils/generators';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { readStateFromLocalStorage } from '@/utils';
 
 export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => {
-  let recruitmentRoster: HeroEntity[] = [];
-  const localStorageData = localStorage.getItem(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
-  if (localStorageData) {
-    const recoveredState = JSON.parse(localStorageData);
-    if (recoveredState.heroList) {
-      recruitmentRoster = recoveredState.heroList;
-    }
+  // Check if existing data in localStorage, otherwise generate 4 new recruits
+  let _tempData: HeroEntity[] = [];
+  const _recoveredData = readStateFromLocalStorage(RECRUITMENTROSTER_LOCALSTORAGE_KEY);
+  if (_recoveredData) {
+    _tempData = _recoveredData;
   } else {
-    generateNewHeros(4, recruitmentRoster);
+    generateNewHeros(4, _tempData);
   }
 
-  const heroList = ref(recruitmentRoster);
+  const _data = ref(_tempData);
 
   function randomize(quantity: number) {
     // Delete all heros
-    heroList.value = [];
-    generateNewHeros(quantity, heroList.value);
+    _data.value = [];
+    generateNewHeros(quantity, _data.value);
   }
 
   function recruitHero(h: HeroEntity) {
     // Remove Hero from the recruitment roster
-    const i = heroList.value.findIndex((el) => el.id === h.id);
+    const i = _data.value.findIndex((el) => el.id === h.id);
     if (i === -1) {
       console.error(
         `Error recruiting hero (id: ${h.id}) which could not be found in the recruitment list`,
       );
       return;
     }
-    heroList.value.splice(i, 1);
+    _data.value.splice(i, 1);
 
     // Add hero to the guild roster
     const guildRoster = useGuildRosterStore();
@@ -47,5 +46,14 @@ export const useRecruitmentRosterStore = defineStore('recruitmentRoster', () => 
     });
   }
 
-  return { heroList, randomize, recruitHero };
+  function getAllHeroes() {
+    return _data.value;
+  }
+
+  return {
+    _data,
+    randomize,
+    recruitHero,
+    getAllHeroes,
+  };
 });

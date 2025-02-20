@@ -1,6 +1,6 @@
 import type { CraftableItemEntity, Range } from '@/types';
 import { EquippableItemType } from '@/utils/enums';
-import type { EquipmentAffix, EquipmentAffixRange, AffixStat } from './misc';
+import type { EquipmentAffix, EquipmentAffixRange, ComputedStat } from './misc';
 
 export interface EquippableItemEntity extends CraftableItemEntity {
   itemLevel: number;
@@ -21,7 +21,7 @@ export interface EquippableItemEntity extends CraftableItemEntity {
   // Resolve all of the local affixes into global stats
   //  and copy over any global stats from global affixes
   // All final stats that effect the character should be in here
-  computedStats?: Omit<AffixStat, 'range'>[];
+  computedStats?: ComputedStat[];
 }
 
 export interface EquippableItemTemplate extends CraftableItemEntity {
